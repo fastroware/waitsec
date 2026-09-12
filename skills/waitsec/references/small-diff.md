@@ -9,27 +9,39 @@ Do not turn a one-line bug fix into a 15-file git diff. Keep your changes laser-
 
 ---
 
-## Anti-Patterns (The Tells)
+## Detailed Pitfalls & The 5-Point Rule
 
 ### 1. Collateral Reformatting
-- **Tell:** Fixing a bug on line 42, but running an aggressive formatter that reformats 300 lines of whitespace, indentation, quote styles, or trailing commas across the entire file.
-- **Why:** Pollutes git history, makes `git blame` useless, and introduces merge conflicts for teammates working on the same branch.
-- **Fix:** Format only the lines you touched. Leave existing indentation and formatting untouched.
+
+* **The Bad Habit:** Fixing a bug on line 42, but running an aggressive formatter that reformats 300 lines of whitespace, indentation, quote styles, or trailing commas across the entire file.
+* **The Problem:** The real fix is now buried inside a wall of unrelated formatting changes.
+* **Why It Fails:** It pollutes git history, makes `git blame` useless, and creates merge conflicts for teammates working on the same branch.
+* **Clean Fix:** Format only the lines you touched. Leave existing indentation and formatting untouched.
+* **The Waitsec Way:** A diff should show the solution, not a style argument. Touch only what the task requires.
 
 ### 2. Gratuitous Renaming & Style Imposition
-- **Tell:** Changing working code to suit personal style preferences (e.g. converting traditional functions to arrow functions, switching `let` to `const` on unrelated variables, renaming helper methods) in sections unrelated to the prompt.
-- **Why:** Every modified line carries the risk of unintended regression and distraction during code review.
-- **Fix:** Keep your hands off working code outside the prompt scope. Respect the prevailing style of the file.
+
+* **The Bad Habit:** Changing working code to suit personal style preferences (e.g. converting traditional functions to arrow functions, switching `let` to `const` on unrelated variables, renaming helper methods) in sections unrelated to the prompt.
+* **The Problem:** The diff fills with cosmetic edits that have nothing to do with the request.
+* **Why It Fails:** Every modified line carries the risk of unintended regression and distracts the reviewer from the actual change.
+* **Clean Fix:** Keep your hands off working code outside the prompt scope. Respect the prevailing style of the file.
+* **The Waitsec Way:** Match the file you are editing, not the style in your head. Consistency beats personal preference.
 
 ### 3. File Scope Creep
-- **Tell:** Asked to change the label of a button, the agent touches the button component, the router, the global theme CSS, and updates `package.json` dependencies.
-- **Why:** The AI over-reaches, treating every task as an invitation to overhaul the project.
-- **Fix:** Modify only the files strictly required to implement the request. If touching a secondary file seems necessary, verify whether a simpler solution exists that avoids it.
+
+* **The Bad Habit:** Asked to change the label of a button, the agent touches the button component, the router, the global theme CSS, and updates `package.json` dependencies.
+* **The Problem:** Four files changed for a one-word edit.
+* **Why It Fails:** The AI over-reaches, treating every task as an invitation to overhaul the project. This hides the real change and multiplies the chance of breakage.
+* **Clean Fix:** Modify only the files strictly required to implement the request. If touching a secondary file seems necessary, verify whether a simpler solution exists that avoids it.
+* **The Waitsec Way:** Stay inside the blast radius of the prompt. Small changes stay easy to review and easy to revert.
 
 ### 4. Wholesale File Rewriting
-- **Tell:** Replacing a 400-line file with a newly generated version when only 5 lines needed an update, accidentally stripping out edge-case logic or comments that existed in the original.
-- **Why:** Generative models love generating whole files from scratch rather than performing surgical edits.
-- **Fix:** Use targeted diffs or line-level edits. Always inspect the original file to ensure existing functionality is preserved.
+
+* **The Bad Habit:** Replacing a 400-line file with a newly generated version when only 5 lines needed an update, accidentally stripping out edge-case logic or comments that existed in the original.
+* **The Problem:** The new file looks clean but silently drops behavior the original had.
+* **Why It Fails:** Generative models love generating whole files from scratch rather than performing surgical edits. That habit erases years of accumulated fixes.
+* **Clean Fix:** Use targeted diffs or line-level edits. Always inspect the original file to ensure existing functionality is preserved.
+* **The Waitsec Way:** Edit the file you have, do not replace it. The original carries context that a fresh generation cannot.
 
 ---
 

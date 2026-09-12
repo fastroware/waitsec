@@ -11,20 +11,27 @@ Do not turn a simple 10-line requirement into a 12-file enterprise architecture.
 
 ---
 
-## Anti-Patterns (The Tells)
+## Detailed Pitfalls & The 5-Point Rule
 
 ### 1. Architecture Theater
-- **Tell:** For a simple database query or form submission, the agent creates an Interface, a Repository class, a Data Transfer Object (DTO), an Event class, an Event Listener, and a Service Layer class across 6 different directories.
-- **Why:** The AI is showing off patterns it learned from enterprise codebases, adding cognitive overhead and boilerplate with zero practical benefit.
-- **Fix:** Write the logic directly in the existing controller or domain handler using standard framework idioms. Introduce layers only when concrete business complexity demands it.
+
+* **The Bad Habit:** For a simple database query or form submission, the agent creates an Interface, a Repository class, a Data Transfer Object (DTO), an Event class, an Event Listener, and a Service Layer class across 6 different directories.
+* **The Problem:** Six new files and several layers of indirection now wrap logic that could live in one method.
+* **Why It Fails:** Every extra layer must be read, wired, and maintained. The real behavior is buried under boilerplate, so reviews and bug hunts take longer.
+* **Clean Fix:** Write the logic directly in the existing controller or domain handler using standard framework idioms. Introduce a layer only when concrete business complexity demands it.
+* **The Waitsec Way:** Build for today's requirement. Complexity must be earned by a real problem, not added as decoration.
 
 ### 2. Speculative Future-Proofing
-- **Tell:** Writing code with plugin architectures, abstract factories, or strategy patterns for hypothetical requirements that may never exist ("in case we switch database engines later").
-- **Why:** YAGNI (You Aren't Gonna Need It). Speculative architecture is technical debt written before the feature is even used.
-- **Fix:** Build for the current requirement. Refactor when the second concrete use case arrives, not before.
+
+* **The Bad Habit:** Writing plugin architectures, abstract factories, or strategy patterns for requirements that may never exist ("in case we switch database engines later").
+* **The Problem:** The code carries branches and abstractions that are never actually exercised.
+* **Why It Fails:** YAGNI (You Aren't Gonna Need It). Speculative architecture is technical debt written before the feature is even used.
+* **Clean Fix:** Build for the current requirement. Refactor when the second concrete use case arrives, not before.
+* **The Waitsec Way:** Solve the problem in front of you. Let real needs pull the design forward.
 
 ### 3. Empty Wrapper Abstractions
-- **Tell:** Creating helper functions or classes that merely pass arguments straight through to an underlying library method with no added logic:
+
+* **The Bad Habit:** Creating helper functions or classes that only pass arguments straight through to an underlying library method with no added logic:
   ```php
   class StringHelper {
       public static function toLower($str) {
@@ -32,13 +39,18 @@ Do not turn a simple 10-line requirement into a 12-file enterprise architecture.
       }
   }
   ```
-- **Why:** It adds an extra layer of indirection to read and maintain for zero added value.
-- **Fix:** Call the native or framework method directly.
+* **The Problem:** Every caller now travels through an extra layer that adds nothing.
+* **Why It Fails:** Readers have to open the wrapper to learn it does nothing. The indirection costs time and invites more pointless wrappers.
+* **Clean Fix:** Call the native or framework method directly.
+* **The Waitsec Way:** A function must add behavior or clarify intent. If it does neither, delete it.
 
 ### 4. Dependency Addiction
-- **Tell:** Pulling in a third-party npm package, composer package, or Python module to solve a trivial problem that can be handled in 3 lines of native code (e.g. date formatting or string padding).
-- **Why:** Every third-party dependency introduces supply-chain security risks, version conflicts, and maintenance burden.
-- **Fix:** Use native language and framework utilities first.
+
+* **The Bad Habit:** Pulling in a third-party npm package, composer package, or Python module to solve a trivial problem that can be handled in 3 lines of native code (e.g. date formatting or string padding).
+* **The Problem:** A new dependency appears in the manifest for work the standard library already does.
+* **Why It Fails:** Every third-party dependency introduces supply-chain security risks, version conflicts, and maintenance burden for the whole team.
+* **Clean Fix:** Use native language and framework utilities first. Add a package only when it solves genuinely complex work.
+* **The Waitsec Way:** Every dependency is a long-term promise. Make it only when it clearly pays off.
 
 ---
 

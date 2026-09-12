@@ -11,27 +11,39 @@ When requirements are ambiguous, do not invent answers. Stop, pause, and clarify
 
 ---
 
-## Anti-Patterns (The Tells)
+## Detailed Pitfalls & The 5-Point Rule
 
 ### 1. Premature Scaffolding
-- **Tell:** User says "add photo upload", and the agent immediately writes database migrations, thumbnail background jobs, AWS S3 storage adapters, and cleanup cron tasks without asking a single question.
-- **Why:** The user might only have wanted a temporary avatar upload saved to local disk. Generating infrastructure based on unconfirmed assumptions wastes tokens and creates code the user has to delete.
-- **Fix:** Stop before writing code. Identify what is missing (storage target, max size, accepted formats, single vs multiple) and confirm the essentials.
+
+* **The Bad Habit:** The user says "add photo upload", and the agent immediately writes database migrations, thumbnail background jobs, cloud storage adapters, and cleanup cron tasks without asking a single question.
+* **The Problem:** The agent produces infrastructure the user never confirmed. The feature might only need to save one avatar to local disk.
+* **Why It Fails:** The user has to review and delete code they never asked for. Tokens are wasted, and the bloated diff hides the real feature.
+* **Clean Fix:** Stop before writing code. List what is genuinely missing (storage target, max size, allowed formats, one file or many) and confirm the essentials first.
+* **The Waitsec Way:** Confirm the shape of the feature before you build it. A short question costs far less than a wrong implementation.
 
 ### 2. Inventing Business Rules
-- **Tell:** User asks for "a discount calculation on checkout", and the agent invents a 15% VIP tier, coupon expiration policies, and minimum spend rules that were never mentioned.
-- **Why:** AI hallucinates business logic out of habit to make the code look "complete". Invented rules confuse the product requirements.
-- **Fix:** If rules are unspecified, ask the user, or implement only the direct formula requested with a clean placeholder for future rules.
+
+* **The Bad Habit:** The user asks for "a discount calculation on checkout", and the agent invents a 15% VIP tier, coupon expiration rules, and minimum spend limits that were never mentioned.
+* **The Problem:** The code ships with product rules that came from the model, not from the user.
+* **Why It Fails:** Invented rules quietly change how the product behaves. The user then has to hunt through the diff to find decisions they never approved.
+* **Clean Fix:** If a rule is unspecified, ask. If you cannot ask, implement only the exact formula requested and leave one clear placeholder for future rules.
+* **The Waitsec Way:** You are not the product owner. Never fill a business gap with a guess.
 
 ### 3. Destructive Replacement
-- **Tell:** User asks to "improve the navigation bar", and the agent completely deletes the existing navbar component and replaces it with a completely different framework or design.
-- **Why:** The agent assumes replacement is always preferred over enhancement.
-- **Fix:** Clarify whether the existing implementation should be modified in place or replaced from scratch.
+
+* **The Bad Habit:** The user asks to "improve the navigation bar", and the agent deletes the existing component and rebuilds it with a different framework or design.
+* **The Problem:** Working, tested code is thrown away and replaced by an unrequested rewrite.
+* **Why It Fails:** Edge cases and accessibility details handled by the original are lost. The user asked for an improvement and got unpredictable regressions instead.
+* **Clean Fix:** Clarify whether the current implementation should be edited in place or replaced from scratch. Default to editing in place.
+* **The Waitsec Way:** Improve what already exists before replacing it. Respect the code the team already trusts.
 
 ### 4. Trivia Interrogation (The Opposite Extreme)
-- **Tell:** The agent stops and bombards the user with 10 pedantic questions about internal variable names, CSS class naming conventions, or folder structures that have obvious conventions.
-- **Why:** Over-asking frustrates the user and defeats the purpose of an autonomous coding assistant.
-- **Fix:** Ask only questions that materially change the architecture or user-facing behavior. Use sensible defaults for everything else.
+
+* **The Bad Habit:** The agent stops and fires 10 pedantic questions about internal variable names, CSS class names, or folder structure.
+* **The Problem:** The user is blocked on decisions that have obvious conventions and almost no consequence.
+* **Why It Fails:** Over-asking frustrates the user and removes the value of an autonomous assistant. The work stalls on details.
+* **Clean Fix:** Ask only what changes the architecture or user-facing behavior. Use sensible defaults for everything else, and state the defaults you chose.
+* **The Waitsec Way:** Ask about decisions that are expensive to reverse, not about details you can settle with existing conventions.
 
 ---
 

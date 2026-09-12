@@ -9,27 +9,39 @@ Never guess the cause of an error when real technical evidence is available. Do 
 
 ---
 
-## Anti-Patterns (The Tells)
+## Detailed Pitfalls & The 5-Point Rule
 
 ### 1. The Shotgun Guess
-- **Tell:** A test fails or a crash occurs, and the agent immediately edits three different files, tweaking logic in random places without identifying why execution failed.
-- **Why:** The AI acts on statistical intuition rather than empirical debugging, often introducing new bugs while failing to fix the original one.
-- **Fix:** Never touch a single line of code until you have identified the exact file, line number, and runtime state that triggered the failure.
+
+* **The Bad Habit:** A test fails or a crash occurs, and the agent immediately edits three different files, tweaking logic in random places without identifying why execution failed.
+* **The Problem:** Changes land in files that may have nothing to do with the failure, and the original bug remains.
+* **Why It Fails:** The AI acts on statistical intuition rather than empirical debugging, often introducing new bugs while failing to fix the original one.
+* **Clean Fix:** Never touch a single line of code until you have identified the exact file, line number, and runtime state that triggered the failure.
+* **The Waitsec Way:** Read the evidence first. A fix without a cause is just another guess.
 
 ### 2. Silent Error Swallowing
-- **Tell:** When an exception is thrown, the agent wraps the crashing block in a generic `try/catch` and leaves the catch block empty, or returns an empty fallback (`return null;`) just to stop the crash from bubbling up.
-- **Why:** Silencing errors masks underlying data corruption and turns a loud, easily fixable bug into a silent, catastrophic production failure.
-- **Fix:** Fix the root cause so the operation succeeds safely. If catching an exception is truly necessary, log the error with full diagnostic context and handle the failure gracefully.
+
+* **The Bad Habit:** When an exception is thrown, the agent wraps the crashing block in a generic `try/catch` and leaves the catch block empty, or returns an empty fallback (`return null;`) just to stop the crash from bubbling up.
+* **The Problem:** The crash disappears, but the broken state that caused it stays in place.
+* **Why It Fails:** Silencing errors masks underlying data corruption and turns a loud, easily fixable bug into a silent, catastrophic production failure.
+* **Clean Fix:** Fix the root cause so the operation succeeds safely. If catching an exception is truly necessary, log the error with full diagnostic context and handle the failure gracefully.
+* **The Waitsec Way:** Never hide an error to make the output look clean. Silence is not a fix.
 
 ### 3. Surface Symptom Patching
-- **Tell:** Seeing `TypeError: Cannot read property 'id' of undefined`, the agent adds optional chaining (`user?.id`) or a null check (`if (!user) return;`), without checking *why* `user` was undefined in the first place.
-- **Why:** Masking a missing variable upstream causes corrupted state downstream.
-- **Fix:** Trace the data flow backwards. Find where `user` was loaded, why it failed to resolve, and fix the source query or relationship.
+
+* **The Bad Habit:** Seeing `TypeError: Cannot read property 'id' of undefined`, the agent adds optional chaining (`user?.id`) or a null check (`if (!user) return;`), without checking *why* `user` was undefined in the first place.
+* **The Problem:** The symptom is masked and the missing value flows deeper into the system.
+* **Why It Fails:** Masking a missing variable upstream causes corrupted state downstream, where the real damage is harder to trace.
+* **Clean Fix:** Trace the data flow backwards. Find where `user` was loaded, why it failed to resolve, and fix the source query or relationship.
+* **The Waitsec Way:** Fix the source, not the symptom. Chase the cause one step up the chain.
 
 ### 4. Hallucinating Missing Dependencies
-- **Tell:** An import fails or a class is not found (often due to a typo or incorrect namespace), and the agent immediately attempts to run `npm install <random-package>` or `composer require`.
-- **Why:** The agent assumes missing functionality means missing packages, cluttering the project with unneeded external dependencies.
-- **Fix:** Check for typos, path mismatches, autoloading issues, or missing exports first.
+
+* **The Bad Habit:** An import fails or a class is not found (often due to a typo or incorrect namespace), and the agent immediately attempts to run `npm install <random-package>` or `composer require`.
+* **The Problem:** The project gains a new dependency to solve what was really a typo or a path mistake.
+* **Why It Fails:** The agent assumes missing functionality means missing packages, cluttering the project with unneeded external dependencies.
+* **Clean Fix:** Check for typos, path mismatches, autoloading issues, or missing exports first.
+* **The Waitsec Way:** Confirm the cause before adding weight. Most "missing" things are already there, just named wrong.
 
 ---
 

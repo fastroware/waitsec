@@ -11,27 +11,39 @@ Never say "I'm done" or "The bug is fixed" without concrete technical proof. Alw
 
 ---
 
-## Anti-Patterns (The Tells)
+## Detailed Pitfalls & The 5-Point Rule
 
 ### 1. The Premature Victory Lap
-- **Tell:** The agent modifies code, never runs a test or build command, and immediately announces: *"I have fixed the issue and implemented all requirements!"*
-- **Why:** The AI relies on statistical confidence instead of empirical execution. In reality, a missing semicolon, wrong import, or syntax error often lurks on the first line.
-- **Fix:** Run the relevant test suite, build command, or reproduction script before writing your closing message.
+
+* **The Bad Habit:** The agent modifies code, never runs a test or build command, and immediately announces: *"I have fixed the issue and implemented all requirements!"*
+* **The Problem:** The claim of success has no command output behind it.
+* **Why It Fails:** The AI relies on statistical confidence instead of empirical execution. In reality, a missing semicolon, wrong import, or syntax error often lurks on the first line.
+* **Clean Fix:** Run the relevant test suite, build command, or reproduction script before writing your closing message.
+* **The Waitsec Way:** Done means proven. Confidence is not evidence.
 
 ### 2. Regression Blindness
-- **Tell:** Fixing a bug in component A, but accidentally breaking components B and C because shared state, schema, or props were modified without running the full test suite.
-- **Why:** The AI focuses narrowly on the prompt and ignores downstream dependencies.
-- **Fix:** If the project has automated tests (`npm test`, `pytest`, `php artisan test`, `go test`), run them to ensure no regressions were introduced.
+
+* **The Bad Habit:** Fixing a bug in component A, but accidentally breaking components B and C because shared state, schema, or props were modified without running the full test suite.
+* **The Problem:** The targeted fix silently damages neighboring features.
+* **Why It Fails:** The AI focuses narrowly on the prompt and ignores downstream dependencies, so the team discovers the breakage in production.
+* **Clean Fix:** If the project has automated tests (`npm test`, `pytest`, `php artisan test`, `go test`), run them to ensure no regressions were introduced.
+* **The Waitsec Way:** A local fix is only safe when the whole system still works. Check the neighbors.
 
 ### 3. Phantom Verification
-- **Tell:** The agent claims *"I tested the login endpoint and it returned status 200"* when no terminal command, curl request, or test runner was actually executed in the environment.
-- **Why:** Generative models hallucinate successful outcomes based on expectation.
-- **Fix:** Real verification produces real output. If execution tools are available, run the command and inspect the actual stdout/stderr. If tools are unavailable, instruct the user on the exact command to run.
+
+* **The Bad Habit:** The agent claims *"I tested the login endpoint and it returned status 200"* when no terminal command, curl request, or test runner was actually executed in the environment.
+* **The Problem:** The stated result is invented, not observed.
+* **Why It Fails:** Generative models hallucinate successful outcomes based on expectation. The user trusts a report that never happened.
+* **Clean Fix:** Real verification produces real output. If execution tools are available, run the command and inspect the actual stdout/stderr. If tools are unavailable, instruct the user on the exact command to run.
+* **The Waitsec Way:** Report only what you actually ran. If you did not run it, say so.
 
 ### 4. Happy-Path Myopia
-- **Tell:** Testing only the success state (e.g. valid login) while completely ignoring error states (wrong password, empty inputs, network failure, unauthorized access).
-- **Why:** AI naturally gravitates toward the ideal flow.
-- **Fix:** Verify both the happy path and at least one failure/edge case before declaring completion.
+
+* **The Bad Habit:** Testing only the success state (e.g. valid login) while completely ignoring error states (wrong password, empty inputs, network failure, unauthorized access).
+* **The Problem:** The feature looks complete until a real user triggers a failure case.
+* **Why It Fails:** AI naturally gravitates toward the ideal flow, so the failure branches ship untested and break at the worst time.
+* **Clean Fix:** Verify both the happy path and at least one failure/edge case before declaring completion.
+* **The Waitsec Way:** The edges are where software breaks. Verify the failure path, not just the demo path.
 
 ---
 
