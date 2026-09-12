@@ -23,22 +23,22 @@ const AVAILABLE_SKILLS = [
   },
   {
     value: 'waitsec-ui',
-    label: 'waitsec-ui (preview)',
+    label: 'waitsec-ui',
     hint: 'Anti-slop UI copy & CSS, responsive guardrails',
   },
   {
     value: 'waitsec-pagemaker',
-    label: 'waitsec-pagemaker (preview)',
+    label: 'waitsec-pagemaker',
     hint: 'Page architect: landing pages, blog/articles, contact, about me',
   },
   {
     value: 'waitsec-code',
-    label: 'waitsec-code (preview)',
+    label: 'waitsec-code',
     hint: 'Clean code rules, anti-comment noise, dependency control',
   },
   {
     value: 'waitsec-quality',
-    label: 'waitsec-quality (preview)',
+    label: 'waitsec-quality',
     hint: 'Security audits, test discipline, data integrity',
   },
 ];
@@ -148,7 +148,7 @@ async function main() {
   const selectedSkills = await multiselect({
     message: 'Select the skills you want (Press Space to select, Enter to confirm):',
     options: AVAILABLE_SKILLS,
-    initialValues: ['waitsec'],
+    initialValues: AVAILABLE_SKILLS.map((s) => s.value),
     required: 'You must select at least one skill.',
   });
   if (isCancel(selectedSkills)) stop('Installation cancelled.');
