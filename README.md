@@ -74,22 +74,26 @@ Add the marketplace and install:
 Copy [rules/waitsec.md](rules/waitsec.md) to `.cursorrules` in your project root, or add this repository as a plugin under `.cursor-plugin/`.
 
 ### 6. Laravel / PHP (Composer)
-Install into your project development dependencies:
+Install into your development dependencies:
 
 ```bash
 composer require --dev waitsec/waitsec
 ```
 
-The post-install script automatically adds `.kilorules` to your root directory.
-
-### 7. Agent Skills Directory (skills.sh)
-Install the full core bundle (recommended):
+Then run the interactive setup command:
 
 ```bash
-npx skills add fastroware/waitsec/skills/waitsec-core
+vendor/bin/waitsec
 ```
 
-Or install only the module you need:
+### 7. Agent Skills Directory (skills.sh)
+Listed on [skills.sh/fastroware/waitsec](https://skills.sh/fastroware/waitsec). Install via the universal skills CLI:
+
+```bash
+npx skills add fastroware/waitsec
+```
+
+Or install specifically the core guardrails module:
 
 ```bash
 # Individual guardrails
