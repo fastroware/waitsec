@@ -31,11 +31,11 @@ Most AI coding assistants do not fail because they lack knowledge. They fail bec
 
 ## The 5 Core Guardrails
 
-1. **`ask-first`** — If the prompt is missing essential decisions (schemas, storage locations, permissions), the AI must pause and ask 1 to 3 direct questions instead of guessing.
-2. **`anti-overengineering`** — Rejects unneeded design patterns, DTOs, and speculative abstractions. Keeps code lean while strictly enforcing authentication, authorization, and input validation.
-3. **`small-diff`** — Modifications stay strictly scoped to what solves the prompt. No cleaning up surrounding files, no global formatting passes, and no unnecessary dependency changes.
-4. **`debug-first`** — When something breaks, the AI must read the complete error message and stack trace. Never guess fixes or hide errors behind empty try/catch blocks.
-5. **`verify-first`** — Never declare a task complete without proof. Run tests, verify builds, test edge cases, and ensure no regressions occurred before reporting done.
+1. **`ask-first`**: If the prompt is missing essential decisions (schemas, storage locations, permissions), the AI must pause and ask 1 to 3 direct questions instead of guessing.
+2. **`anti-overengineering`**: Rejects unneeded design patterns, DTOs, and speculative abstractions. Keeps code lean while strictly enforcing authentication, authorization, and input validation.
+3. **`small-diff`**: Modifications stay strictly scoped to what solves the prompt. No cleaning up surrounding files, no global formatting passes, and no unnecessary dependency changes.
+4. **`debug-first`**: When something breaks, the AI must read the complete error message and stack trace. Never guess fixes or hide errors behind empty try/catch blocks.
+5. **`verify-first`**: Never declare a task complete without proof. Run tests, verify builds, test edge cases, and ensure no regressions occurred before reporting done.
 
 ---
 
@@ -91,22 +91,37 @@ vendor/bin/waitsec
 ```
 
 ### 7. Agent Skills Directory (skills.sh)
-Listed on [skills.sh/fastroware/waitsec](https://skills.sh/fastroware/waitsec). Install via the universal skills CLI:
+Listed on [skills.sh/fastroware/waitsec](https://skills.sh/fastroware/waitsec).
+
+The skills CLI does not pre-select anything for a GitHub repo, so you must choose at least one skill. To install every skill without any prompt:
 
 ```bash
-npx skills add fastroware/waitsec
+npx skills add fastroware/waitsec -y
 ```
 
-Or install specifically the core guardrails module:
+To install only the core guardrails:
 
 ```bash
-# Individual guardrails
-npx skills add fastroware/waitsec/skills/waitsec            # All 5 core guardrails
-npx skills add fastroware/waitsec/skills/waitsec-ui         # Upcoming — UI optimizer & anti-slop copy
-npx skills add fastroware/waitsec/skills/waitsec-pagemaker  # Upcoming — Page architect (landing, blog, contact)
-npx skills add fastroware/waitsec/skills/waitsec-code       # Upcoming — Clean code & dependency hygiene
-npx skills add fastroware/waitsec/skills/waitsec-quality    # Upcoming — Security audits & test discipline
+npx skills add fastroware/waitsec --skill waitsec
 ```
+
+To pick a specific set:
+
+```bash
+npx skills add fastroware/waitsec --skill waitsec waitsec-pagemaker
+```
+
+Available skills:
+
+| Skill | Purpose |
+| :--- | :--- |
+| `waitsec` | Core 5 guardrails: ask-first, anti-overengineering, small-diff, debug-first, verify-first |
+| `waitsec-pagemaker` | Page architect: project recon, design preferences, SEO/GEO, Schema.org, auth and UX rules |
+| `waitsec-code` | Clean code, anti-comment noise, dependency hygiene |
+| `waitsec-ui` | Anti-slop UI, responsive discipline, UI copy cleanup |
+| `waitsec-quality` | Security auditing, test discipline, migration safety |
+
+Tip: the CLI preselects all skills only when you install from a skills.sh pack URL. For a one-command install that selects everything by default, create a pack on [skills.sh](https://skills.sh) (sign in with Vercel, import this repository) and share the pack URL `https://skills.sh/p/<pack-id>`.
 
 ---
 
@@ -115,7 +130,7 @@ npx skills add fastroware/waitsec/skills/waitsec-quality    # Upcoming — Secur
 ```text
 waitsec/
 ├── skills/
-│   ├── waitsec/                   # ACTIVE — Core 5-phase guardrails
+│   ├── waitsec/                   # ACTIVE: Core 5-phase guardrails
 │   │   ├── SKILL.md               # Hub: pipeline overview + links to detail files
 │   │   └── references/            # Deep-dive guardrails & UI copy rules
 │   │       ├── ask-first.md           # Phase 1: Clarify requirements before coding
@@ -125,14 +140,20 @@ waitsec/
 │   │       ├── verify-first.md        # Phase 5: Proof before declaring done
 │   │       └── write-info-analyzer.md # Simple rules for UI text and clean labels
 │   │
-│   ├── waitsec-ui/                # UPCOMING — Anti-slop CSS, UI copy restraint, responsive
+│   ├── waitsec-ui/                # ACTIVE: Anti-slop CSS, UI copy restraint, responsive
 │   │   └── SKILL.md
-│   ├── waitsec-pagemaker/         # UPCOMING — Page architect (landing, blog, articles, contact)
-│   │   ├── SKILL.md
+│   ├── waitsec-pagemaker/         # ACTIVE: Page architect (landing, blog, articles, auth, contact)
+│   │   ├── SKILL.md               # Recon, design preferences, SEO/GEO, Schema.org, UX
 │   │   └── references/            # Blueprints per archetype
-│   ├── waitsec-code/              # UPCOMING — Clean code, anti-comment pollution
+│   │       ├── landing-page.md
+│   │       ├── blog-index.md
+│   │       ├── article-single.md
+│   │       ├── about-me.md
+│   │       ├── contact-page.md
+│   │       └── auth-pages.md      # Login, register, password reset, lockout states
+│   ├── waitsec-code/              # ACTIVE: Clean code, anti-comment pollution
 │   │   └── SKILL.md
-│   └── waitsec-quality/           # UPCOMING — Security auditing, testing discipline
+│   └── waitsec-quality/           # ACTIVE: Security auditing, testing discipline
 │       └── SKILL.md
 │
 ├── rules/
@@ -150,9 +171,7 @@ waitsec/
 ## Roadmap: Core & Extensions
 
 - **Core (Active)**: The 5 foundational guardrails (`ask-first`, `anti-overengineering`, `small-diff`, `debug-first`, `verify-first`).
-- **Quality (Upcoming)**: Specialized deep-dives for `security`, `testing`, `performance`, and `accessibility`.
-- **Code (Upcoming)**: Anti-slop comments, naming conventions, and dependency discipline.
-- **UI (Upcoming)**: Anti-slop interface rules, responsive standards, and clean typography.
+- **Extensions (Active)**: `waitsec-pagemaker` for page building, `waitsec-code` for code hygiene, `waitsec-ui` for UI restraint, and `waitsec-quality` for security and testing discipline.
 
 ---
 

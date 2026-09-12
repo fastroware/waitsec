@@ -2,7 +2,7 @@
   "name": "waitsec",
   "displayName": "waitsec",
   "description": "Practical guardrails for AI coding agents. Hold on, think first, code less.",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "author": {
     "name": "fastroware"
   },
