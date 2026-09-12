@@ -1,0 +1,50 @@
+#!/usr/bin/env php
+<?php
+
+$rootDir = dirname(__DIR__);
+$rulesFile = $rootDir . '/rules/waitsec.md';
+$cwd = getcwd();
+
+echo "\n=========================================\n";
+echo "  waitsec: AI Coding Guardrails (PHP)\n";
+echo "  \"Hold on. Think first. Code less.\"\n";
+echo "=========================================\n\n";
+
+if (!file_exists($rulesFile)) {
+    fwrite(STDERR, "Error: rules/waitsec.md not found at {$rulesFile}\n");
+    exit(1);
+}
+
+$rules = file_get_contents($rulesFile);
+
+echo "Select your editor / agent rule target:\n";
+echo "  1) Kilo Code (.kilorules)\n";
+echo "  2) Cline (.clinerules)\n";
+echo "  3) Cursor (.cursorrules)\n";
+echo "  4) Antigravity / Claude (AGENTS.md)\n";
+echo "  5) All of the above\n\n";
+
+echo "Choice [1-5] (default: 1): ";
+$choice = trim(fgets(STDIN) ?: '1');
+if ($choice === '') $choice = '1';
+
+$targets = match ($choice) {
+    '2' => ['.clinerules'],
+    '3' => ['.cursorrules'],
+    '4' => ['AGENTS.md'],
+    '5' => ['.kilorules', '.clinerules', '.cursorrules', 'AGENTS.md'],
+    default => ['.kilorules'],
+};
+
+foreach ($targets as $file) {
+    $dest = $cwd . '/' . $file;
+    if (file_exists($dest)) {
+        echo "  [!] {$file} already exists - appending rules...\n";
+        file_put_contents($dest, "\n\n" . $rules, FILE_APPEND);
+    } else {
+        file_put_contents($dest, $rules);
+        echo "  [+] Created {$file}\n";
+    }
+}
+
+echo "\nDone! waitsec rules are active in this project.\n\n";
