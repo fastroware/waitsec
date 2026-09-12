@@ -18,7 +18,7 @@ Treat this section as the prompt you must satisfy every time you generate a page
 1. **Recon before markup.** Run Part 0, then state the detected stack, template engine, styling system, load method, version, and icon library in one short block.
 2. **Follow the project.** Use the framework, template syntax, and styling system that already exist. Never add a second CSS system. Ask before switching a native CSS project to a framework.
 3. **Install with the right method.** Tailwind with an existing build step installs through npm. Tailwind in a static project uses the CDN unless the user asks for a local install. Bootstrap and other requested frameworks install locally.
-4. **Every generated page includes JSON-LD.** Add a valid Schema.org block in `<head>`, with the type matched to the page (see Part 8). No page ships without structured data.
+4. **Every generated page includes JSON-LD.** Add a valid Schema.org block in `<head>`, with the type matched to the page (see Part 8). No page ships without structured data. Auth and error pages use a minimal `WebPage` node and are set to `noindex`.
 5. **Icons only from a library.** Use the project's existing icon library, or Lucide from CDN as the default. Never use an emoji as an icon. Never hand-write inline SVG markup. Never use an image as a UI icon.
 6. **No em dash and no en dash.** Use colons, commas, periods, parentheses, or plain hyphens in every word of the output.
 7. **No emoji anywhere.** Not in headings, body copy, buttons, badges, alt text, or metadata.
@@ -26,6 +26,7 @@ Treat this section as the prompt you must satisfy every time you generate a page
 9. **The navbar must be responsive.** A working menu button on mobile, a solid sticky background, 4 to 5 primary links, and a visible active and focus state.
 10. **Meet the SEO and GEO bar.** One H1, a unique title and meta description, a canonical URL, Open Graph tags, and answer-first content that machines can quote.
 11. **Finish with the Pre-Flight Checklist.** Do not report the page as done until every box is checked.
+12. **Translate vague style words.** When the user says minimalist, modern, clean, premium, bold, or similar, convert the word into concrete tokens using Part 10, reuse the project tokens first, and state the translation before generating. Never treat a style word as a license for gradients, glass, or heavy shadows.
 
 ---
 
@@ -40,6 +41,7 @@ Activate this skill whenever:
 - Structuring multi-section web views or routes (`/`, `/about`, `/contact`, `/blog`, `/blog/[slug]`).
 - Writing layout containers, responsive grids, navigation bars, and design themes.
 - Adding SEO metadata, Open Graph tags, or Schema.org structured data to a page.
+- Building authentication screens (login, register, password reset) or account lockout and rate-limit pages.
 
 ---
 
@@ -498,6 +500,7 @@ Structured data helps search engines and answer engines understand what the page
 | Single article or post | `Article` or `BlogPosting`, `BreadcrumbList`, `Person` as author, `Organization` as publisher |
 | About or portfolio | `ProfilePage`, `Person`, `Organization` |
 | Contact page | `ContactPage`, `Organization`, `ContactPoint` |
+| Auth page (login, register, reset, locked) | minimal `WebPage`, with the page set to `noindex, nofollow` |
 | FAQ section | `FAQPage` |
 | Any page with breadcrumbs | `BreadcrumbList` |
 
@@ -575,7 +578,22 @@ Each page blueprint in `references/` includes the exact JSON-LD block for that p
 
 ## Part 9: Page Archetypes & Blueprint Routing
 
-When the user asks for a specific type of page, read its dedicated reference guide. Each reference includes the page anatomy, the 5-point pitfalls, the SEO and GEO notes, and the exact JSON-LD block for that page type.
+### Routing Rules
+
+Each reference includes the page anatomy, the 5-point pitfalls, the SEO and GEO notes, and the exact JSON-LD block for that page type. Choose the reference like this:
+
+1. **The user names or clearly describes an archetype** (for example "about me", "contact page", "login"): read that reference first, then build.
+2. **The request is vague or random** (for example "make a page", "build something nice"): infer the closest archetype from the user's intent and the project, then read that reference. If two archetypes are plausible and the choice changes the structure, ask one short question.
+3. **The request is outside the listed archetypes** (for example pricing, dashboard, settings, search results, 404, FAQ, changelog): use the general preference below, and adapt the closest blueprint instead of forcing an unrelated one.
+4. **Always state which blueprint you are following** in the recon summary before you generate.
+
+### General Preference for Unlisted Pages
+
+- Keep every rule from Parts 0 to 8: recon, styling, UX, navbar, SEO, GEO, and structured data.
+- Reuse the anatomy of the nearest archetype. A settings page follows the form layout of the contact page, a search results page follows the list layout of the blog index, and a pricing page follows the section rhythm of a landing page.
+- Pick the Schema.org type that matches the content. Use `FAQPage` for an FAQ, `Product` or `SoftwareApplication` for pricing, and a minimal `WebPage` for utility pages such as 404 or search.
+- If no listed type fits, use a minimal `WebPage` node and keep every field accurate.
+- Never stretch a blueprint to fit a page it was not designed for.
 
 ### 1. Marketing & Conversion Pages
 * **Includes:** SaaS homepages, landing pages, product launch screens.
@@ -599,6 +617,116 @@ When the user asks for a specific type of page, read its dedicated reference gui
   - Contact Page: [`skills/waitsec-pagemaker/references/contact-page.md`](./references/contact-page.md)
   - About / Portfolio: [`skills/waitsec-pagemaker/references/about-me.md`](./references/about-me.md)
 
+### 4. Authentication & Account Access Pages
+* **Includes:** Login, register, forgot password, reset password, remember me, account locked, and login rate-limit screens.
+* **Key Blueprint:** Single-purpose centered form, one primary action, clear error and lockout states, and no user enumeration.
+* **Schema:** Minimal `WebPage` with the page set to `noindex, nofollow`.
+* *Detailed Guide:* [`skills/waitsec-pagemaker/references/auth-pages.md`](./references/auth-pages.md)
+
+---
+
+## Part 10: Design Preference Translation (Minimalist, Modern, and Similar Words)
+
+Users often describe the look with one or two vague words: "minimalist", "modern", "clean", "premium", "bold", "playful". Treat these as direction, not as a license to add generic AI decoration. Translate the word into concrete design decisions, then say the translation out loud before generating.
+
+### 1. Rules
+
+- A style word is a direction, not a spec. Convert it into decisions about color, spacing, radius, borders, shadow, typography, motion, density, and imagery.
+- The project's existing design tokens win. A style word only fills gaps the project does not already define.
+- "Modern" never means purple gradients, glassmorphism, huge soft shadows, all-pill shapes, or animated everything. Those are AI slop, not modern design.
+- If the word conflicts with the project's design language, tell the user and ask whether to follow the project or deliberately override it.
+- If two words conflict ("minimalist but bold"), resolve them by function: let the layout word drive hierarchy and density, and let the mood word drive color and decoration. State the resolution, and ask only if the conflict changes the structure.
+- If the user points to a reference site or brand, extract concrete tokens from it (type scale, accent color, spacing, radius, density) instead of copying the whole look.
+- State the final token summary in one short block before writing markup. Do not silently guess.
+
+### 2. Translator Table
+
+| User says | Usually means | Does NOT mean |
+| :--- | :--- | :--- |
+| Minimalist / Minimal | Few colors (neutrals plus one accent), generous spacing, type-led hierarchy, flat surfaces, thin or no borders | Empty pages with no hierarchy, gray-on-gray text, removing all images |
+| Modern / Contemporary | Clean type, clear grid, consistent radius, subtle borders, restrained motion | Purple gradients, glass everywhere, big shadows, neon glows, pill everything |
+| Clean | Aligned grid, consistent spacing, high-contrast text, few effects | Making everything white, tiny light-gray text, removing all styling |
+| Simple | Fewer sections, one primary action, plain language, minimal form fields | Hiding needed information, removing navigation, blank screens |
+| Premium / Luxury | Generous space, strong type contrast, one refined accent, quality imagery, restrained motion | Gold gradients, fake 3D, heavy glossy shadows, shiny badges |
+| Corporate / Professional | Structured sections, muted palette, clear typography, trust signals | Stock-photo collages, blue gradient hero, generic icon walls |
+| Playful / Fun | One brighter accent, consistent rounded radius, friendly copy, small motion | Emoji, rainbow palettes, bouncy animation on everything, comic fonts |
+| Bold | Large type, strong contrast, big sections, one loud accent | Heavy shadows alone, clashing colors, oversized everything |
+| Elegant | Refined typography, thin rules, calm palette, lots of breathing room | Script fonts, gold shimmer, over-decoration |
+| Dark | Solid dark surfaces, checked contrast, muted borders, one accent | Pure black with low-contrast gray text, neon outlines everywhere |
+| Warm / Friendly | Warm neutrals, softer radius, human copy | Orange overload, gradients everywhere, rounded everything |
+
+Local slang works the same way. "Estetik", "kece", "clean banget", "kayak startup", or "kayak Stripe" is still a direction. Map it to a row above, or ask one question with two concrete options.
+
+### 3. Handling Steps
+
+1. Map the word with the translator table.
+2. Read the project theme: existing colors, fonts, spacing scale, radius, and components. Reuse them.
+3. If the project already has a strong design language, follow it and say so. Only override when the user confirms.
+4. Resolve conflicting words by function, then state the resolution.
+5. For a reference site or brand, extract tokens, not pixels.
+6. Print the token summary: palette, accent, type scale, spacing, radius, border and shadow policy, motion.
+7. Build, then check the result against the summary.
+
+### 4. Default Tokens (When Nothing Is Specified)
+
+- **Color:** a neutral scale plus exactly one accent. Body text at least 4.5:1 contrast.
+- **Spacing:** a 4px and 8px scale, with consistent gaps between sections.
+- **Radius:** `rounded-lg` for cards, `rounded-md` for buttons and inputs. Pills only for small tags.
+- **Borders:** 1px neutral borders for structure. Shadows only for overlays such as dropdowns and modals.
+- **Type:** one sans-serif family. Body line-height around 1.5, headings around 1.2, with a fluid scale using `clamp()`.
+- **Motion:** 150ms to 200ms, only for state changes such as hover, focus, and open. Respect `prefers-reduced-motion`.
+- **Density:** comfortable on mobile, a little more generous on desktop. Never giant empty gaps by default.
+
+### 5. Pitfalls
+
+#### 1. Treating "Modern" as a Slop License
+
+* **The Bad Habit:** Reading "modern" and adding a purple gradient hero, glass cards, and floating shadows.
+* **The Problem:** The page looks like every other generated template, and the eye has no clear focus.
+* **Why It Fails:** Users recognize the generic AI look and trust the product less.
+* **Clean Fix:** Translate "modern" into clean type, a clear grid, one accent, and restrained motion. Use no gradient unless the brand already uses one.
+* **The Waitsec Way:** Modern is restraint and clarity, not decoration.
+
+#### 2. Over-Rounding and Over-Shadowing for "Premium"
+
+* **The Bad Habit:** Making every card `rounded-full` with a large soft shadow to look expensive.
+* **The Problem:** Shapes lose meaning and surfaces turn blurry.
+* **Why It Fails:** Depth cues stop working, and the page reads as cheap rather than premium.
+* **Clean Fix:** Use one consistent radius and crisp borders. Reserve shadow for real overlays, and use space and type contrast for a premium feel.
+* **The Waitsec Way:** Premium comes from space, type, and consistency, not from glow.
+
+#### 3. Going Low-Contrast for "Minimalist"
+
+* **The Bad Habit:** Choosing light gray text on white and thin faint lines to feel minimal.
+* **The Problem:** Text becomes hard to read and controls become hard to find.
+* **Why It Fails:** Minimalism is often mistaken for low contrast, and real users cannot read the result.
+* **Clean Fix:** Keep strong contrast and a clear hierarchy. Simplify with space, not with faintness.
+* **The Waitsec Way:** Minimal means fewer elements, not weaker ones.
+
+#### 4. Copying a Reference Site Blindly
+
+* **The Bad Habit:** Recreating another product's exact layout, palette, and motion.
+* **The Problem:** The result looks like a clone, and it may not fit this product's content or brand.
+* **Why It Fails:** It ignores the project's own identity and can raise legal and trust concerns.
+* **Clean Fix:** Extract the principles (spacing, type scale, accent, density) and rebuild them with the project's content and tokens.
+* **The Waitsec Way:** Learn the recipe, do not steal the dish.
+
+#### 5. Overriding the Project's Design System
+
+* **The Bad Habit:** Ignoring existing tokens and introducing new colors, fonts, and spacing because the user said "make it modern".
+* **The Problem:** The page no longer matches the rest of the product.
+* **Why It Fails:** Inconsistency across screens confuses users and multiplies maintenance work.
+* **Clean Fix:** Reuse the project tokens first. Ask before deviating, and if the user confirms, keep the change minimal and note it.
+* **The Waitsec Way:** The design system is the source of truth. A style word does not outrank it.
+
+#### 6. Conflicting Words Resolved Silently
+
+* **The Bad Habit:** Getting "minimalist but bold" and quietly picking one, then delivering a page that matches neither.
+* **The Problem:** The user expected both directions to be visible.
+* **Why It Fails:** The mismatch surfaces in review, and the work is redone.
+* **Clean Fix:** Resolve by function and state the resolution. If the conflict changes structure, ask one short question.
+* **The Waitsec Way:** Say how you resolved the brief instead of guessing in silence.
+
 ---
 
 ## Pre-Flight Checklist
@@ -620,3 +748,7 @@ Before returning generated page code to the user, verify:
 - [ ] Does the page have one `<h1>`, a unique title and meta description, a canonical URL, and Open Graph tags?
 - [ ] Is the main content server-rendered and structured so answer engines can quote it?
 - [ ] Is the JSON-LD block present, type-appropriate, using absolute URLs and ISO 8601 dates, and validated with no errors?
+- [ ] If the page is an auth page, is it set to `noindex` with a minimal `WebPage` node, does it avoid user enumeration, and does any lockout state explain the reason and offer recovery?
+- [ ] If the requested page is outside the listed archetypes, did I state the closest blueprint I adapted and keep the general preferences?
+- [ ] If the user gave a vague style word, did I translate it into concrete tokens (palette, type, spacing, radius, border and shadow policy, motion) and state the translation?
+- [ ] Did I reuse the project's design tokens before inventing new ones?
