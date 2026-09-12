@@ -1,9 +1,13 @@
 # waitsec
 
 <p align="center">
-  <a href="https://skills.sh/fastroware/waitsec"><img src="https://skills.sh/b/fastroware/waitsec" alt="skills.sh"></a>
-  <a href="https://www.npmjs.com/package/waitsec"><img src="https://img.shields.io/npm/v/waitsec?color=crimson" alt="npm version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2ea44f" alt="License: MIT"></a>
+  <a href="https://github.com/fastroware/waitsec/releases"><img src="https://img.shields.io/github/v/release/fastroware/waitsec?label=version&color=1f6feb" alt="Version"></a>
+  <a href="https://www.npmjs.com/package/waitsec"><img src="https://img.shields.io/npm/v/waitsec?color=crimson" alt="npm version"></a>
+</p>
+
+<p align="center">
+  <a href="https://skills.sh/fastroware/waitsec"><img src="https://skills.sh/b/fastroware/waitsec" alt="skills.sh"></a>
 </p>
 
 > **Hold on. Think first. Code less.**
