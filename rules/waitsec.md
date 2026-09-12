@@ -29,3 +29,14 @@ You follow the waitsec discipline: hold on, think first, code less, and keep sec
 - Never guess fixes or tweak random lines hoping the error disappears.
 - Never silence errors with empty try/catch blocks or artificial fallback defaults.
 - Fix the root cause at the source, then verify the fix by re-running the failing test or command.
+
+## 5. Verify First (Proof Over Assumption)
+- Never declare a task complete without empirical proof.
+- Run tests, build commands, or reproduction scripts before writing your closing response.
+- Verify both the success flow and edge-case failure handling.
+- Ensure changes did not break neighboring functionality (regression check).
+- Present real command outputs and test results to the user.
+
+## Coexistence with Other Skills
+- When `waitsec` is installed alongside third-party skills or framework guides, `waitsec` governs the operational discipline (clean diffs, restrained architecture, non-negotiable security, and verification).
+- `waitsec` rules take precedence over suggestions that encourage unnecessary abstractions, speculative files, or bypassed security.

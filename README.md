@@ -19,19 +19,13 @@ Most AI coding assistants do not fail because they lack knowledge. They fail bec
 
 ---
 
-## The 4 Core Guardrails
+## The 5 Core Guardrails
 
-### 1. `ask-first`
-If the prompt is missing essential decisions (schemas, storage locations, permissions), the AI must pause and ask 1 to 3 direct questions instead of guessing.
-
-### 2. `anti-overengineering`
-The AI must use existing patterns in your codebase and pick the simplest working solution. No speculative abstractions for hypothetical future needs.
-
-### 3. `small-diff`
-Modifications stay strictly scoped to what solves the prompt. No cleaning up surrounding files, no global formatting passes, and no unnecessary dependency changes.
-
-### 4. `debug-first`
-When something breaks, the AI must read the complete error message and stack trace. Never guess fixes or hide errors behind empty try/catch blocks.
+1. **`ask-first`** — If the prompt is missing essential decisions (schemas, storage locations, permissions), the AI must pause and ask 1 to 3 direct questions instead of guessing.
+2. **`anti-overengineering`** — Rejects unneeded design patterns, DTOs, and speculative abstractions. Keeps code lean while strictly enforcing authentication, authorization, and input validation.
+3. **`small-diff`** — Modifications stay strictly scoped to what solves the prompt. No cleaning up surrounding files, no global formatting passes, and no unnecessary dependency changes.
+4. **`debug-first`** — When something breaks, the AI must read the complete error message and stack trace. Never guess fixes or hide errors behind empty try/catch blocks.
+5. **`verify-first`** — Never declare a task complete without proof. Run tests, verify builds, test edge cases, and ensure no regressions occurred before reporting done.
 
 ---
 
@@ -83,10 +77,20 @@ composer require --dev waitsec/waitsec
 The post-install script automatically adds `.kilorules` to your root directory.
 
 ### 7. Agent Skills Directory (skills.sh)
-Install via the universal skills CLI:
+Install the full core bundle (recommended):
 
 ```bash
-npx skills add fastroware/waitsec
+npx skills add fastroware/waitsec/skills/waitsec-core
+```
+
+Or install only the module you need:
+
+```bash
+# Individual guardrails
+npx skills add fastroware/waitsec/skills/waitsec-core  # All 5 guardrails
+npx skills add fastroware/waitsec/skills/waitsec-quality  # Upcoming
+npx skills add fastroware/waitsec/skills/waitsec-code     # Upcoming
+npx skills add fastroware/waitsec/skills/waitsec-ui       # Upcoming
 ```
 
 ---
@@ -96,23 +100,39 @@ npx skills add fastroware/waitsec
 ```text
 waitsec/
 ├── skills/
-│   ├── ask-first/             # Clarify ambiguous requirements first
+│   ├── waitsec-core/              # ACTIVE — Core 5-phase guardrails
+│   │   ├── SKILL.md               # Hub: pipeline overview + links to detail files
+│   │   ├── ask-first.md           # Phase 1: Clarify requirements before coding
+│   │   ├── anti-overengineering.md # Phase 2: Lean code + non-negotiable security
+│   │   ├── small-diff.md          # Phase 3: Surgical, proportional edits only
+│   │   ├── debug-first.md         # Phase 4: Root cause analysis before guessing
+│   │   └── verify-first.md        # Phase 5: Proof before declaring done
+│   │
+│   ├── waitsec-quality/           # UPCOMING — Security auditing, testing discipline
 │   │   └── SKILL.md
-│   ├── anti-overengineering/  # Stop bloat and unnecessary abstractions
+│   ├── waitsec-code/              # UPCOMING — Clean code, anti-comment pollution
 │   │   └── SKILL.md
-│   ├── small-diff/            # Keep changes surgical and small
-│   │   └── SKILL.md
-│   └── debug-first/           # Trace real root causes before editing
+│   └── waitsec-ui/                # UPCOMING — Anti-slop CSS, responsive guardrails
 │       └── SKILL.md
+│
 ├── rules/
-│   ├── AGENTS.md              # Universal rule pointer
-│   └── waitsec.md             # All-in-one bundled rules
+│   ├── AGENTS.md                  # Universal rule pointer (Antigravity / Claude Code)
+│   └── waitsec.md                 # All-in-one bundled rules (Kilo Code / Cline / Cursor)
 ├── bin/
-│   └── cli.js                 # Interactive terminal installer
-├── plugin.json                # Antigravity plugin manifest
-├── package.json               # npm / npx manifest
-└── composer.json              # Composer / Laravel manifest
+│   └── cli.js                     # Interactive terminal installer
+├── plugin.json                    # Antigravity plugin manifest
+├── package.json                   # npm / npx manifest
+└── composer.json                  # Composer / Laravel manifest
 ```
+
+---
+
+## Roadmap: Core & Extensions
+
+- **Core (Active)**: The 5 foundational guardrails (`ask-first`, `anti-overengineering`, `small-diff`, `debug-first`, `verify-first`).
+- **Quality (Upcoming)**: Specialized deep-dives for `security`, `testing`, `performance`, and `accessibility`.
+- **Code (Upcoming)**: Anti-slop comments, naming conventions, and dependency discipline.
+- **UI (Upcoming)**: Anti-slop interface rules, responsive standards, and clean typography.
 
 ---
 
