@@ -1,0 +1,35 @@
+{
+  "name": "waitsec",
+  "version": "0.1.0",
+  "description": "Practical guardrails for AI coding agents. Hold on, think first, code less.",
+  "main": "rules/waitsec.md",
+  "bin": {
+    "waitsec": "./bin/cli.js"
+  },
+  "scripts": {
+    "start": "node ./bin/cli.js"
+  },
+  "keywords": [
+    "ai",
+    "coding-agent",
+    "guardrails",
+    "anti-slop",
+    "cursor",
+    "cline",
+    "kilo-code",
+    "antigravity",
+    "claude-code",
+    "developer-tools"
+  ],
+  "author": "",
+  "license": "MIT",
+  "files": [
+    "bin/",
+    "rules/",
+    "skills/",
+    ".cursor-plugin/",
+    "plugin.json",
+    "README.md",
+    "LICENSE"
+  ]
+}

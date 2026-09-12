@@ -1,0 +1,14 @@
+{
+  "name": "waitsec/waitsec",
+  "description": "Practical guardrails for AI coding agents in PHP and Laravel projects.",
+  "type": "library",
+  "license": "MIT",
+  "scripts": {
+    "post-install-cmd": [
+      "php -r \"if (!file_exists('.kilorules') && file_exists('vendor/waitsec/waitsec/rules/waitsec.md')) copy('vendor/waitsec/waitsec/rules/waitsec.md', '.kilorules');\""
+    ],
+    "post-update-cmd": [
+      "php -r \"if (!file_exists('.kilorules') && file_exists('vendor/waitsec/waitsec/rules/waitsec.md')) copy('vendor/waitsec/waitsec/rules/waitsec.md', '.kilorules');\""
+    ]
+  }
+}
