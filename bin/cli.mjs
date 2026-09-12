@@ -13,18 +13,23 @@ const REPO_ROOT = path.resolve(__dirname, '..');
 const SKILLS_SOURCE_DIR = path.join(REPO_ROOT, 'skills');
 const RULES_SOURCE_FILE = path.join(REPO_ROOT, 'rules', 'waitsec.md');
 
-const CORE_SKILL = 'waitsec-core';
+const CORE_SKILL = 'waitsec';
 
 const AVAILABLE_SKILLS = [
   {
-    value: 'waitsec-core',
-    label: 'waitsec-core',
+    value: 'waitsec',
+    label: 'waitsec (core)',
     hint: '5 core guardrails: ask-first, anti-overengineering, small-diff, debug-first, verify-first',
   },
   {
-    value: 'waitsec-quality',
-    label: 'waitsec-quality (preview)',
-    hint: 'Security audits, test discipline, data integrity',
+    value: 'waitsec-ui',
+    label: 'waitsec-ui (preview)',
+    hint: 'Anti-slop UI copy & CSS, responsive guardrails',
+  },
+  {
+    value: 'waitsec-pagemaker',
+    label: 'waitsec-pagemaker (preview)',
+    hint: 'Page architect: landing pages, blog/articles, contact, about me',
   },
   {
     value: 'waitsec-code',
@@ -32,9 +37,9 @@ const AVAILABLE_SKILLS = [
     hint: 'Clean code rules, anti-comment noise, dependency control',
   },
   {
-    value: 'waitsec-ui',
-    label: 'waitsec-ui (preview)',
-    hint: 'Anti-slop UI copy & CSS, responsive guardrails',
+    value: 'waitsec-quality',
+    label: 'waitsec-quality (preview)',
+    hint: 'Security audits, test discipline, data integrity',
   },
 ];
 
@@ -143,7 +148,7 @@ async function main() {
   const selectedSkills = await multiselect({
     message: 'Select the skills you want (Press Space to select, Enter to confirm):',
     options: AVAILABLE_SKILLS,
-    initialValues: ['waitsec-core'],
+    initialValues: ['waitsec'],
     required: 'You must select at least one skill.',
   });
   if (isCancel(selectedSkills)) stop('Installation cancelled.');

@@ -101,10 +101,11 @@ Or install specifically the core guardrails module:
 
 ```bash
 # Individual guardrails
-npx skills add fastroware/waitsec/skills/waitsec-core  # All 5 guardrails
-npx skills add fastroware/waitsec/skills/waitsec-quality  # Upcoming
-npx skills add fastroware/waitsec/skills/waitsec-code     # Upcoming
-npx skills add fastroware/waitsec/skills/waitsec-ui       # Upcoming
+npx skills add fastroware/waitsec/skills/waitsec            # All 5 core guardrails
+npx skills add fastroware/waitsec/skills/waitsec-ui         # Upcoming — UI optimizer & anti-slop copy
+npx skills add fastroware/waitsec/skills/waitsec-pagemaker  # Upcoming — Page architect (landing, blog, contact)
+npx skills add fastroware/waitsec/skills/waitsec-code       # Upcoming — Clean code & dependency hygiene
+npx skills add fastroware/waitsec/skills/waitsec-quality    # Upcoming — Security audits & test discipline
 ```
 
 ---
@@ -114,19 +115,24 @@ npx skills add fastroware/waitsec/skills/waitsec-ui       # Upcoming
 ```text
 waitsec/
 ├── skills/
-│   ├── waitsec-core/              # ACTIVE — Core 5-phase guardrails
+│   ├── waitsec/                   # ACTIVE — Core 5-phase guardrails
 │   │   ├── SKILL.md               # Hub: pipeline overview + links to detail files
-│   │   ├── ask-first.md           # Phase 1: Clarify requirements before coding
-│   │   ├── anti-overengineering.md # Phase 2: Lean code + non-negotiable security
-│   │   ├── small-diff.md          # Phase 3: Surgical, proportional edits only
-│   │   ├── debug-first.md         # Phase 4: Root cause analysis before guessing
-│   │   └── verify-first.md        # Phase 5: Proof before declaring done
+│   │   └── references/            # Deep-dive guardrails & UI copy rules
+│   │       ├── ask-first.md           # Phase 1: Clarify requirements before coding
+│   │       ├── anti-overengineering.md # Phase 2: Lean code + non-negotiable security
+│   │       ├── small-diff.md          # Phase 3: Surgical, proportional edits only
+│   │       ├── debug-first.md         # Phase 4: Root cause analysis before guessing
+│   │       ├── verify-first.md        # Phase 5: Proof before declaring done
+│   │       └── write-info-analyzer.md # Simple rules for UI text and clean labels
 │   │
-│   ├── waitsec-quality/           # UPCOMING — Security auditing, testing discipline
+│   ├── waitsec-ui/                # UPCOMING — Anti-slop CSS, UI copy restraint, responsive
 │   │   └── SKILL.md
+│   ├── waitsec-pagemaker/         # UPCOMING — Page architect (landing, blog, articles, contact)
+│   │   ├── SKILL.md
+│   │   └── references/            # Blueprints per archetype
 │   ├── waitsec-code/              # UPCOMING — Clean code, anti-comment pollution
 │   │   └── SKILL.md
-│   └── waitsec-ui/                # UPCOMING — Anti-slop CSS, responsive guardrails
+│   └── waitsec-quality/           # UPCOMING — Security auditing, testing discipline
 │       └── SKILL.md
 │
 ├── rules/

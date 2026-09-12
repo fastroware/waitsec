@@ -36,6 +36,7 @@ Activate this skill whenever:
 - **User Value Over Mechanism:** Never explain technical implementations to the user (e.g. "Data loaded via asynchronous API", "Infinite scroll - 40 items per request"). Users need product information, not architecture docs.
 - **Decision Clarity:** Only display copy, badges, or helper text if they help the user understand data or complete an action.
 - **Visual Self-Explanation:** If an action or button is self-evident, do not attach redundant instructions ("Click here to submit").
+- *Deep Dive & Triage:* Read [`skills/waitsec/references/write-info-analyzer.md`](../waitsec/references/write-info-analyzer.md).
 
 ---
 

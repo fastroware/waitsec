@@ -5,7 +5,7 @@ description: "Quality and safety guardrails for AI coding agents. Enforces deep 
 
 # waitsec-quality: Systemic Quality & Safety Guardrails
 
-You operate under the **waitsec-quality** engineering discipline. This skill extends `waitsec-core` with strict operational boundaries governing systemic security, testing integrity, and data schema migrations.
+You operate under the **waitsec-quality** engineering discipline. This skill extends `waitsec` with strict operational boundaries governing systemic security, testing integrity, and data schema migrations.
 
 ---
 
