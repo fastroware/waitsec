@@ -1,4 +1,4 @@
-﻿---
+---
 name: waitsec-quality
 description: "[Coming Soon] Quality extension for waitsec. Covers security auditing, automated testing discipline, and data integrity guardrails."
 ---

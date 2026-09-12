@@ -1,4 +1,4 @@
-﻿---
+---
 name: waitsec-ui
 description: "[Coming Soon] UI/frontend extension for waitsec. Covers anti-slop CSS, responsive discipline, and no-decoration-for-decoration's-sake rules."
 ---

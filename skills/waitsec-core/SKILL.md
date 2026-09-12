@@ -1,6 +1,6 @@
 ---
 name: waitsec-core
-description: Core guardrails for AI coding agents. Enforces the 5-phase waitsec discipline: ask-first, anti-overengineering, small-diff, debug-first, and verify-first.
+description: "Core guardrails for AI coding agents. Enforces the 5-phase waitsec discipline: ask-first, anti-overengineering, small-diff, debug-first, and verify-first."
 ---
 
 # waitsec-core: The 5 Foundational Guardrails

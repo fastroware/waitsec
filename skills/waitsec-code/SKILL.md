@@ -1,4 +1,4 @@
-﻿---
+---
 name: waitsec-code
 description: "[Coming Soon] Code quality extension for waitsec. Covers clean code patterns, anti-comment pollution, and dependency hygiene."
 ---
