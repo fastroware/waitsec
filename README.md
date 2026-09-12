@@ -82,6 +82,13 @@ composer require --dev waitsec/waitsec
 
 The post-install script automatically adds `.kilorules` to your root directory.
 
+### 7. Agent Skills Directory (skills.sh)
+Install via the universal skills CLI:
+
+```bash
+npx skills add fastroware/waitsec
+```
+
 ---
 
 ## Structure

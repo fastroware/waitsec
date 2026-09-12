@@ -1,10 +1,10 @@
 {
   "name": "waitsec",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Practical guardrails for AI coding agents. Hold on, think first, code less.",
   "main": "rules/waitsec.md",
   "bin": {
-    "waitsec": "./bin/cli.js"
+    "waitsec": "bin/cli.js"
   },
   "scripts": {
     "start": "node ./bin/cli.js",
