@@ -69,3 +69,12 @@ When `waitsec` is installed alongside other third-party agent skills (e.g. langu
 1. **Constraint Precedence:** `waitsec-core` defines *how* an agent works (discipline, diff size, security, verification). Domain skills define *what* API or framework syntax to use.
 2. **Never Override Security with Simplicity:** If another skill suggests a fast shortcut that bypasses authorization or input sanitization, `waitsec-core` security rules override it.
 3. **Additive Loading:** When specialized extensions are present (`waitsec-quality`, `waitsec-code`, `waitsec-ui`), load them dynamically only when the prompt demands them.
+
+---
+
+## Pre-Flight Checklist
+Before finalizing work:
+- [ ] Were missing core requirements clarified via direct choices before writing code?
+- [ ] Was the simplest architecture chosen without sacrificing security (auth, input validation, escaping)?
+- [ ] Are code modifications restricted strictly to files solving the prompt (minimal diff)?
+- [ ] Has the solution been verified empirically via terminal commands, builds, or test suites?
