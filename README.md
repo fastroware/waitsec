@@ -50,7 +50,7 @@ Pick your editor (Kilo Code, Cline, Cursor, or Antigravity), and the installer p
 Copy [rules/waitsec.md](rules/waitsec.md) to your project root as `.kilorules` (or `.clinerules`):
 
 ```bash
-curl -o .kilorules https://raw.githubusercontent.com/your-username/waitsec/main/rules/waitsec.md
+curl -o .kilorules https://raw.githubusercontent.com/fastroware/waitsec/main/rules/waitsec.md
 ```
 
 You can also paste the contents of `rules/waitsec.md` into the **Custom Instructions** field in your Kilo Code extension settings.
@@ -59,14 +59,14 @@ You can also paste the contents of `rules/waitsec.md` into the **Custom Instruct
 Install the plugin using the Antigravity CLI:
 
 ```bash
-agy plugin install https://github.com/your-username/waitsec
+agy plugin install https://github.com/fastroware/waitsec
 ```
 
 ### 4. Claude Code
 Add the marketplace and install:
 
 ```text
-/plugin marketplace add https://github.com/your-username/waitsec
+/plugin marketplace add https://github.com/fastroware/waitsec
 /plugin install waitsec@waitsec
 ```
 

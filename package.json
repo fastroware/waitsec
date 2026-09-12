@@ -1,13 +1,14 @@
 {
   "name": "waitsec",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Practical guardrails for AI coding agents. Hold on, think first, code less.",
   "main": "rules/waitsec.md",
   "bin": {
     "waitsec": "./bin/cli.js"
   },
   "scripts": {
-    "start": "node ./bin/cli.js"
+    "start": "node ./bin/cli.js",
+    "ship": "node ./scripts/ship.js"
   },
   "keywords": [
     "ai",
@@ -21,8 +22,16 @@
     "claude-code",
     "developer-tools"
   ],
-  "author": "",
+  "author": "fastroware",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fastroware/waitsec.git"
+  },
+  "homepage": "https://github.com/fastroware/waitsec#readme",
+  "bugs": {
+    "url": "https://github.com/fastroware/waitsec/issues"
+  },
   "files": [
     "bin/",
     "rules/",
