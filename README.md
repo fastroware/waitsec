@@ -150,6 +150,32 @@ waitsec/
 
 ---
 
+## Feedback, Bugs & Contributing
+
+Found a bug, want to suggest a new guardrail, or want to contribute? Everything is tracked through GitHub.
+
+### 1. Found a Bug or Have a Complaint?
+If an AI agent bypassed a guardrail, generated unexpected boilerplate, or an installer command failed:
+1. Go to [GitHub Issues](https://github.com/fastroware/waitsec/issues).
+2. Click **New Issue**.
+3. Include:
+   - Your AI assistant or editor (Cursor, Claude Code, Antigravity, Kilo, Cline).
+   - The prompt you ran.
+   - What the agent did wrong and what behavior was expected instead.
+
+### 2. Suggesting a New Guardrail or Feature
+If you have an idea for a rule that prevents AI slop in specific languages or workflows:
+1. Open a ticket on [GitHub Issues](https://github.com/fastroware/waitsec/issues) titled `[Feature] your idea`.
+2. Provide a before-and-after example showing the bad AI output vs the desired clean solution.
+
+### 3. Submitting a Pull Request
+1. Fork this repository on GitHub.
+2. Create a feature branch: `git checkout -b feature/my-guardrail`.
+3. Keep instructions concise, actionable, and strictly free of generic AI slop.
+4. Submit a **Pull Request** to `main`.
+
+---
+
 ## License
 
 MIT
