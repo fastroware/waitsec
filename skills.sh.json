@@ -1,0 +1,31 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Core",
+      "description": "The foundational guardrails that govern every task.",
+      "skills": ["waitsec"]
+    },
+    {
+      "title": "Pages",
+      "description": "Page architecture with stack recon, SEO and GEO, Schema.org, and UX rules.",
+      "skills": ["waitsec-pagemaker"]
+    },
+    {
+      "title": "Code",
+      "description": "Clean code, naming, and dependency hygiene.",
+      "skills": ["waitsec-code"]
+    },
+    {
+      "title": "UI",
+      "description": "Anti-slop interface, responsive layout, and clean UI copy.",
+      "skills": ["waitsec-ui"]
+    },
+    {
+      "title": "Quality",
+      "description": "Security auditing, testing discipline, and migration safety.",
+      "skills": ["waitsec-quality"]
+    }
+  ]
+}
