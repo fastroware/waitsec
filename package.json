@@ -1,13 +1,13 @@
 {
   "name": "waitsec",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Practical guardrails for AI coding agents. Hold on, think first, code less.",
   "main": "rules/waitsec.md",
   "bin": {
-    "waitsec": "bin/cli.js"
+    "waitsec": "bin/cli.mjs"
   },
   "scripts": {
-    "start": "node ./bin/cli.js",
+    "start": "node ./bin/cli.mjs",
     "ship": "node ./scripts/ship.js"
   },
   "keywords": [
@@ -40,5 +40,9 @@
     "plugin.json",
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "dependencies": {
+    "@clack/prompts": "^1.8.0",
+    "picocolors": "^1.1.1"
+  }
 }

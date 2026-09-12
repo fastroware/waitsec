@@ -1,5 +1,11 @@
 # waitsec
 
+<p align="center">
+  <a href="https://skills.sh/fastroware/waitsec"><img src="https://skills.sh/b/fastroware/waitsec" alt="skills.sh"></a>
+  <a href="https://www.npmjs.com/package/waitsec"><img src="https://img.shields.io/npm/v/waitsec?color=crimson" alt="npm version"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2ea44f" alt="License: MIT"></a>
+</p>
+
 > **Hold on. Think first. Code less.**
 
 `waitsec` gives your AI coding agent practical guardrails. It prevents AI from writing hundreds of unneeded lines, inventing imaginary requirements, or over-complicating simple tasks.
@@ -119,7 +125,7 @@ waitsec/
 │   ├── AGENTS.md                  # Universal rule pointer (Antigravity / Claude Code)
 │   └── waitsec.md                 # All-in-one bundled rules (Kilo Code / Cline / Cursor)
 ├── bin/
-│   └── cli.js                     # Interactive terminal installer
+│   └── cli.mjs                    # Interactive terminal installer (Clack prompts)
 ├── plugin.json                    # Antigravity plugin manifest
 ├── package.json                   # npm / npx manifest
 └── composer.json                  # Composer / Laravel manifest
