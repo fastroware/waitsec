@@ -84,9 +84,9 @@ Never demand phone numbers, fax numbers, company size, or physical mailing addre
 * **Why It Fails:** Software must always confirm state changes. Silent forms destroy confidence and generate duplicate tickets.
 * **Clean Fix:** Disable the submit button immediately on click, show a loading state, and render an unmistakable success card:
   ```html
-  <!-- Button Loading State -->
+  <!-- Button Loading State: the spinner icon comes from the icon library, never inline SVG -->
   <button disabled class="w-full py-3 bg-neutral-700 text-white font-medium rounded-lg cursor-not-allowed flex items-center justify-center gap-2">
-    <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">...</svg>
+    <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>
     <span>Sending...</span>
   </button>
 
@@ -113,6 +113,43 @@ Never demand phone numbers, fax numbers, company size, or physical mailing addre
 
 ---
 
+## SEO, GEO & Structured Data (Contact Page)
+
+- Title: "Contact" plus the brand name, about 50 to 60 characters.
+- Meta description: how to reach the team and the expected response time, about 140 to 160 characters.
+- One `<h1>` such as "Get in touch".
+- Print the email and address as visible text, not only inside the form, so they can be extracted.
+- Server-render the contact details, the email link, and the response-time note.
+- Keep the page focused on contact, and avoid unrelated marketing sections.
+
+### JSON-LD for a Contact Page
+
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": "Contact Us",
+  "url": "https://example.com/contact",
+  "mainEntity": {
+    "@type": "Organization",
+    "name": "Example Inc",
+    "url": "https://example.com",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "email": "hello@example.com",
+      "availableLanguage": ["English", "Indonesian"]
+    }
+  }
+}
+</script>
+```
+
+Add the organization `logo` and a `PostalAddress` when a physical address is shown. Only include channels that are actually displayed on the page.
+
+---
+
 ## Pre-Flight Checklist for Contact Pages
 
 - [ ] Is the form limited to 3 or 4 essential fields (Name, Email, Message)?
@@ -121,3 +158,5 @@ Never demand phone numbers, fax numbers, company size, or physical mailing addre
 - [ ] Does the page display an unmistakable success banner after submission?
 - [ ] Is there a direct, visible email address (`mailto:`) provided as an alternative contact method?
 - [ ] Does the form have enough bottom padding to clear mobile virtual keyboards?
+- [ ] Is there a valid ContactPage with Organization and ContactPoint schema?
+- [ ] Are the email and address visible as text, not only inside the form?

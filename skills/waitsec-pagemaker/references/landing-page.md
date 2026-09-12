@@ -143,6 +143,72 @@ Use this guide when creating a marketing page, product launch screen, or SaaS ho
 
 ---
 
+## SEO, GEO & Structured Data (Landing Page)
+
+State what the product is and who it is for within the first two sentences of the hero. Answer engines quote those lines, so make them complete and direct.
+
+- Title: product name plus one clear benefit, about 50 to 60 characters.
+- Meta description: what the product does and who it is for, about 140 to 160 characters.
+- One `<h1>` that carries the core value proposition in plain words.
+- Server-render the hero headline, subheadline, and primary CTA.
+- Add an FAQ block with question-shaped `<h3>` headings. Start each answer with a direct one-sentence response.
+- Keep the Open Graph image at 1200x630 and use an absolute URL.
+
+### JSON-LD for a Landing Page
+
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://example.com/#organization",
+      "name": "Example Inc",
+      "url": "https://example.com",
+      "logo": "https://example.com/images/logo.png"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://example.com/#website",
+      "url": "https://example.com",
+      "name": "Example",
+      "publisher": { "@id": "https://example.com/#organization" }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Example App",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "url": "https://example.com",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is there a free plan?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The free plan covers one project with no time limit."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+```
+
+Include the `FAQPage` block only when the FAQ is actually visible on the page. Use `Product` instead of `SoftwareApplication` for a physical or ecommerce product.
+
+---
+
 ## Pre-Flight Checklist for Landing Pages
 
 - [ ] Does the hero section have exactly 1 high-contrast primary CTA button?
@@ -150,3 +216,5 @@ Use this guide when creating a marketing page, product launch screen, or SaaS ho
 - [ ] Are feature cards structured with varied visual weight (bento style) rather than copy-paste clones?
 - [ ] Is there zero horizontal page wobble when testing at 320px width?
 - [ ] Are all headlines scaled down comfortably on mobile to avoid breaking words into multiple lines?
+- [ ] Is there one H1, a unique title, a meta description, and an absolute Open Graph image?
+- [ ] Is the JSON-LD valid, type-appropriate, and free of validator errors?

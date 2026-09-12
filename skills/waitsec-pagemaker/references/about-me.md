@@ -113,6 +113,44 @@ Use this guide when creating a personal developer portfolio, founder bio, or eng
 
 ---
 
+## SEO, GEO & Structured Data (About & Portfolio)
+
+- Title: full name plus role, for example "Ilyas Mukhlisin, Backend Engineer", about 50 to 60 characters.
+- Meta description: who you are, what you build, and how to reach you, about 140 to 160 characters.
+- One `<h1>` with your name.
+- Server-render the bio, project list, and contact email.
+- Add `sameAs` links to GitHub, LinkedIn, and X so engines can confirm the identity.
+- Describe each project with a concrete outcome, not a vague claim, so answer engines have something to quote.
+
+### JSON-LD for an About or Portfolio Page
+
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "url": "https://example.com/about",
+  "mainEntity": {
+    "@type": "Person",
+    "name": "Your Name",
+    "jobTitle": "Backend Engineer",
+    "url": "https://example.com",
+    "image": "https://example.com/images/avatar.jpg",
+    "worksFor": { "@type": "Organization", "name": "Fastro" },
+    "knowsAbout": ["Laravel", "PostgreSQL", "API design"],
+    "sameAs": [
+      "https://github.com/username",
+      "https://www.linkedin.com/in/username"
+    ]
+  }
+}
+</script>
+```
+
+When the about page is part of a company site, add an `Organization` node and connect it with `worksFor` or `memberOf`.
+
+---
+
 ## Pre-Flight Checklist for About Me & Portfolio Pages
 
 - [ ] Are all fake animated skill percentage bars removed in favor of clean categorical tags?
@@ -120,3 +158,4 @@ Use this guide when creating a personal developer portfolio, founder bio, or eng
 - [ ] Does every featured project have a working live link or public repository link?
 - [ ] Is there a direct, clickable `mailto:` link clearly visible on the page?
 - [ ] Do project cards collapse into a clean single vertical stack on mobile screens?
+- [ ] Is there a valid ProfilePage with Person data, including sameAs links to real profiles?

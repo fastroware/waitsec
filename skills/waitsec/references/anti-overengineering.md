@@ -113,7 +113,7 @@ The following security practices are **mandatory in all generated code**:
 
 ### Task: "Add an endpoint to cancel an order"
 
-❌ **Bad (Overengineered):**
+**Bad (Overengineered):**
 - `CancelOrderCommand.php`
 - `CancelOrderCommandHandler.php`
 - `OrderRepositoryInterface.php`
@@ -122,7 +122,7 @@ The following security practices are **mandatory in all generated code**:
 - `OrderCancellationDTO.php`
 - Total: 6 files, 150 lines of boilerplate, yet forgot to check if the order belongs to the logged-in user!
 
-✅ **Good (Lean & Secure):**
+**Good (Lean & Secure):**
 - `OrderController.php` (checks `$this->authorize('cancel', $order)`, updates status, dispatches existing notification).
 - Total: 1 file, 15 lines of clear, secure, readable code.
 

@@ -112,6 +112,50 @@ Every article preview card must contain:
 
 ---
 
+## SEO, GEO & Structured Data (Blog Index)
+
+- Title: blog name plus its topic focus, about 50 to 60 characters.
+- Meta description: what the blog covers and who it helps, about 140 to 160 characters.
+- One `<h1>` for the index title, and `<h2>` for each article title.
+- Server-render article titles, excerpts, and dates so crawlers read them without JavaScript.
+- Link each card with the article title as anchor text, not "read more".
+- Point a canonical tag at the canonical page of the listing, and keep paginated pages self-canonical.
+- Keep the publish date and reading time visible, because freshness matters to both search and answer engines.
+
+### JSON-LD for a Blog Index
+
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Engineering Journal",
+  "url": "https://example.com/blog",
+  "description": "Articles about software architecture, security, and frontend engineering.",
+  "isPartOf": { "@type": "WebSite", "url": "https://example.com" },
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "url": "https://example.com/blog/scaling-sqlite"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "url": "https://example.com/blog/reading-stack-traces"
+      }
+    ]
+  }
+}
+</script>
+```
+
+Use `Blog` instead of `CollectionPage` when the listing is a true blog. Include one `ListItem` per visible article, in the same order shown on the page.
+
+---
+
 ## Pre-Flight Checklist for Blog Index Pages
 
 - [ ] Do article cards stack into a clean single column on mobile without horizontal scrolling?
@@ -119,3 +163,5 @@ Every article preview card must contain:
 - [ ] Are article excerpts clamped to 2 or 3 lines so cards maintain a predictable height?
 - [ ] Can visitors comfortably reach the footer without being trapped by automatic infinite scroll?
 - [ ] Are publication dates and reading estimates clearly legible with strong contrast?
+- [ ] Does the page expose a valid CollectionPage or Blog ItemList schema?
+- [ ] Do article cards use the article title as anchor text instead of "read more"?

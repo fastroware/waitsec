@@ -95,6 +95,68 @@ Use this guide when creating a single article view, blog post template, or markd
 
 ---
 
+## SEO, GEO & Structured Data (Article Page)
+
+- Title: the article headline, optionally with the site name, about 50 to 60 characters.
+- Meta description: an honest summary of the article, about 140 to 160 characters.
+- One `<h1>` that matches the headline.
+- State the article's main answer in the first paragraph, before background detail.
+- Use question-shaped `<h2>` and `<h3>` headings, each followed by a direct answer.
+- Show `datePublished` and `dateModified` visibly near the top, and keep both in the schema.
+- Give the cover image descriptive alt text and an absolute URL.
+- Keep the article body server-rendered.
+
+### JSON-LD for an Article Page
+
+The `Article` type is safe, while `BlogPosting` is more specific for blog posts. Use the one that matches the page. Add `BreadcrumbList` so search engines can show the path.
+
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Why Errors Appear as Codes and How to Read Them",
+      "description": "A short, honest summary of what the article explains.",
+      "image": "https://example.com/storage/blog-thumbnails/cover.webp",
+      "datePublished": "2026-09-04T09:56:00+07:00",
+      "dateModified": "2026-09-04T09:56:00+07:00",
+      "author": {
+        "@type": "Person",
+        "name": "Ilyas Mukhlisin",
+        "url": "https://example.com/about"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Fikselink",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://example.com/images/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://example.com/blog/post/why-errors-appear-as-codes"
+      },
+      "articleSection": "Technology",
+      "keywords": "error code, HTTP status code, how to read errors"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://example.com" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://example.com/blog" },
+        { "@type": "ListItem", "position": 3, "name": "Why Errors Appear as Codes", "item": "https://example.com/blog/post/why-errors-appear-as-codes" }
+      ]
+    }
+  ]
+}
+</script>
+```
+
+---
+
 ## Pre-Flight Checklist for Single Article Pages
 
 - [ ] Is the article reading width capped at `max-w-3xl` or `65-75ch` to prevent eye strain?
@@ -102,3 +164,5 @@ Use this guide when creating a single article view, blog post template, or markd
 - [ ] Is body paragraph line-height set to relaxed (`leading-relaxed` / 1.75)?
 - [ ] Are subheadings given generous top margin (`mt-10` to `mt-12`) to separate topics clearly?
 - [ ] Is there a clear back-navigation link at the top of the article?
+- [ ] Does the first paragraph answer the main question directly?
+- [ ] Is there a valid BlogPosting or Article block with author, publisher, and ISO 8601 dates?
