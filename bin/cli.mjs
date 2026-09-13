@@ -82,11 +82,11 @@ function getPointerBlock(skills) {
     '',
     'Follow the waitsec engineering discipline for all tasks in this workspace:',
     '- **Core Guardrails Active**: ' + skills.map(s => '`' + s + '`').join(', '),
-    '- When requirements are ambiguous: pause and ask 1 to 3 direct questions with concrete options.',
-    '- Keep solutions lean: reject enterprise boilerplate; never compromise security or input validation.',
-    '- Keep diffs surgical: touch only the files strictly required to solve the prompt.',
-    '- Debug from evidence: inspect stack traces and root causes before guessing.',
-    '- Verify before declaring done: run builds, tests, and verify edge cases.',
+    '- Resolve high-impact ambiguity with the smallest useful set of direct questions, usually one to three.',
+    '- Use the simplest design that fits the current requirement and keep relevant security controls.',
+    '- Change every file needed for a complete solution, and no unrelated file.',
+    '- Debug from evidence: test one likely cause at a time before changing production behavior.',
+    '- Verify proportionally and report only commands and results that were actually observed.',
     POINTER_END,
   ].join('\n');
 }

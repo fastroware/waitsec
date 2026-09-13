@@ -1,79 +1,73 @@
----
-name: verify-first
-description: Never declare a task complete without proving it works. Run tests, verify builds, and check for regressions.
----
+# Verify First: Report Proof, Not Confidence
 
-# Verify First: Proof Over Assumption
+Before reporting completion, run the narrowest meaningful check that can catch a mistake in the changed behavior. Add broader checks when the affected area and available environment support them.
 
-Never say "I'm done" or "The bug is fixed" without concrete technical proof. Always verify before declaring completion.
+## Use When
 
-**Core Principle:** *An unverified change is an incomplete change.* If you cannot prove that the code compiles, runs, and satisfies the requirement, you are not done.
+- You changed code, configuration, schemas, build files, or executable examples.
+- You fixed a bug or added behavior.
+- You are about to say that a task is complete or a failure is fixed.
+- The user asks what was tested or how the result was checked.
 
----
+## Do Not Use When
 
-## Detailed Pitfalls & The 5-Point Rule
+- You are giving a general explanation with no changed or executable result.
+- A check needs unavailable credentials, services, hardware, or tools. Report that limit instead.
+- A broad suite adds little value to a low-risk text-only change.
 
-### 1. The Premature Victory Lap
+## Anti-Patterns
 
-* **The Bad Habit:** The agent modifies code, never runs a test or build command, and immediately announces: *"I have fixed the issue and implemented all requirements!"*
-* **The Problem:** The claim of success has no command output behind it.
-* **Why It Fails:** The AI relies on statistical confidence instead of empirical execution. In reality, a missing semicolon, wrong import, or syntax error often lurks on the first line.
-* **Clean Fix:** Run the relevant test suite, build command, or reproduction script before writing your closing message.
-* **The Waitsec Way:** Done means proven. Confidence is not evidence.
+### 1. Claiming Success Without Running a Check
 
-### 2. Regression Blindness
+- **The Bad Habit:** The agent edits code and reports that the issue is fixed without executing anything.
+- **The Problem:** The completion claim has no observed result behind it.
+- **Why It Fails:** A syntax error, bad import, or missed call site can remain in the first version of a plausible change.
+- **Clean Fix:** Run a focused test, build, type check, lint command, or reproduction that matches the change.
+- **The Waitsec Way:** A result is reported as proven only after it is observed.
 
-* **The Bad Habit:** Fixing a bug in component A, but accidentally breaking components B and C because shared state, schema, or props were modified without running the full test suite.
-* **The Problem:** The targeted fix silently damages neighboring features.
-* **Why It Fails:** The AI focuses narrowly on the prompt and ignores downstream dependencies, so the team discovers the breakage in production.
-* **Clean Fix:** If the project has automated tests (`npm test`, `pytest`, `php artisan test`, `go test`), run them to ensure no regressions were introduced.
-* **The Waitsec Way:** A local fix is only safe when the whole system still works. Check the neighbors.
+### 2. Reporting a Check That Did Not Run
 
-### 3. Phantom Verification
+- **The Bad Habit:** The agent says an endpoint returned `200` or a suite passed without running the command.
+- **The Problem:** The report presents an expected outcome as a real outcome.
+- **Why It Fails:** The user may ship based on evidence that does not exist.
+- **Clean Fix:** Report only commands you ran and results you saw. Mark unavailable checks as not run.
+- **The Waitsec Way:** Never invent test results.
 
-* **The Bad Habit:** The agent claims *"I tested the login endpoint and it returned status 200"* when no terminal command, curl request, or test runner was actually executed in the environment.
-* **The Problem:** The stated result is invented, not observed.
-* **Why It Fails:** Generative models hallucinate successful outcomes based on expectation. The user trusts a report that never happened.
-* **Clean Fix:** Real verification produces real output. If execution tools are available, run the command and inspect the actual stdout/stderr. If tools are unavailable, instruct the user on the exact command to run.
-* **The Waitsec Way:** Report only what you actually ran. If you did not run it, say so.
+### 3. Running Only an Unrelated Broad Check
 
-### 4. Happy-Path Myopia
+- **The Bad Habit:** The agent runs a large suite but skips the reproduction or focused test for the changed behavior.
+- **The Problem:** A green suite may not exercise the path that was changed.
+- **Why It Fails:** Test volume does not prove coverage of the requested result.
+- **Clean Fix:** Start with the narrow check that targets the change, then run broader checks when useful.
+- **The Waitsec Way:** Relevant proof comes before more proof.
 
-* **The Bad Habit:** Testing only the success state (e.g. valid login) while completely ignoring error states (wrong password, empty inputs, network failure, unauthorized access).
-* **The Problem:** The feature looks complete until a real user triggers a failure case.
-* **Why It Fails:** AI naturally gravitates toward the ideal flow, so the failure branches ship untested and break at the worst time.
-* **Clean Fix:** Verify both the happy path and at least one failure/edge case before declaring completion.
-* **The Waitsec Way:** The edges are where software breaks. Verify the failure path, not just the demo path.
+### 4. Checking Only the Success Path
 
----
+- **The Bad Habit:** A feature with validation or permissions is tested only with valid input and full access.
+- **The Problem:** Failure behavior remains unknown.
+- **Why It Fails:** Real users also submit empty, invalid, expired, or unauthorized requests.
+- **Clean Fix:** Check a relevant failure or edge case when the changed behavior has one.
+- **The Waitsec Way:** Test the risk introduced by the change, not a fixed number of scenarios.
 
-## The 4-Step Verification Sequence
+## Proportional Verification
 
-Follow this sequence before declaring any task finished:
+| Change | Useful first check | Broader check when useful |
+| :--- | :--- | :--- |
+| Bug fix | Re-run the reproduction or focused regression test | Nearby module or project suite |
+| New behavior | Focused test or direct behavior check | Related suite, build, or type check |
+| Refactor | Existing tests for the affected behavior | Wider suite when shared code changed |
+| Documentation or copy | Check links, code fences, examples, or rendering that changed | Documentation build when available |
+| Configuration | Parse, lint, dry run, or tool-specific validation | Build or integration check that reads it |
 
-1. **Syntax & Build Check:** Ensure the code compiles, lints, or builds with zero errors (`npm run build`, `tsc --noEmit`, etc.).
-2. **Behavioral Test:** Run the specific automated test or reproduction script that targets the changed functionality.
-3. **Regression Check:** Run the wider test suite (if available) to guarantee neighboring features still work.
-4. **Present Concrete Evidence:** Summarize what was tested and include the actual pass/fail status in your final response.
+If a command fails for a reason caused by your change, fix it when the cause is clear. If it fails for an existing or external reason, report that plainly.
 
----
+## Quick Example
 
-## Decision Matrix: What to Verify
-
-| Task Type | Minimum Verification Required |
-| :--- | :--- |
-| **Bug Fix** | Re-run the reproduction command; prove the error no longer occurs. |
-| **New Feature** | Run unit/feature tests; test both valid input and invalid/empty input. |
-| **Refactoring** | Run existing test suite to ensure 100% backward compatibility. |
-| **Documentation / Copy** | Verify rendered markdown formatting, links, and code block syntax. |
-
----
+- **Bad:** "Everything passes" with no command or output.
+- **Good:** `npm test -- user-profile` passed. The full end-to-end suite was not run because its browser service is unavailable.
 
 ## Checklist
 
-Before declaring a task complete:
-- [ ] Did I run the build, linter, or type checker to ensure no syntax/compilation errors?
-- [ ] Did I run the relevant automated test or verification command?
-- [ ] Did I verify that existing neighboring functionality was not broken?
-- [ ] Did I check at least one error or edge-case state?
-- [ ] Did I report the real verification outcome to the user instead of assuming success?
+- [ ] Did I run the narrowest useful check for the changed result?
+- [ ] Did I add broader or failure-path checks only where the risk supports them?
+- [ ] Did I report passed, failed, and not-run checks accurately?

@@ -1,66 +1,72 @@
----
-name: debug-first
-description: Inspect error logs, stack traces, and root causes before guessing or modifying code.
----
+# Debug First: Use Evidence Before Fixing Code
 
-# Debug First: Inspect Evidence Before Touching Code
+When behavior fails, gather enough evidence to support a likely root cause before making a production fix. Focused temporary instrumentation is useful when the current evidence is not enough.
 
-Never guess the cause of an error when real technical evidence is available. Do not spray random code changes across multiple files hoping the bug disappears.
+## Use When
 
----
+- A test or command fails.
+- The application crashes or returns the wrong result.
+- The user reports a reproducible bug.
+- Validation reveals a new failure during implementation.
 
-## Detailed Pitfalls & The 5-Point Rule
+## Do Not Use When
 
-### 1. The Shotgun Guess
+- The task is a new feature with no reported failure.
+- The user requested a planned refactor rather than a bug diagnosis.
+- You are reviewing a possible risk without claiming that it caused a real failure.
 
-* **The Bad Habit:** A test fails or a crash occurs, and the agent immediately edits three different files, tweaking logic in random places without identifying why execution failed.
-* **The Problem:** Changes land in files that may have nothing to do with the failure, and the original bug remains.
-* **Why It Fails:** The AI acts on statistical intuition rather than empirical debugging, often introducing new bugs while failing to fix the original one.
-* **Clean Fix:** Never touch a single line of code until you have identified the exact file, line number, and runtime state that triggered the failure.
-* **The Waitsec Way:** Read the evidence first. A fix without a cause is just another guess.
+## Anti-Patterns
 
-### 2. Silent Error Swallowing
+### 1. Changing Several Files on a Guess
 
-* **The Bad Habit:** When an exception is thrown, the agent wraps the crashing block in a generic `try/catch` and leaves the catch block empty, or returns an empty fallback (`return null;`) just to stop the crash from bubbling up.
-* **The Problem:** The crash disappears, but the broken state that caused it stays in place.
-* **Why It Fails:** Silencing errors masks underlying data corruption and turns a loud, easily fixable bug into a silent, catastrophic production failure.
-* **Clean Fix:** Fix the root cause so the operation succeeds safely. If catching an exception is truly necessary, log the error with full diagnostic context and handle the failure gracefully.
-* **The Waitsec Way:** Never hide an error to make the output look clean. Silence is not a fix.
+- **The Bad Habit:** The agent edits several possible causes before reading the failure output.
+- **The Problem:** Unrelated changes appear while the original failure remains unclear.
+- **Why It Fails:** New behavior makes the evidence harder to interpret and can add more bugs.
+- **Clean Fix:** Read the full error, inspect the failing path, and test one likely cause at a time.
+- **The Waitsec Way:** Evidence comes before the production fix.
 
-### 3. Surface Symptom Patching
+### 2. Hiding the Error
 
-* **The Bad Habit:** Seeing `TypeError: Cannot read property 'id' of undefined`, the agent adds optional chaining (`user?.id`) or a null check (`if (!user) return;`), without checking *why* `user` was undefined in the first place.
-* **The Problem:** The symptom is masked and the missing value flows deeper into the system.
-* **Why It Fails:** Masking a missing variable upstream causes corrupted state downstream, where the real damage is harder to trace.
-* **Clean Fix:** Trace the data flow backwards. Find where `user` was loaded, why it failed to resolve, and fix the source query or relationship.
-* **The Waitsec Way:** Fix the source, not the symptom. Chase the cause one step up the chain.
+- **The Bad Habit:** The agent adds an empty catch block, returns `null`, or suppresses a warning so the failure disappears.
+- **The Problem:** The visible error is gone but the broken state remains.
+- **Why It Fails:** Callers receive incomplete data and lose the information needed to recover or diagnose the issue.
+- **Clean Fix:** Repair the cause. If an error must be caught, handle it clearly and log only safe diagnostic context.
+- **The Waitsec Way:** A quiet failure is not a fixed failure.
 
-### 4. Hallucinating Missing Dependencies
+### 3. Patching a Symptom Without Checking the Domain
 
-* **The Bad Habit:** An import fails or a class is not found (often due to a typo or incorrect namespace), and the agent immediately attempts to run `npm install <random-package>` or `composer require`.
-* **The Problem:** The project gains a new dependency to solve what was really a typo or a path mistake.
-* **Why It Fails:** The agent assumes missing functionality means missing packages, cluttering the project with unneeded external dependencies.
-* **Clean Fix:** Check for typos, path mismatches, autoloading issues, or missing exports first.
-* **The Waitsec Way:** Confirm the cause before adding weight. Most "missing" things are already there, just named wrong.
+- **The Bad Habit:** The agent adds optional chaining or an early return as soon as a value is missing.
+- **The Problem:** The code may hide an invalid state, or it may reject a valid empty state without checking the domain.
+- **Why It Fails:** The same syntax can either fix or mask the issue depending on why the value is missing.
+- **Clean Fix:** Trace where the value comes from and decide whether absence is valid before choosing a guard or fixing the source.
+- **The Waitsec Way:** Understand the state before deciding how to handle it.
 
----
+### 4. Installing a Package for an Import Error
 
-## The 5-Step Root Cause Sequence
+- **The Bad Habit:** A missing import leads straight to installing a new package.
+- **The Problem:** The project gains a dependency before path, export, spelling, or setup errors are checked.
+- **Why It Fails:** The added package may not solve the failure and creates more maintenance work.
+- **Clean Fix:** Check existing dependencies, import paths, exports, namespaces, and generated files first.
+- **The Waitsec Way:** Confirm what is missing before adding anything.
 
-Follow this disciplined sequence whenever debugging:
+## Root Cause Sequence
 
-1. **Read the Full Stack Trace:** Locate the exact file path and line number where the execution failed. Do not stop at the first line of the error message.
-2. **Inspect the Execution Context:** Read the failing function, check the inputs passed to it, and determine the exact condition that caused the crash.
-3. **Reproduce or Verify the Root Cause:** Confirm why the condition occurred (e.g. database query returned empty array, missing environment variable, incorrect type casting).
-4. **Apply One Targeted Fix:** Make the smallest possible fix that resolves the root cause.
-5. **Verify the Fix:** Run the test suite, command, or request again to verify that the error is resolved and no regressions were introduced.
+1. Read the full error, stack trace, logs, or incorrect output.
+2. Inspect the failing function, inputs, and nearby data flow.
+3. Separate observed facts from your current hypothesis.
+4. Reproduce the suspected cause or run one focused experiment.
+5. Apply one targeted production fix.
+6. Re-run the failing path and a useful nearby regression check.
 
----
+You may add temporary logging or assertions when needed. Remove them before delivery unless they provide lasting operational value. Do not log secrets, tokens, credentials, or full sensitive payloads.
+
+## Quick Example
+
+- **Bad:** Add `user?.id`, catch every error, and install an auth package.
+- **Good:** Confirm why `user` is missing, fix the failed lookup or handle a valid guest state, then rerun the failing case.
 
 ## Checklist
 
-Before declaring a bug fixed:
-- [ ] Did I locate the exact line and file of the failure from the stack trace?
-- [ ] Did I fix the root cause rather than merely masking the symptom?
-- [ ] Did I avoid wrapping the code in silent, empty try/catch blocks?
-- [ ] Did I verify the fix by re-running the failing test or reproduction command?
+- [ ] Can I state the observed failure separately from my hypothesis?
+- [ ] Does the fix address the supported cause rather than only hiding the output?
+- [ ] Did I rerun the failing path and remove temporary diagnostic noise?

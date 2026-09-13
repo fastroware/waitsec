@@ -1,113 +1,138 @@
-# Image Sourcing Blueprint (waitsec-pagemaker)
+# Image and Media Sourcing
 
-Use this guide when a page needs images. The rule is simple: reuse the project's own media first. Only go external when the project has nothing that fits.
+Use this guide when a page needs a new image, when an existing image must be selected, or when media delivery affects page layout and performance.
 
----
+Do not add an image merely because a blueprint has an image slot. Media must support the content or product task.
 
-## Part 1: Check the Project First
+## 1. Check the Project First
 
-Before downloading anything, look for existing media:
+Inspect the target page, nearby pages, asset pipeline, CMS, and likely media directories. Look for:
 
-- Common folders: `public/`, `public/images/`, `assets/`, `static/`, `img/`, `images/`, `resources/`, `storage/`, `uploads/`, `media/`.
-- Also check template asset folders, CMS uploads, and existing CDN configuration.
-- List what exists: logos, product shots, icons, backgrounds, photos. Note the format, dimensions, and license.
-- Prefer an existing image over a new one. Reuse keeps the bundle small and the brand consistent.
-- If an existing image only needs cropping, resizing, or compression, do that instead of downloading a new one.
-- Never replace a project's real product screenshots with generic stock photos.
+- Brand marks and approved illustrations.
+- Product screenshots and demonstrations.
+- Portraits or team media.
+- Existing editorial images.
+- Open Graph images.
+- Image components, optimization services, and CDN rules.
+- License or credit records.
 
-## Part 2: When to Source Externally
+Reuse suitable project media before sourcing something new. Cropping or optimizing an approved asset is often better than adding another visual style.
 
-Only source externally when the project has no suitable image for the section.
+Do not scan large upload or storage trees without a reason. Start with paths imported by nearby pages and the project's documented asset locations.
 
-- Default source: **Pexels**, which is royalty-free. Use the Pexels CDN URL or download into the project's asset folder.
-- Content rules, in order of priority:
-  - **No identifiable people.** Skip faces, crowds, portraits, and hands. The user asked for no people.
-  - Prefer close-up plants, leaves, flowers, moss, water, rocks, textures, landscapes, mountains, sky, and abstract nature.
-  - No text, watermarks, brand logos, or recognizable trademarks inside the photo.
-  - No violent, political, medical, or otherwise sensitive imagery.
-- Because Pexels has no reliable "no people" filter, verify each chosen image visually before using it. If a person appears even in the background, pick another.
+## 2. Define the Media Need
 
-## Part 3: Match the Aspect Ratio
+Before selecting an image, state:
 
-Pick the image ratio that matches the slot, and set explicit `width` and `height` so the layout does not shift.
+- The job of the image.
+- The subject and tone required by the content.
+- The display ratio and approximate rendered size.
+- Whether the image contains meaningful information or is decorative.
+- License, attribution, privacy, and brand constraints.
+- Whether people, products, locations, text, or trademarks are allowed.
 
-| Slot | Ratio | Suggested size |
-| :--- | :--- | :--- |
-| Hero | 16:9 | 1600x900 |
-| Wide banner | 21:9 | 2100x900 |
-| Card thumbnail | 4:3 | 800x600 |
-| Square card or avatar | 1:1 | 600x600 or 400x400 |
-| Open Graph image | 1.91:1 | 1200x630 |
-| Full-bleed section | 16:9 desktop, 4:5 mobile crop | 1600x900 and 1000x1250 |
+User-provided assets and subjects named by the user are outside the automatic external-sourcing default. Use them as requested unless another project, consent, privacy, or safety rule applies.
 
-Request the right size and crop from Pexels with URL parameters, for example:
+## 3. Choose a Source
 
-```text
-https://images.pexels.com/photos/<id>/pexels-photo-<id>.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900&fit=crop
-```
+Use this order:
 
-Adjust `w` and `h` to the slot ratio. Use `fit=crop` so the subject stays centered instead of stretched.
+1. Existing approved project media.
+2. Media supplied by the user or content owner.
+3. An approved company library, CMS, or provider already used by the project.
+4. An external source explicitly requested or approved by the user.
+5. Pexels as the last stock fallback when the page needs an image and no suitable source exists.
+6. A neutral placeholder or simple non-image treatment when no suitable media can be verified.
 
-## Part 4: Delivery
+Do not open Pexels before checking the project folders, nearby imports, CMS, and approved providers. Confirm the current license and terms before using an external asset.
 
-- When the project vendors its own media, download the image into the asset folder instead of hotlinking in production.
-- For quick static pages, a direct Pexels CDN URL is acceptable, but record the URL so it can be replaced later.
-- Compress to WebP or AVIF when the stack supports it. Keep a JPEG or PNG fallback only if needed.
-- Load below-the-fold images with `loading="lazy"` and `decoding="async"`.
-- Load the hero image eagerly with `fetchpriority="high"` so it does not delay Largest Contentful Paint.
-- Always set a descriptive `alt`. Decorative images get `alt=""`.
-- When a license or project rule requires it, record the source and credit in a comment or a credits file.
+### Pexels Fallback Default
 
-## Part 5: Pitfalls
+When the agent reaches Pexels without a user-specified subject:
 
-### 1. Downloading New Images When the Project Already Has Them
+- Do not search with people-focused terms.
+- Prefer cinematic close-ups of plants, natural scenery, architecture, objects, products, workspaces without people, and natural textures.
+- Useful search directions include `cinematic plant close up`, `leaves macro photography`, `misty mountain scenery`, `minimal architecture detail`, `workspace objects no people`, `product still life`, and `natural texture`.
+- Inspect the selected result and skip it when a person is a visible subject, even if the search term was non-human.
+- Do not use a random image endpoint that can return a different or unreviewed subject later.
+- If no suitable result can be verified, use a neutral placeholder or ask for an asset when the image is important.
 
-* **The Bad Habit:** Reaching for a stock photo before checking the project's own asset folders.
-* **The Problem:** The page ends up with two visual styles, and the real product shots go unused.
-* **Why It Fails:** Inconsistent branding looks unprofessional, and the bundle grows for no reason.
-* **Clean Fix:** Scan `public/`, `assets/`, `static/`, and `storage/` first. Reuse or lightly crop what exists.
-* **The Waitsec Way:** The project's own media is the source of truth. Add only what is truly missing.
+This default does not restrict an existing project asset or a subject the user explicitly requests. Do not replace or reject user-owned media merely because it contains a person.
 
-### 2. People in Stock Photos
+## 4. Fit the Slot
 
-* **The Bad Habit:** Dropping a smiling stock model into a hero because the search looked good.
-* **The Problem:** A generic person weakens the message and often clashes with the brand.
-* **Why It Fails:** It reads as filler, and the user explicitly asked for images without people.
-* **Clean Fix:** Filter and visually verify for no people. Prefer plants, landscapes, and textures.
-* **The Waitsec Way:** Choose imagery that supports the message, not a face that distracts from it.
+- Match the source crop to the real content slot.
+- Preserve important subjects across responsive crops.
+- Use explicit intrinsic dimensions or an aspect-ratio container to reserve space.
+- Avoid stretching media to a different ratio.
+- Test narrow and wide crops with the real subject.
+- Keep text out of an image when the text must remain readable, searchable, translatable, or accessible.
 
-### 3. Wrong Aspect Ratio
+Common ratios can be useful starting points, but the component and content decide the final ratio.
 
-* **The Bad Habit:** Using a long landscape photo inside a square card, or stretching an image to fit.
-* **The Problem:** The subject gets cropped badly or the image looks distorted.
-* **Why It Fails:** Broken proportions look careless and hurt trust.
-* **Clean Fix:** Request or crop the exact ratio the slot needs, and use `object-fit: cover` for flexible containers.
-* **The Waitsec Way:** Match the media to the frame. Do not force the frame to the media.
+## 5. Delivery and Performance
 
-### 4. Hotlinking Unstable URLs in Production
+Follow the project's image component and pipeline first.
 
-* **The Bad Habit:** Pointing production pages at a temporary stock URL that later changes or disappears.
-* **The Problem:** The image breaks and the section renders empty.
-* **Why It Fails:** Broken images look like a bug and can take down a hero.
-* **Clean Fix:** Download and vendor important images, or record and verify every external URL.
-* **The Waitsec Way:** Own the assets your page depends on.
+- Use a suitable modern format when the pipeline supports it.
+- Avoid creating duplicate format conversions outside the normal build.
+- Lazy-load below-the-fold media when it does not need early loading.
+- Give high fetch priority only to the real Largest Contentful Paint image when measurement or page structure supports that choice.
+- Use responsive sources when the project provides them.
+- Keep remote domains compatible with the project's CSP, privacy policy, and image configuration.
+- Vendor an external asset when licensing permits it and project reliability requires local ownership.
+- Avoid production hotlinks that can disappear, track visitors, or bypass project optimization.
 
-### 5. Unsized Images Causing Layout Shift
+## 6. Accessible Text and Credits
 
-* **The Bad Habit:** Inserting images with no width or height, or with only a CSS width.
-* **The Problem:** The page jumps as images load and text shifts position.
-* **Why It Fails:** Layout shift is jarring and it hurts Core Web Vitals and SEO.
-* **Clean Fix:** Set explicit `width` and `height` attributes that match the ratio, and let CSS scale them down.
-* **The Waitsec Way:** Reserve the space before the pixels arrive.
+- Give informative images alt text that describes the information needed in context.
+- Use empty alt text for decorative images.
+- Do not repeat a nearby caption word for word unless both serve different access needs.
+- Keep visible credits when the license requires them.
+- Record source and license in the project's established credit or asset record, not in random narration comments.
 
----
+## Anti-Patterns
 
-## Pre-Flight Checklist for Image Sourcing
+### 1. Adding Stock Media Before Checking the Project
 
-- [ ] Did I check the project's own asset folders before sourcing new images?
-- [ ] Does every external image come from a royalty-free source such as Pexels, with no identifiable people?
-- [ ] Does each image's aspect ratio match its slot (hero 16:9, card 4:3 or 1:1, Open Graph 1200x630)?
-- [ ] Are important images downloaded and vendored instead of hotlinked in production?
-- [ ] Do all images have explicit width and height to prevent layout shift?
-- [ ] Are below-the-fold images lazy, and is the hero image prioritized?
-- [ ] Does every meaningful image have a descriptive `alt`, with `alt=""` for decorative ones?
+* **The Bad Habit:** Searching for a new image before looking at approved product media and nearby page assets.
+* **The Problem:** The page introduces a second visual style and ignores more accurate project material.
+* **Why It Fails:** Generic media weakens identity and adds delivery or license work without improving the page.
+* **Clean Fix:** Inspect existing imports, asset directories, the CMS, and the image pipeline first. Reuse or adapt a suitable approved asset.
+* **The Waitsec Way:** Project media is the first source, not the fallback.
+
+### 2. Searching Pexels for People by Default
+
+* **The Bad Habit:** Searching Pexels for developers, teams, founders, customers, or other people when the user did not ask for a human subject.
+* **The Problem:** Generic stock people become part of the page even though a plant, natural scene, object, product, or texture could support the content.
+* **Why It Fails:** The agent makes an unnecessary subject choice and may introduce imagery the user does not want.
+* **Clean Fix:** Use non-human search terms for automatic Pexels fallback and inspect the chosen result. Keep user-provided assets and explicitly requested subjects outside this default.
+* **The Waitsec Way:** When the agent chooses the stock subject, start with useful media that does not introduce people.
+
+### 3. Using an Unstable Remote Image in Production
+
+* **The Bad Habit:** Linking directly to an external image without checking reliability, terms, tracking, CSP, or optimization.
+* **The Problem:** The image can break, expose visitor requests, or load outside the project's performance controls.
+* **Why It Fails:** A page dependency is handed to a source the project does not control.
+* **Clean Fix:** Use an approved provider and configuration, or vendor the asset when permitted and useful. Record its source and license.
+* **The Waitsec Way:** Know who serves each production asset and under what terms.
+
+### 4. Unsized Media Shifting the Page
+
+* **The Bad Habit:** Rendering an image without intrinsic dimensions or reserved aspect ratio.
+* **The Problem:** Text and controls move when the media finishes loading.
+* **Why It Fails:** People can lose their reading position or tap the wrong control as the page shifts.
+* **Clean Fix:** Reserve the correct space with dimensions or aspect ratio and let responsive CSS scale it.
+* **The Waitsec Way:** The layout knows the media shape before the pixels arrive.
+
+## Media Checklist
+
+- [ ] Does the page need this image for content, trust, identification, or explanation?
+- [ ] Did I inspect approved project media, user assets, nearby imports, the CMS, and the current image pipeline before opening Pexels?
+- [ ] If Pexels was needed without a user-specified subject, did I use non-human search terms and verify that people are not visible subjects?
+- [ ] Are subject, consent, brand, license, credit, and privacy rules known?
+- [ ] Does the crop work in the real responsive slot without distortion?
+- [ ] Are dimensions or aspect ratio reserved?
+- [ ] Does loading priority match the image's actual page role?
+- [ ] Are remote delivery, CSP, tracking, and reliability handled?
+- [ ] Is alt text or decorative treatment correct for the image's purpose?

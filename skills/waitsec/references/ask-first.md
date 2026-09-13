@@ -1,112 +1,79 @@
----
-name: ask-first
-description: Pause before coding when requirements are unclear. Ask clarifying questions instead of guessing or inventing requirements.
----
+# Ask First: Resolve High-Impact Ambiguity
 
-# Ask First: Confirm Before You Code
+Ask only when a missing answer can change security, data safety, external services, or a decision that is expensive to reverse. Use the project and sensible defaults for routine details.
 
-Most AI coding disasters happen not because the AI cannot code, but because it codes before knowing what the user actually needs.
+## Use When
 
-When requirements are ambiguous, do not invent answers. Stop, pause, and clarify.
+- Permission or ownership rules are missing for protected data.
+- A destructive schema or data change is unclear.
+- The task needs credentials, a paid service, or a specific external system.
+- Two plausible project targets would produce meaningfully different behavior.
 
----
+## Do Not Use When
 
-## Detailed Pitfalls & The 5-Point Rule
+- Existing code, configuration, or conventions already answer the question.
+- The choice is internal, low impact, and easy to change later.
+- The user already approved a plan or asked you to use your judgment.
+- You are choosing names, formatting, common status codes, or routine UI spacing.
 
-### 1. Premature Scaffolding
+## Anti-Patterns
 
-* **The Bad Habit:** The user says "add photo upload", and the agent immediately writes database migrations, thumbnail background jobs, cloud storage adapters, and cleanup cron tasks without asking a single question.
-* **The Problem:** The agent produces infrastructure the user never confirmed. The feature might only need to save one avatar to local disk.
-* **Why It Fails:** The user has to review and delete code they never asked for. Tokens are wasted, and the bloated diff hides the real feature.
-* **Clean Fix:** Stop before writing code. List what is genuinely missing (storage target, max size, allowed formats, one file or many) and confirm the essentials first.
-* **The Waitsec Way:** Confirm the shape of the feature before you build it. A short question costs far less than a wrong implementation.
+### 1. Inventing Product or Permission Rules
 
-### 2. Inventing Business Rules
+- **The Bad Habit:** The agent invents a discount policy or decides that a sensitive endpoint is public.
+- **The Problem:** The implementation contains behavior the user did not request or approve.
+- **Why It Fails:** Made-up rules can change prices, access, or user expectations without warning.
+- **Clean Fix:** Ask one direct question when no safe project default exists. Otherwise, use the narrowest safe behavior supported by the codebase.
+- **The Waitsec Way:** The agent implements product rules. It does not create them.
 
-* **The Bad Habit:** The user asks for "a discount calculation on checkout", and the agent invents a 15% VIP tier, coupon expiration rules, and minimum spend limits that were never mentioned.
-* **The Problem:** The code ships with product rules that came from the model, not from the user.
-* **Why It Fails:** Invented rules quietly change how the product behaves. The user then has to hunt through the diff to find decisions they never approved.
-* **Clean Fix:** If a rule is unspecified, ask. If you cannot ask, implement only the exact formula requested and leave one clear placeholder for future rules.
-* **The Waitsec Way:** You are not the product owner. Never fill a business gap with a guess.
+### 2. Building Before the Shape Is Clear
 
-### 3. Destructive Replacement
+- **The Bad Habit:** A request for photo upload becomes migrations, cloud storage, queues, thumbnails, and cleanup jobs.
+- **The Problem:** The diff grows around assumptions instead of the confirmed need.
+- **Why It Fails:** The user must review and remove work that may not belong in the feature.
+- **Clean Fix:** Confirm only choices that change the implementation in a large way, such as local storage versus an external service.
+- **The Waitsec Way:** Confirm the boundary, then build only what fits inside it.
 
-* **The Bad Habit:** The user asks to "improve the navigation bar", and the agent deletes the existing component and rebuilds it with a different framework or design.
-* **The Problem:** Working, tested code is thrown away and replaced by an unrequested rewrite.
-* **Why It Fails:** Edge cases and accessibility details handled by the original are lost. The user asked for an improvement and got unpredictable regressions instead.
-* **Clean Fix:** Clarify whether the current implementation should be edited in place or replaced from scratch. Default to editing in place.
-* **The Waitsec Way:** Improve what already exists before replacing it. Respect the code the team already trusts.
+### 3. Replacing Working Code Without Need
 
-### 4. Trivia Interrogation (The Opposite Extreme)
+- **The Bad Habit:** The agent replaces an existing component or framework when the request only asks for an improvement.
+- **The Problem:** Tested behavior and project conventions disappear in an unrequested rewrite.
+- **Why It Fails:** The replacement can lose edge cases and create a much larger review.
+- **Clean Fix:** Edit in place unless replacement is requested or the existing structure cannot support the change safely.
+- **The Waitsec Way:** Improve working code before considering a rewrite.
 
-* **The Bad Habit:** The agent stops and fires 10 pedantic questions about internal variable names, CSS class names, or folder structure.
-* **The Problem:** The user is blocked on decisions that have obvious conventions and almost no consequence.
-* **Why It Fails:** Over-asking frustrates the user and removes the value of an autonomous assistant. The work stalls on details.
-* **Clean Fix:** Ask only what changes the architecture or user-facing behavior. Use sensible defaults for everything else, and state the defaults you chose.
-* **The Waitsec Way:** Ask about decisions that are expensive to reverse, not about details you can settle with existing conventions.
+### 4. Asking About Routine Details
 
----
+- **The Bad Habit:** The agent blocks work with questions about variable names, class order, colors, or folder placement.
+- **The Problem:** The user must decide details the repository already settles.
+- **Why It Fails:** Excess questions remove the value of an agent that can inspect and follow conventions.
+- **Clean Fix:** Read nearby code, pick the established pattern, and state a notable default only when it helps review.
+- **The Waitsec Way:** Ask about costly decisions, not routine implementation choices.
 
-## The "Crucial Only" Threshold
+## Decision Guide
 
-Do NOT stop to ask questions unless the ambiguity is truly **crucial**. If a decision is reversible or can be adjusted easily later, choose the simplest standard convention and keep moving.
+Ask when all three are true:
 
-### What Counts as "Crucial":
-1. **Irreversible Structural Impact:** Changes that alter existing database schemas, drop columns or tables, change primary/foreign key relations, or swap out an entire core library.
-2. **Security & Permission Boundaries:** Unspecified access control on sensitive endpoints (e.g. should this API be public, authenticated, or restricted to admin users?).
-3. **External Infrastructure Requirements:** Ambiguities requiring third-party credentials, paid cloud resources, or specific external services (e.g. AWS S3 bucket vs local disk, background Redis queue vs synchronous execution).
+1. The answer is not available in the prompt or project.
+2. The choice has a real effect on security, data, external setup, or hard-to-reverse behavior.
+3. There is no safe and reversible default.
 
-### What is NOT Crucial (Never Ask):
-- Internal naming (variables, files, helpers): look at the existing code and follow it.
-- Basic UI styles, padding, or colors: follow the existing theme or design system.
-- Common edge cases: handle them with sensible, simple defaults.
-- Anything the user has already approved or asked for directly.
+When a question is needed:
 
----
+- Ask the smallest useful set of questions, usually one to three.
+- Give concrete options and a short recommendation.
+- Explain the trade-off in one sentence.
+- Wait before creating speculative files.
 
-## User Override: The "Just Do It" Rule
+If the user says "just do it," choose the safest reversible option and continue. If no safe option exists, explain the blocker instead of inventing behavior.
 
-If the user explicitly instructs:
-- *"Gak usah banyak tanya / Don't ask questions"*
-- *"Langsung aja / Just do it"*
-- *"Terserah lu / Use your best judgment"*
-- Or has already confirmed a plan:
+## Quick Example
 
-**STOP ASKING.** Immediately switch to autonomous mode:
-- Pick the most minimal, standard, and defensive implementation.
-- Execute with small, surgical diffs.
-- Only halt if an action would cause unrecoverable data destruction (e.g. dropping production databases or deleting uncommitted files).
-
----
-
-## Decision Matrix: When to Ask vs When to Default
-
-| Situation | Action | Rationale |
-| :--- | :--- | :--- |
-| User explicitly said "just do it" or confirmed the plan | **DEFAULT** | Respect user override; proceed autonomously. |
-| Missing storage target (local disk vs AWS S3) | **ASK** | Crucial: changes dependencies, environment, and config. |
-| Missing permission/role requirements for a sensitive action | **ASK** | Crucial: security and authorization boundaries. |
-| Irreversible database schema drop or type change | **ASK** | Crucial: risk of unrecoverable data loss. |
-| Choosing variable names or internal helper method names | **DEFAULT** | Non-crucial: follow existing codebase conventions. |
-| Choosing standard HTTP status codes (200, 201, 404, 422) | **DEFAULT** | Non-crucial: follow REST specifications. |
-| Choosing standard validation error messages | **DEFAULT** | Non-crucial: use clear standard phrasing. |
-
----
-
-## How to Ask Effectively
-
-When questions are truly crucial:
-1. **Limit to 1 to 3 questions maximum.** Never send a wall of text.
-2. **Provide concrete choices (A / B).** Give clear recommendations (e.g. *"Option A: Local storage (simpler for now) vs Option B: S3 bucket"*).
-3. **State the trade-off briefly.** Explain in one sentence why the choice matters.
-4. **Wait for the answer.** Do not generate speculative files while waiting.
-
----
+- **Bad:** "Which name should I use for the helper, and should it go above or below this method?"
+- **Good:** Read the file, follow its naming and ordering, then make the change.
 
 ## Checklist
 
-Before writing code for any task, verify:
-- [ ] Has the user explicitly requested autonomous execution ("just do it" / plan already approved)? If yes, skip asking.
-- [ ] Is the question genuinely crucial (structural, irreversible, or security-critical)? If no, use sensible defaults.
-- [ ] Did I avoid inventing product or business logic out of thin air?
-- [ ] If questions are necessary, are they capped at 1-3 with clear options?
+- [ ] Is the missing answer absent from both the prompt and the project?
+- [ ] Would the answer change a high-impact decision?
+- [ ] If I asked, did I keep it short and offer concrete choices?

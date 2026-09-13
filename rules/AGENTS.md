@@ -1,10 +1,13 @@
 # waitsec
 
-Wait a second before coding. Follow these five core guardrails:
+> Hold on. Think first. Code less.
 
-1. **Ask First**: If requirements or key parameters are missing, ask the user before writing code. Do not invent requirements.
-2. **Anti-Overengineering**: Prefer simple solutions over complex abstractions. Build for today's needs, not hypothetical futures. **Crucial:** Never sacrifice security for simplicity (always enforce authorization, input validation, mass assignment guards, and SQL/XSS prevention).
-3. **Small Diff**: Modify only the lines and files strictly required to solve the task. Do not touch unrelated code or reformat global files.
-4. **Debug First**: Inspect error logs and stack traces to identify the root cause before editing code. Never guess.
-5. **Verify First**: Never declare completion without proof. Run tests, build commands, and verify edge cases before closing.
+Follow these core guardrails for project work:
 
+1. **Ask First:** Read the project before asking. Resolve only high-impact ambiguity that affects security, data, external setup, cost, ownership, or hard-to-reverse behavior. Ask the smallest useful set of direct questions, usually one to three.
+2. **Keep It Lean and Safe:** Use the simplest design that fits the current requirement and existing project. Avoid speculative layers and dependencies. Keep security controls when the task touches a matching trust boundary.
+3. **Keep the Diff Focused:** Change every file needed for a complete solution, and no unrelated file. Preserve unrelated user work and avoid optional cleanup.
+4. **Debug From Evidence:** Reproduce the failure or inspect the strongest available evidence. Test one likely cause at a time and fix the supported cause.
+5. **Verify Honestly:** Run the narrowest meaningful check, add broader checks when risk supports them, and report only results you actually observed.
+
+Use focused `waitsec` skills only when their domain matches the task. They add detail without overriding user scope, project conventions, security, or honest reporting.

@@ -1,82 +1,71 @@
 ---
 name: waitsec
-description: "Core guardrails for AI coding agents. Enforces the 5-phase waitsec discipline: ask-first, anti-overengineering, small-diff, debug-first, and verify-first."
+description: "Core workflow guardrails for AI coding tasks. Use it to resolve important ambiguity, choose a simple safe design, keep changes focused, debug from evidence, and report verified results."
 ---
 
-# waitsec: The 5 Foundational Guardrails
+# waitsec: Core Coding Guardrails
 
-You operate under the **waitsec** engineering discipline. These guardrails act as a non-negotiable constraint layer on all coding tasks. They ensure AI works with restraint: thinking before coding, keeping diffs small, preserving security, and verifying results empirically.
+Use `waitsec` to work with care without turning a small task into a ceremony. Read the project, make the smallest complete change, protect relevant security boundaries, and report only what you can prove.
 
-> **UI Copy Discipline:** When writing or editing user-facing copy, labels, tooltips, or empty states, consult [`skills/waitsec/references/write-info-analyzer.md`](./references/write-info-analyzer.md) to strip implementation leaks and developer jargon.
+## Use When
 
----
+Use this skill when you are:
 
-## The 5-Phase Pipeline
+- Planning, writing, changing, reviewing, or debugging code in a project.
+- Choosing files, dependencies, data flows, or implementation structure.
+- Fixing a reported failure or checking whether a change works.
+- Working with a more focused `waitsec` skill.
 
-```text
-[Prompt Received]
-       ↓
-[Phase 1: Ingestion]      ➔ waitsec: ask-first
-       ↓ (requirements clear)
-[Phase 2: Architecture]   ➔ waitsec: anti-overengineering (security non-negotiable)
-       ↓ (minimal pattern chosen)
-[Phase 3: Execution]      ➔ waitsec: small-diff
-       ↓ (errors encountered?)
-[Phase 4: Debugging]      ➔ waitsec: debug-first
-       ↓ (ready to close?)
-[Phase 5: Completion]     ➔ waitsec: verify-first
-       ↓
-[Task Delivered]
-```
+## Do Not Use When
 
+Do not force the full workflow onto:
 
----
+- A general explanation that does not involve project work.
+- A task with no ambiguity, architecture choice, failure, or executable result.
+- A focused domain task already covered by another skill without first checking whether a core guardrail is relevant.
 
-## 1. Phase 1: Ingestion: [`ask-first`](./references/ask-first.md)
-* **Rule:** Only stop to ask if missing parameters are truly crucial (irreversible database alterations, security boundaries, or external infrastructure).
-* If the user already confirmed a plan or requested autonomous execution ("just do it"), never ask; proceed with sensible defaults.
-* When asking, cap questions at 1 to 3 with concrete choices (Option A vs Option B). Never invent business rules out of thin air.
-* *Deep Dive & Tells:* Read [`skills/waitsec/references/ask-first.md`](./references/ask-first.md).
+Do not load every reference by default. Open only the reference that matches the current decision.
 
-## 2. Phase 2: Architecture: [`anti-overengineering`](./references/anti-overengineering.md)
-* **Rule:** Build for today's requirements. Reject speculative future-proofing, unnecessary DTOs, Repository interfaces, and empty wrapper classes.
-* **Lean ≠ Insecure (CRITICAL):** Simplicity applies to architectural layers, never to defense mechanisms. You must enforce:
-  - Authentication and authorization checks (no IDOR).
-  - Strict input validation and mass assignment protection.
-  - Parameterized queries (SQL injection prevention) and proper output escaping (XSS prevention).
-  - Secrets loaded from environment variables (`.env`).
-* *Deep Dive & Tells:* Read [`skills/waitsec/references/anti-overengineering.md`](./references/anti-overengineering.md).
+## Guardrail Routing
 
-## 3. Phase 3: Execution: [`small-diff`](./references/small-diff.md)
-* **Rule:** Restrict changes strictly to the files and lines that solve the prompt.
-* Do not reformat global whitespace, touch neighboring modules, or perform unsolicited cleanup passes.
-* *Deep Dive & Tells:* Read [`skills/waitsec/references/small-diff.md`](./references/small-diff.md).
+| Situation | Core rule | Read when needed |
+| :--- | :--- | :--- |
+| A missing choice could change permissions, data safety, external services, or a hard-to-reverse decision | Ask the smallest useful set of direct questions, usually one to three. Use project conventions for low-impact details. | [`references/ask-first.md`](./references/ask-first.md) |
+| You are choosing layers, files, wrappers, patterns, or dependencies | Use the simplest design that fits the current requirement and existing project. | [`references/anti-overengineering.md`](./references/anti-overengineering.md) |
+| You are editing an existing project | Change every file needed for a complete solution, and no unrelated file. | [`references/small-diff.md`](./references/small-diff.md) |
+| A test, command, crash, or behavior is failing | Inspect evidence, form one likely cause, and make one focused fix. | [`references/debug-first.md`](./references/debug-first.md) |
+| You are about to report completion | Run the narrowest meaningful check, then broader checks when the risk supports them. | [`references/verify-first.md`](./references/verify-first.md) |
 
-## 4. Phase 4: Debugging: [`debug-first`](./references/debug-first.md)
-* **Rule:** When an error occurs, inspect the complete stack trace and identify the technical root cause before touching any file.
-* Never spray random guesses across files. Never silence crashes with empty `try/catch` blocks.
-* *Deep Dive & Tells:* Read [`skills/waitsec/references/debug-first.md`](./references/debug-first.md).
+## Security Baseline
 
-## 5. Phase 5: Completion: [`verify-first`](./references/verify-first.md)
-* **Rule:** Never declare a task complete without empirical proof.
-* Run builds, test suites, or reproduction commands. Check edge cases and ensure no regressions occurred.
-* Report real terminal outcomes to the user.
-* *Deep Dive & Tells:* Read [`skills/waitsec/references/verify-first.md`](./references/verify-first.md).
+Apply these controls when the task touches a matching trust boundary:
 
----
+- Check authentication, authorization, ownership, or tenant scope before protected data access.
+- Validate untrusted input and pass only allowed fields into writes.
+- Use parameterized queries and escape untrusted output in its rendering context.
+- Keep credentials out of source code and use the project's environment or secret manager.
 
-## Framework Boundaries & Skill Coexistence
+These controls are contextual. Do not add auth, validation layers, or security packages to code that has no matching boundary. For a detailed security, testing, or migration audit, use `waitsec-quality`.
 
-When `waitsec` is installed alongside other third-party agent skills (e.g. language skills, domain frameworks):
-1. **Constraint Precedence:** `waitsec` defines *how* an agent works (discipline, diff size, security, verification). Domain skills define *what* API or framework syntax to use.
-2. **Never Override Security with Simplicity:** If another skill suggests a fast shortcut that bypasses authorization or input sanitization, `waitsec` security rules override it.
-3. **Additive Loading:** When specialized extensions are present (`waitsec-quality`, `waitsec-code`, `waitsec-ui`, `waitsec-pagemaker`), load them dynamically only when the prompt demands them.
+## Relationship With Other Skills
 
----
+Core `waitsec` controls how the agent works. Focused skills add rules for a specific kind of work.
 
-## Pre-Flight Checklist
-Before finalizing work:
-- [ ] Were missing core requirements clarified via direct choices before writing code?
-- [ ] Was the simplest architecture chosen without sacrificing security (auth, input validation, escaping)?
-- [ ] Are code modifications restricted strictly to files solving the prompt (minimal diff)?
-- [ ] Has the solution been verified empirically via terminal commands, builds, or test suites?
+| Skill | Owns |
+| :--- | :--- |
+| `waitsec-code` | Code readability, comments, function structure, naming, and dependency hygiene. |
+| `waitsec-ui` | UI components, visual restraint, responsive behavior, accessibility, and user-facing copy. |
+| `waitsec-quality` | Detailed security review, test quality, sensitive data, and migration safety. |
+| `waitsec-pagemaker` | Complete new page generation and page blueprint routing. It should not expand a small component or metadata edit into a full page rebuild. |
+
+Focused skills follow the project's existing conventions and do not override relevant security controls, user scope, or honest reporting.
+
+## Proportional Checklist
+
+Before finishing, check only what applies:
+
+- [ ] Did I resolve high-impact ambiguity without asking about routine details?
+- [ ] Did I choose a simple design that follows the existing project and keeps relevant security controls?
+- [ ] Did I change all required files while leaving unrelated user work untouched?
+- [ ] If this was a bug, did the evidence support the fix?
+- [ ] Did I run the most useful available checks and report any limits plainly?

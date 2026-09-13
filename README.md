@@ -80,7 +80,7 @@ Full explanation: [docs/installation.md](https://github.com/fastroware/waitsec/b
 | Skill | What it does | Use it when |
 | :--- | :--- | :--- |
 | `waitsec` | Core 5 guardrails: ask-first, anti-overengineering, small-diff, debug-first, verify-first | Always. This is the base every extension builds on. |
-| `waitsec-pagemaker` | Builds clean web pages: project recon, design preferences, responsive layout, UX, SEO and GEO, Schema.org, auth pages, motion, 3D, and image sourcing | You build or redesign web pages. |
+| `waitsec-pagemaker` | Orchestrates complete web pages: project recon, page structure, responsive UI, content flow, and conditional guidance for SEO, structured data, auth, motion, 3D, and images | You build, restructure, or audit a complete web page. |
 | `waitsec-code` | Clean code: no comment noise, small focused functions, no unnecessary dependencies | You write or refactor source code. |
 | `waitsec-ui` | Frontend restraint: anti-slop visuals, mobile-first layout, clean UI copy | You work on UI or design systems. |
 | `waitsec-quality` | Security auditing, realistic tests, safe database migrations | You touch auth, payments, tests, or migrations. |
@@ -123,32 +123,40 @@ waitsec/
 │   ├── installation.md            # Full install and usage guide (English)
 │   └── installation-id.md         # Panduan instalasi (Bahasa Indonesia)
 ├── skills/
-│   ├── waitsec/                   # Core 5-phase guardrails
-│   │   ├── SKILL.md               # Hub: pipeline overview + links to detail files
-│   │   └── references/            # Deep-dive guardrails and UI copy rules
+│   ├── waitsec/                   # Core workflow guardrails
+│   │   ├── SKILL.md               # Router for the five core guardrails
+│   │   └── references/            # Focused workflow guidance
 │   │       ├── ask-first.md
 │   │       ├── anti-overengineering.md
 │   │       ├── small-diff.md
 │   │       ├── debug-first.md
 │   │       ├── verify-first.md
-│   │       └── write-info-analyzer.md
-│   ├── waitsec-ui/                # Anti-slop CSS, UI copy restraint, responsive
-│   │   └── SKILL.md
-│   ├── waitsec-pagemaker/         # Page architect (landing, blog, articles, auth, contact)
-│   │   ├── SKILL.md               # Recon, design preferences, SEO/GEO, Schema.org, UX
-│   │   └── references/            # Blueprints per archetype
+│   │       └── write-info-analyzer.md  # Compatibility pointer to UI copy guidance
+│   ├── waitsec-ui/                # Responsive, accessible, restrained UI
+│   │   ├── SKILL.md
+│   │   └── references/
+│   │       └── ui-copy.md         # KEEP, REWRITE, and REMOVE copy decisions
+│   ├── waitsec-pagemaker/         # Complete page orchestrator
+│   │   ├── SKILL.md               # Recon, workflow, UI contract, and reference routing
+│   │   └── references/
+│   │       ├── project-recon.md
+│   │       ├── seo-and-structured-data.md
 │   │       ├── landing-page.md
 │   │       ├── blog-index.md
 │   │       ├── article-single.md
 │   │       ├── about-me.md
 │   │       ├── contact-page.md
-│   │       ├── auth-pages.md      # Login, register, password reset, lockout states
-│   │       ├── motion-and-3d.md   # anime.js motion, parallax, three.js 3D
-│   │       └── image-sourcing.md  # Reuse project media, Pexels fallback, aspect ratios
-│   ├── waitsec-code/              # Clean code, anti-comment pollution
+│   │       ├── auth-pages.md
+│   │       ├── motion-and-3d.md
+│   │       └── image-sourcing.md
+│   ├── waitsec-code/              # Code readability and dependency hygiene
 │   │   └── SKILL.md
-│   └── waitsec-quality/           # Security auditing, testing discipline
-│       └── SKILL.md
+│   └── waitsec-quality/           # Security, testing, and migration safety
+│       ├── SKILL.md
+│       └── references/
+│           ├── security.md
+│           ├── testing.md
+│           └── migrations.md
 │
 ├── rules/
 │   ├── AGENTS.md                  # Universal rule pointer (Antigravity / Claude Code)
@@ -188,11 +196,7 @@ If an agent bypassed a guardrail, generated unexpected boilerplate, or an instal
 
 Thanks to everyone who has contributed to this project.
 
-<a href="https://github.com/fastroware/waitsec/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=fastroware/waitsec" alt="waitsec contributors">
-</a>
-
-- [fastroware](https://github.com/fastroware): creator and maintainer.
+<img src="https://contrib.rocks/image?repo=fastroware/waitsec" alt="waitsec contributors">
 
 Want your name here? See the contributing section above.
 

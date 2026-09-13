@@ -1,138 +1,117 @@
-# Auth Pages Blueprint (waitsec-pagemaker)
+# Authentication Page Blueprint
 
-Use this guide when creating login, register, forgot password, reset password, remember me, or account lockout and rate-limit screens. These pages are private by nature, so the goal is clarity, safety, and a short path back into the product.
+Use this guide for sign-in, registration, password recovery, password reset, verification, account lockout, or similar access pages.
 
----
+Pagemaker owns page composition and client UX. Apply [`waitsec-ui`](../../waitsec-ui/SKILL.md) for forms, accessibility, states, and copy. Route server-side authentication, authorization, sessions, tokens, rate limits, tests, and sensitive data to [`waitsec-quality`](../../waitsec-quality/SKILL.md).
 
-## Complete Page Anatomy & Responsive Flow
+## Scope Boundary
 
-### 1. Login Page
-* **Desktop (1024px+):** Centered card (`max-w-md`) or a 2-column split with the form on the left and a solid brand panel on the right. No busy background.
-* **Mobile (<768px):** Single column. Brand mark on top, then the form. Inputs and the primary button are full width.
-* Fields: email or username, password with a show or hide toggle, a "Remember me" checkbox, the primary "Sign in" button, and a secondary "Forgot password?" link.
-* One primary action only. Social login buttons appear only when a real provider is wired up, and they sit below a labeled divider.
+Client page work includes:
 
-### 2. Register Page
-* Minimal fields: name, email, password, and confirm password (or a single password field with a visible rules checklist).
-* Show password rules as a short checklist and validate as the user types.
-* Terms or privacy checkbox only when it is legally required.
-* Primary "Create account", with a clear link back to login.
+- Field layout and labels.
+- Password visibility controls.
+- Autocomplete attributes.
+- Submission, validation, success, and blocked states.
+- Recovery links and return paths.
+- Keyboard, focus, mobile keyboard, and screen-reader behavior.
 
-### 3. Forgot and Reset Password
-* Forgot: one email field and one primary "Send reset link" button. Always show the same neutral success message, whether or not the email exists.
-* Reset: new password plus confirm. The token is handled server-side, and the page notes that the link expires.
+Client code must not pretend to enforce server security. A disabled button or countdown can reflect a server rule, but it cannot replace that rule.
 
-### 4. Remember Me
-* Label states the exact duration, for example "Remember me for 30 days".
-* Unchecked by default on shared or public devices.
-* Never store tokens in `localStorage` or `sessionStorage`. Use secure, httpOnly, sameSite cookies set by the server.
+## Page Variants
 
-### 5. Account Locked and Rate Limit Blocked
-* Explain what happened in plain words, how long the lock lasts, and the next step.
-* Provide one recovery action: retry when the countdown ends, reset the password, or contact support.
-* Show a live countdown and keep the submit button disabled until it ends.
-* Render this as its own clear state, not a generic error page.
+| Page | Typical content | Conditional content |
+| :--- | :--- | :--- |
+| Sign in | Account identifier, password, submit action | Remember option, provider buttons, password recovery |
+| Register | Fields required by the real account model | Password rules, consent, invitation context |
+| Forgot password | Account identifier and submit action | Support or return link |
+| Reset password | New credential fields and submit action | Expiry information provided by the server |
+| Verification | Current status and next action | Resend behavior and change-address path |
+| Locked or rate limited | Clear blocked state and recovery path | Retry time when the server safely provides it |
 
----
+Do not show social providers, consent boxes, account fields, or recovery methods that are not implemented.
 
-## Interaction and Security Rules (Non-Negotiable)
+## Form Rules
 
-- Never reveal whether an account exists. Use the same message for an unknown email and a wrong password.
-- Enforce the rate limit on the server. The UI only reflects the remaining wait time.
-- Use correct autocomplete attributes: `autocomplete="email"`, `autocomplete="current-password"` for login, and `autocomplete="new-password"` for register and reset.
-- Keep password fields accessible with visible labels and a show or hide toggle.
-- Errors appear as a summary at the top of the form and, where useful, inline under the field.
-- Use `aria-live="polite"` for the lockout countdown and for async error messages.
-- Give every control at least a 44px by 44px target on mobile.
-- Set input font size to at least 16px on mobile so iOS does not zoom on focus.
-- Center the card with `min-h` and normal document flow, never a fixed `h-screen` that traps the form when the keyboard opens.
+- Use persistent visible labels.
+- Use the correct input types and project conventions.
+- Set useful autocomplete values, such as `email`, `username`, `current-password`, and `new-password` where they match the field.
+- Provide a password show or hide control with an accessible name and announced state.
+- Use a readable mobile input size and let the page scroll above the keyboard.
+- Keep submit and recovery actions easy to distinguish.
+- Preserve safe field values after recoverable errors. Clear secret values when project security rules require it.
+- Disable or guard repeated submissions while a request is pending.
 
----
+## Messages and Privacy
 
-## Detailed Pitfalls & The 5-Point Rule
+- Use the server's approved generic sign-in failure message.
+- Password recovery should not expose whether an account exists.
+- Do not include stack traces, provider errors, token values, or internal rate-limit details in normal user copy.
+- State what the person can do next.
+- Keep security and consent text that affects the user's decision.
+- Do not promise an email, retry time, or recovery path the server does not provide.
 
-### 1. User Enumeration
+The server decides response timing, account lookup behavior, session storage, token rotation, cookie settings, and rate limits. Follow quality rules rather than recreating those controls in page instructions.
 
-* **The Bad Habit:** The login form says "Email not found" for an unknown address and "Wrong password" for a known one.
-* **The Problem:** The different responses let an attacker test which emails have accounts.
-* **Why It Fails:** It turns the login page into an account discovery tool and invites credential stuffing against real users.
-* **Clean Fix:** Return one generic message such as "Email or password is incorrect" for both cases, and keep the response time consistent.
-* **The Waitsec Way:** Treat account existence as private data. Say less to stay safe.
+## Remembered Sessions
 
-### 2. Lockout With No Explanation or Recovery
+Show a remember option only when the product supports it. The label should explain the real behavior when duration or device scope matters.
 
-* **The Bad Habit:** After too many attempts the form silently stops working or returns a blank error.
-* **The Problem:** The user assumes the site is broken and keeps retrying, which extends the lock.
-* **Why It Fails:** Frustration grows, support load rises, and legitimate users are locked out with no path back.
-* **Clean Fix:** Show a clear locked state with the reason, a live countdown, and one recovery action.
-* **The Waitsec Way:** A block must explain itself and offer a way out.
+Do not choose client token storage from this page blueprint. Session design belongs to the server and security implementation.
 
-### 3. Insecure Remember Me
+## Locked and Rate-Limited States
 
-* **The Bad Habit:** Storing a long-lived token in `localStorage` so the checkbox "just works".
-* **The Problem:** Any script on the page can read the token, and a stolen token keeps the session alive.
-* **Why It Fails:** It turns a small XSS into a permanent account takeover.
-* **Clean Fix:** Use secure, httpOnly, sameSite cookies set by the server, with a sensible expiry, and rotate the token on use.
-* **The Waitsec Way:** Convenience must never weaken the session.
+- Render a distinct blocked state rather than a dead form.
+- Explain the allowed next step without exposing sensitive account information.
+- Show a retry time or countdown only when the server provides a reliable value.
+- Keep the final decision on the server even if the UI disables submission.
+- Make status updates available to assistive technology without announcing every second when that would be noisy.
+- Provide a recovery or support path only when it really exists.
 
-### 4. Password Fields That Fail on Mobile
+## Indexing
 
-* **The Bad Habit:** A password input with no show or hide toggle, tiny text, and no correct autocomplete hint.
-* **The Problem:** Users mistype, cannot verify, and the browser fills the wrong field or the wrong kind of value.
-* **Why It Fails:** Failed logins pile up, and some users abandon the form entirely.
-* **Clean Fix:** Add a show or hide toggle, use at least 16px text, and set the correct `autocomplete` attribute for each field.
-* **The Waitsec Way:** Remove friction from the most repeated action in the product.
+Auth and account-recovery pages are normally not intended for search. Follow the project's existing `noindex` and sitemap behavior. Use [`seo-and-structured-data.md`](./seo-and-structured-data.md) only to inspect or correct that behavior. Do not add JSON-LD merely because the route is a page.
 
-### 5. Fixed h-screen Form Trap
+## Anti-Patterns
 
-* **The Bad Habit:** Centering the card inside `h-screen flex items-center`.
-* **The Problem:** When the mobile keyboard opens, the viewport shrinks and the input scrolls out of view.
-* **Why It Fails:** Users cannot see what they type or reach the submit button.
-* **Clean Fix:** Use `min-h-screen` with normal flow and enough bottom padding so the form scrolls above the keyboard.
-* **The Waitsec Way:** Let the page scroll. Never lock the height of a form on mobile.
+### 1. Revealing Account Existence
 
-### 6. No Loading or Disabled State
+* **The Bad Habit:** Showing different visible messages for an unknown account and an incorrect secret.
+* **The Problem:** The page tells an observer which account identifiers are registered.
+* **Why It Fails:** That information can support targeted password attacks and unwanted account discovery.
+* **Clean Fix:** Display the approved generic response and let the server enforce consistent secure behavior. Route server implementation and tests to quality.
+* **The Waitsec Way:** Access pages reveal only what a person needs to recover or continue safely.
 
-* **The Bad Habit:** The submit button stays active while the request runs.
-* **The Problem:** Users click several times and send duplicate login or register requests.
-* **Why It Fails:** It triggers avoidable rate limits and adds confusing error states.
-* **Clean Fix:** Disable the button on submit, show a spinner or "Signing in..." label, and re-enable it on failure.
-* **The Waitsec Way:** Every submit needs feedback and a single-flight guard.
+### 2. Treating Client Controls as Security
 
----
+* **The Bad Habit:** Implementing a countdown, disabled button, or hidden field and assuming it enforces a rate limit or protects a token.
+* **The Problem:** A direct request can bypass the page control.
+* **Why It Fails:** Attackers do not have to use the rendered interface.
+* **Clean Fix:** Use client controls for feedback and duplicate-submit prevention. Enforce authentication, rate limits, and token rules on the server under quality guidance.
+* **The Waitsec Way:** The interface explains security state. It does not create the security boundary.
 
-## SEO, GEO & Structured Data (Auth Pages)
+### 3. Fixed-Height Form Trap
 
-- Auth pages should not rank. Set `<meta name="robots" content="noindex, nofollow">`.
-- Keep a simple title ("Sign in" or "Create account") plus the brand, and skip promotional copy.
-- Exclude auth pages from the sitemap and avoid linking to them as content.
-- Because this is a private page, use a minimal `WebPage` node. Do not add rich result types that a login page cannot support.
+* **The Bad Habit:** Vertically centering the auth form inside a fixed viewport height with no natural page scroll.
+* **The Problem:** The mobile keyboard can cover the active field or submit action.
+* **Why It Fails:** People cannot review input or finish the form while the keyboard is open.
+* **Clean Fix:** Use natural flow, a flexible minimum height when needed, and enough bottom space for keyboard-safe scrolling.
+* **The Waitsec Way:** Access forms must remain usable in the real mobile viewport.
 
-```html
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Sign in",
-  "url": "https://example.com/login",
-  "isPartOf": {
-    "@type": "WebSite",
-    "url": "https://example.com"
-  }
-}
-</script>
-```
+### 4. No Submission Feedback
 
----
+* **The Bad Habit:** Leaving the primary action active and unchanged while an auth request runs.
+* **The Problem:** People submit repeatedly and cannot tell whether the request started.
+* **Why It Fails:** Duplicate requests can trigger blocks and create confusing state changes.
+* **Clean Fix:** Guard repeat submission, show a clear pending state, and restore an actionable error or recovery state when the request fails.
+* **The Waitsec Way:** Every access attempt gets clear, safe feedback.
 
-## Pre-Flight Checklist for Auth Pages
+## Page Checklist
 
-- [ ] Is `<meta name="robots" content="noindex, nofollow">` present, and the page excluded from the sitemap?
-- [ ] Does the page avoid revealing whether an account exists, with the same message and timing for all failures?
-- [ ] Do password fields have a show or hide toggle and the correct `autocomplete` attribute?
-- [ ] Does "Remember me" state its duration and default to off on shared devices?
-- [ ] Are session tokens kept out of `localStorage` and placed in secure httpOnly cookies?
-- [ ] Does the locked or rate-limited state explain the reason, show a countdown, and offer one recovery action?
-- [ ] Is the submit button disabled during the request to prevent double submits?
-- [ ] Does the form use `min-h-screen` with normal scrolling instead of a fixed `h-screen`?
-- [ ] Is a minimal `WebPage` JSON-LD block present and valid?
+- [ ] Does the page show only fields and providers the real auth flow supports?
+- [ ] Are labels, input types, autocomplete, focus, and password controls accessible?
+- [ ] Are pending, validation, failure, success, locked, and recovery states handled where relevant?
+- [ ] Do visible messages avoid exposing account existence and internal errors?
+- [ ] Does the page remain usable with a mobile keyboard and zoom?
+- [ ] Are remembered-session claims based on real server behavior?
+- [ ] Are rate limits, tokens, cookies, auth tests, and sensitive data routed to quality?
+- [ ] Does the route follow the project's existing noindex and sitemap behavior without forced schema?
