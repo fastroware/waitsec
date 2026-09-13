@@ -27,6 +27,9 @@ Treat this section as the prompt you must satisfy every time you generate a page
 10. **Meet the SEO and GEO bar.** One H1, a unique title and meta description, a canonical URL, Open Graph tags, and answer-first content that machines can quote.
 11. **Finish with the Pre-Flight Checklist.** Do not report the page as done until every box is checked.
 12. **Translate vague style words.** When the user says minimalist, modern, clean, premium, bold, or similar, convert the word into concrete tokens using Part 10, reuse the project tokens first, and state the translation before generating. Never treat a style word as a license for gradients, glass, or heavy shadows.
+13. **Motion must earn its place.** Reuse the project's motion library, or anime.js when real motion is requested: CDN in static projects, npm in build projects. Animate only `transform` and `opacity`, and honor `prefers-reduced-motion`.
+14. **3D only when it explains something.** Use three.js or the project's 3D library, lazy-load it after the content, cap the device pixel ratio, and always provide a poster and a no-WebGL fallback.
+15. **Reuse the project's images first.** Only when no existing image fits, source from Pexels with no identifiable people (prefer plants, landscapes, and textures), match the slot's aspect ratio, and vendor important images.
 
 ---
 
@@ -42,6 +45,8 @@ Activate this skill whenever:
 - Writing layout containers, responsive grids, navigation bars, and design themes.
 - Adding SEO metadata, Open Graph tags, or Schema.org structured data to a page.
 - Building authentication screens (login, register, password reset) or account lockout and rate-limit pages.
+- Adding animation, parallax, scroll effects, or 3D graphics to a page.
+- Choosing, sourcing, or placing images and other media on a page.
 
 ---
 
@@ -115,7 +120,22 @@ Report the final decision in one line: styling system, load method (local or CDN
   ```
 - Never hand-write raw inline SVG markup. Never use an emoji as an icon. Never use a raster image as a stand-in for a UI icon.
 
-### 6. Hard Content Rules
+### 6. Detect Motion, 3D, and Media Assets
+
+Find out what animation, 3D, and image tooling already exists before adding any:
+
+- **Motion libraries:** GSAP, anime.js, Framer Motion, Motion One, AOS, ScrollReveal. Check `package.json` and script tags. Record the version and whether it loads locally or from a CDN.
+- **3D libraries:** three.js, `@react-three/fiber`, Babylon.js, `model-viewer`. Record the same details.
+- **Media assets:** scan `public/`, `public/images/`, `assets/`, `static/`, `img/`, `images/`, `resources/`, `storage/`, `uploads/`, and `media/` for existing logos, product shots, and photos. Note formats and dimensions.
+
+Then decide:
+
+1. Reuse the motion or 3D library already in the project.
+2. Use the project's own images before sourcing any new ones.
+3. If the user asks for animation, parallax, or 3D, follow [`references/motion-and-3d.md`](./references/motion-and-3d.md).
+4. If the project has no suitable image for a slot, follow [`references/image-sourcing.md`](./references/image-sourcing.md).
+
+### 7. Hard Content Rules
 
 These rules apply to every generated page without exception:
 
@@ -124,7 +144,7 @@ These rules apply to every generated page without exception:
 - No em dash and no en dash. Use colons, commas, periods, parentheses, or plain hyphens.
 - Icons come from the detected icon library or from Lucide CDN.
 
-### 7. State Findings and Ask Only What Matters
+### 8. State Findings and Ask Only What Matters
 
 Post a short recon summary before building, for example:
 
@@ -132,7 +152,7 @@ Post a short recon summary before building, for example:
 
 Then ask at most one or two questions, only about decisions that are expensive to reverse (styling system, template target, icon library). Everything else uses sensible defaults, and you state the defaults you chose.
 
-### 8. Recon Pitfalls
+### 9. Recon Pitfalls
 
 #### 1. Assuming the Stack
 
@@ -729,6 +749,28 @@ Local slang works the same way. "Estetik", "kece", "clean banget", "kayak startu
 
 ---
 
+## Part 11: Motion, 3D & Media Routing
+
+### 1. Animation and Parallax
+
+When the user asks for animation, parallax, or scroll effects, read [`references/motion-and-3d.md`](./references/motion-and-3d.md). Default to anime.js, reuse any existing motion library, use a pinned CDN for static projects and npm for build projects, animate only `transform` and `opacity`, and honor `prefers-reduced-motion`.
+
+### 2. 3D and Graphics
+
+When the user asks for 3D or other graphics, read the same guide. Default to three.js, lazy-load it after the content, cap the device pixel ratio, and always ship a poster image and a no-WebGL fallback. If a static image or a short video does the job, prefer that instead.
+
+### 3. Images and Media
+
+When the page needs images, read [`references/image-sourcing.md`](./references/image-sourcing.md). Scan the project's asset folders first and reuse what exists. Only when nothing fits, source from Pexels with no identifiable people, preferring close-up plants, landscapes, and textures, and match the image ratio to the slot.
+
+### 4. Load Method
+
+- Static project without a build step: load anime.js or three.js from a pinned CDN.
+- Project with a build step: install locally and import only what is used.
+- Always report the library, version, and load method before generating.
+
+---
+
 ## Pre-Flight Checklist
 
 Before returning generated page code to the user, verify:
@@ -752,3 +794,6 @@ Before returning generated page code to the user, verify:
 - [ ] If the requested page is outside the listed archetypes, did I state the closest blueprint I adapted and keep the general preferences?
 - [ ] If the user gave a vague style word, did I translate it into concrete tokens (palette, type, spacing, radius, border and shadow policy, motion) and state the translation?
 - [ ] Did I reuse the project's design tokens before inventing new ones?
+- [ ] If animation was requested, did I reuse or add the motion library with the right load method, and honor `prefers-reduced-motion`?
+- [ ] If 3D was requested, is it lazy-loaded with a poster and a no-WebGL fallback?
+- [ ] Did I check the project's own images first, and if sourcing, avoid people and match the aspect ratio?

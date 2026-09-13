@@ -1,148 +1,140 @@
-# waitsec
+<p align="center">
+  <a href="https://github.com/fastroware/waitsec">
+    <img src="https://raw.githubusercontent.com/fastroware/waitsec/main/assets/banner-waitsec.png" alt="waitsec banner: Hold on. Think first. Code less." width="100%">
+  </a>
+</p>
+
+<h1 align="center">
+  <img src="https://raw.githubusercontent.com/fastroware/waitsec/main/assets/logo-waitsec.png" alt="waitsec logo" width="88" height="88">
+  <br>
+  waitsec
+</h1>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2ea44f" alt="License: MIT"></a>
   <a href="https://github.com/fastroware/waitsec/tags"><img src="https://img.shields.io/github/v/tag/fastroware/waitsec?label=version&color=1f6feb" alt="Version"></a>
   <a href="https://www.npmjs.com/package/waitsec"><img src="https://img.shields.io/npm/v/waitsec?color=crimson" alt="npm version"></a>
-</p>
-
-<p align="center">
   <a href="https://skills.sh/fastroware/waitsec"><img src="https://img.shields.io/badge/skills.sh-waitsec-black?logo=vercel&logoColor=white" alt="skills.sh"></a>
 </p>
 
 > **Hold on. Think first. Code less.**
 
-`waitsec` gives your AI coding agent practical guardrails. It prevents AI from writing hundreds of unneeded lines, inventing imaginary requirements, or over-complicating simple tasks.
-
 ---
 
-## Why waitsec?
+## What is waitsec?
 
-Most AI coding assistants do not fail because they lack knowledge. They fail because they move too fast and assume too much:
+waitsec is a set of plain instruction files for your AI coding agent. It is not a library you import and not a program you run in your app. It is a set of rules your agent reads so it behaves better while it works on your code.
 
-1. **They code before asking.** You ask for a photo upload feature, and the AI starts writing database migrations, thumbnail generators, and cloud bucket scripts before even asking where files should be stored.
-2. **They over-engineer.** You ask for a simple login check, and the AI creates twelve new files with DTOs, factories, and repository interfaces.
-3. **They touch too many files.** You ask to fix button alignment, and the AI reformats your router, updates project dependencies, and rewrites global styles.
-4. **They guess when errors happen.** A test fails on one line, and the AI changes five unrelated files hoping something sticks.
+Think of it as a checklist taped to your agent's desk. When you ask for a feature, the agent follows the checklist: ask when something is unclear, keep the change small, read the error before fixing it, and prove the work before saying it is done.
 
-`waitsec` acts as a brake: pause, verify, keep the change small, and fix the root problem.
+If you have ever asked for a small change and got twelve new files, or reported a one line bug and watched the agent edit five unrelated files, waitsec is for that problem.
 
----
+## What "global" means
 
-## The 5 Core Guardrails
+When you install waitsec, the installer asks for a scope. That is only about where the rule files are saved.
 
-1. **`ask-first`**: If the prompt is missing essential decisions (schemas, storage locations, permissions), the AI must pause and ask 1 to 3 direct questions instead of guessing.
-2. **`anti-overengineering`**: Rejects unneeded design patterns, DTOs, and speculative abstractions. Keeps code lean while strictly enforcing authentication, authorization, and input validation.
-3. **`small-diff`**: Modifications stay strictly scoped to what solves the prompt. No cleaning up surrounding files, no global formatting passes, and no unnecessary dependency changes.
-4. **`debug-first`**: When something breaks, the AI must read the complete error message and stack trace. Never guess fixes or hide errors behind empty try/catch blocks.
-5. **`verify-first`**: Never declare a task complete without proof. Run tests, verify builds, test edge cases, and ensure no regressions occurred before reporting done.
+| Scope | Where the files go | Best for |
+| :--- | :--- | :--- |
+| **This project only** | Inside the current folder, for example `.agents/skills/` or `.claude/skills/`, plus a rules file | Teams. The rules travel with the repository and can be committed. |
+| **Everywhere (Global)** | Your home directory, for example `~/.agents/skills` or `~/.claude/skills` | You. Every project on this computer gets the guardrails, even brand new ones. |
 
----
+You can install both. A project install wins inside that project.
 
-## Quick Install
+Full explanation: [docs/installation.md](https://github.com/fastroware/waitsec/blob/main/docs/installation.md) or [Bahasa Indonesia](https://github.com/fastroware/waitsec/blob/main/docs/installation-id.md).
 
-### 1. In Any Project (Recommended)
-Run this in your project terminal:
+## Features
+
+| Skill | What it does | Use it when |
+| :--- | :--- | :--- |
+| `waitsec` | Core 5 guardrails: ask-first, anti-overengineering, small-diff, debug-first, verify-first | Always. This is the base every extension builds on. |
+| `waitsec-pagemaker` | Builds clean web pages: project recon, design preferences, responsive layout, UX, SEO and GEO, Schema.org, auth pages, motion, 3D, and image sourcing | You build or redesign web pages. |
+| `waitsec-code` | Clean code: no comment noise, small focused functions, no unnecessary dependencies | You write or refactor source code. |
+| `waitsec-ui` | Frontend restraint: anti-slop visuals, mobile-first layout, clean UI copy | You work on UI or design systems. |
+| `waitsec-quality` | Security auditing, realistic tests, safe database migrations | You touch auth, payments, tests, or migrations. |
+
+## Install
+
+Use the interactive installer in your project folder. It handles every editor and puts the files in the right place:
 
 ```bash
 npx waitsec
 ```
 
-Pick your editor (Kilo Code, Cline, Cursor, or Antigravity), and the installer places the rules file directly in your workspace.
+All five skills are selected by default. Press `Space` to unselect any you do not want, then `Enter`.
 
-### 2. Kilo Code or Cline (VS Code)
-Copy [rules/waitsec.md](rules/waitsec.md) to your project root as `.kilorules` (or `.clinerules`):
-
-```bash
-curl -o .kilorules https://raw.githubusercontent.com/fastroware/waitsec/main/rules/waitsec.md
-```
-
-You can also paste the contents of `rules/waitsec.md` into the **Custom Instructions** field in your Kilo Code extension settings.
-
-### 3. Google Antigravity
-Install the plugin using the Antigravity CLI:
-
-```bash
-agy plugin install https://github.com/fastroware/waitsec
-```
-
-### 4. Claude Code
-Add the marketplace and install:
-
-```text
-/plugin marketplace add https://github.com/fastroware/waitsec
-/plugin install waitsec@waitsec
-```
-
-### 5. Cursor
-Copy [rules/waitsec.md](rules/waitsec.md) to `.cursorrules` in your project root, or add this repository as a plugin under `.cursor-plugin/`.
-
-### 6. Laravel / PHP (Composer)
-Install into your development dependencies:
-
-```bash
-composer require --dev waitsec/waitsec
-```
-
-Then run the interactive setup command:
-
-```bash
-vendor/bin/waitsec
-```
-
-### 7. Agent Skills Directory (skills.sh)
-Listed on [skills.sh/fastroware/waitsec](https://skills.sh/fastroware/waitsec).
-
-The skills CLI does not pre-select anything for a GitHub repo, so you must choose at least one skill. To install every skill without any prompt:
+Prefer a non-interactive install? Use the universal skills CLI:
 
 ```bash
 npx skills add fastroware/waitsec -y
 ```
 
-To install only the core guardrails:
+### Partial install
 
-```bash
-npx skills add fastroware/waitsec --skill waitsec
-```
-
-To pick a specific set:
+Extensions depend on the core skill, so installing one extension always means installing `waitsec` plus that extension. Example for the page builder:
 
 ```bash
 npx skills add fastroware/waitsec --skill waitsec waitsec-pagemaker
 ```
 
-Available skills:
+Other combinations:
 
-| Skill | Purpose |
-| :--- | :--- |
-| `waitsec` | Core 5 guardrails: ask-first, anti-overengineering, small-diff, debug-first, verify-first |
-| `waitsec-pagemaker` | Page architect: project recon, design preferences, SEO/GEO, Schema.org, auth and UX rules |
-| `waitsec-code` | Clean code, anti-comment noise, dependency hygiene |
-| `waitsec-ui` | Anti-slop UI, responsive discipline, UI copy cleanup |
-| `waitsec-quality` | Security auditing, test discipline, migration safety |
+```bash
+npx skills add fastroware/waitsec --skill waitsec                # core only
+npx skills add fastroware/waitsec --skill waitsec waitsec-ui     # core plus UI
+npx skills add fastroware/waitsec --skill waitsec waitsec-code   # core plus code
+npx skills add fastroware/waitsec --skill waitsec waitsec-quality # core plus quality
+```
 
-Tip: the CLI preselects all skills only when you install from a skills.sh pack URL. For a one-command install that selects everything by default, create a pack on [skills.sh](https://skills.sh) (sign in with Vercel, import this repository) and share the pack URL `https://skills.sh/p/<pack-id>`.
+## How to use it
 
----
+1. Install it once, either for a project or globally.
+2. Open your project in your editor and work as usual.
+3. When a task matches a skill, the agent reads that skill and follows it. You do not run anything.
+
+For example, just ask:
+
+- "Build a landing page for my SaaS."
+- "Add a login page with a forgot password flow."
+- "Fix this failing test."
+- "Review this endpoint for security issues."
+
+The full guide, including per-editor setup, manual install, update, uninstall, and troubleshooting, is here:
+
+- English: [docs/installation.md](https://github.com/fastroware/waitsec/blob/main/docs/installation.md)
+- Bahasa Indonesia: [docs/installation-id.md](https://github.com/fastroware/waitsec/blob/main/docs/installation-id.md)
+
+## Security notice
+
+Read this before you use waitsec.
+
+- waitsec is a set of instruction documents for AI agents. It is guidance, not a runtime library.
+- We do not audit your application and we cannot guarantee that generated code, third party skills, or dependencies are safe, correct, or free of vulnerabilities.
+- Skills run with the same permissions as your AI agent, which can read and write files and run commands on your machine. Always review what the agent changed before you run or ship it.
+- Be especially careful with authentication, authorization, payments, secrets, and database migrations. Never let an agent push secrets or run destructive migrations unattended.
+- The security advice inside these skills is advice only. You are responsible for testing and securing your own project.
+
+In short: use waitsec to make your agent more careful, not as a guarantee that your code is secure.
 
 ## Structure
 
 ```text
 waitsec/
+├── docs/
+│   ├── installation.md            # Full install and usage guide (English)
+│   └── installation-id.md         # Panduan instalasi (Bahasa Indonesia)
 ├── skills/
-│   ├── waitsec/                   # ACTIVE: Core 5-phase guardrails
+│   ├── waitsec/                   # Core 5-phase guardrails
 │   │   ├── SKILL.md               # Hub: pipeline overview + links to detail files
-│   │   └── references/            # Deep-dive guardrails & UI copy rules
-│   │       ├── ask-first.md           # Phase 1: Clarify requirements before coding
-│   │       ├── anti-overengineering.md # Phase 2: Lean code + non-negotiable security
-│   │       ├── small-diff.md          # Phase 3: Surgical, proportional edits only
-│   │       ├── debug-first.md         # Phase 4: Root cause analysis before guessing
-│   │       ├── verify-first.md        # Phase 5: Proof before declaring done
-│   │       └── write-info-analyzer.md # Simple rules for UI text and clean labels
-│   │
-│   ├── waitsec-ui/                # ACTIVE: Anti-slop CSS, UI copy restraint, responsive
+│   │   └── references/            # Deep-dive guardrails and UI copy rules
+│   │       ├── ask-first.md
+│   │       ├── anti-overengineering.md
+│   │       ├── small-diff.md
+│   │       ├── debug-first.md
+│   │       ├── verify-first.md
+│   │       └── write-info-analyzer.md
+│   ├── waitsec-ui/                # Anti-slop CSS, UI copy restraint, responsive
 │   │   └── SKILL.md
-│   ├── waitsec-pagemaker/         # ACTIVE: Page architect (landing, blog, articles, auth, contact)
+│   ├── waitsec-pagemaker/         # Page architect (landing, blog, articles, auth, contact)
 │   │   ├── SKILL.md               # Recon, design preferences, SEO/GEO, Schema.org, UX
 │   │   └── references/            # Blueprints per archetype
 │   │       ├── landing-page.md
@@ -150,56 +142,47 @@ waitsec/
 │   │       ├── article-single.md
 │   │       ├── about-me.md
 │   │       ├── contact-page.md
-│   │       └── auth-pages.md      # Login, register, password reset, lockout states
-│   ├── waitsec-code/              # ACTIVE: Clean code, anti-comment pollution
+│   │       ├── auth-pages.md      # Login, register, password reset, lockout states
+│   │       ├── motion-and-3d.md   # anime.js motion, parallax, three.js 3D
+│   │       └── image-sourcing.md  # Reuse project media, Pexels fallback, aspect ratios
+│   ├── waitsec-code/              # Clean code, anti-comment pollution
 │   │   └── SKILL.md
-│   └── waitsec-quality/           # ACTIVE: Security auditing, testing discipline
+│   └── waitsec-quality/           # Security auditing, testing discipline
 │       └── SKILL.md
 │
 ├── rules/
 │   ├── AGENTS.md                  # Universal rule pointer (Antigravity / Claude Code)
 │   └── waitsec.md                 # All-in-one bundled rules (Kilo Code / Cline / Cursor)
+├── assets/
+│   ├── banner-waitsec.png
+│   └── logo-waitsec.png
 ├── bin/
 │   └── cli.mjs                    # Interactive terminal installer (Clack prompts)
+├── skills.sh.json                 # skills.sh repo page grouping
 ├── plugin.json                    # Antigravity plugin manifest
 ├── package.json                   # npm / npx manifest
 └── composer.json                  # Composer / Laravel manifest
 ```
 
----
-
-## Roadmap: Core & Extensions
-
-- **Core (Active)**: The 5 foundational guardrails (`ask-first`, `anti-overengineering`, `small-diff`, `debug-first`, `verify-first`).
-- **Extensions (Active)**: `waitsec-pagemaker` for page building, `waitsec-code` for code hygiene, `waitsec-ui` for UI restraint, and `waitsec-quality` for security and testing discipline.
-
----
-
 ## Feedback, Bugs & Contributing
 
 Found a bug, want to suggest a new guardrail, or want to contribute? Everything is tracked through GitHub.
 
-### 1. Found a Bug or Have a Complaint?
-If an AI agent bypassed a guardrail, generated unexpected boilerplate, or an installer command failed:
+### 1. Found a bug or have a complaint?
+If an agent bypassed a guardrail, generated unexpected boilerplate, or an installer command failed:
 1. Go to [GitHub Issues](https://github.com/fastroware/waitsec/issues).
 2. Click **New Issue**.
-3. Include:
-   - Your AI assistant or editor (Cursor, Claude Code, Antigravity, Kilo, Cline).
-   - The prompt you ran.
-   - What the agent did wrong and what behavior was expected instead.
+3. Include your editor, the prompt you ran, and what the agent did wrong.
 
-### 2. Suggesting a New Guardrail or Feature
-If you have an idea for a rule that prevents AI slop in specific languages or workflows:
+### 2. Suggesting a new guardrail or feature
 1. Open a ticket on [GitHub Issues](https://github.com/fastroware/waitsec/issues) titled `[Feature] your idea`.
-2. Provide a before-and-after example showing the bad AI output vs the desired clean solution.
+2. Provide a before-and-after example showing the bad output and the clean solution.
 
-### 3. Submitting a Pull Request
+### 3. Submitting a pull request
 1. Fork this repository on GitHub.
-2. Create a feature branch: `git checkout -b feature/my-guardrail`.
-3. Keep instructions concise, actionable, and strictly free of generic AI slop.
+2. Create a branch: `git checkout -b feature/my-guardrail`.
+3. Keep instructions concise, actionable, and free of generic AI slop.
 4. Submit a **Pull Request** to `main`.
-
----
 
 ## License
 
