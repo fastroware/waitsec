@@ -797,3 +797,4 @@ Before returning generated page code to the user, verify:
 - [ ] If animation was requested, did I reuse or add the motion library with the right load method, and honor `prefers-reduced-motion`?
 - [ ] If 3D was requested, is it lazy-loaded with a poster and a no-WebGL fallback?
 - [ ] Did I check the project's own images first, and if sourcing, avoid people and match the aspect ratio?
+
