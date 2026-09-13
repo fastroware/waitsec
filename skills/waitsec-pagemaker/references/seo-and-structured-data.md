@@ -33,8 +33,8 @@ Extend the existing owner. Do not add a second title, canonical tag, Open Graph 
 
 Add or update only what the page needs and the project does not already provide:
 
-- A unique, factual title.
-- A useful meta description based on visible page content.
+- A unique, factual title. Separate title parts with a middle dot surrounded by spaces, " · ", for example "Blog · Example Site". Do not use an en dash, em dash, hyphen, or vertical bar as the title separator.
+- A useful meta description based on visible page content. Keep the title and description free of emoji and free of em dash (U+2014) or en dash (U+2013) unless the user explicitly asks.
 - A canonical URL when the preferred URL is known.
 - Open Graph fields for pages intended to be shared.
 - A suitable absolute social image URL when a real image exists.

@@ -198,7 +198,7 @@ Thanks to everyone who has contributed to this project.
 
 <img src="https://contrib.rocks/image?repo=fastroware/waitsec" alt="waitsec contributors">
 
-Want your name here? See the contributing section above.
+<!-- Want your name here? See the contributing section above. -->
 
 ## License
 

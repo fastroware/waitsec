@@ -56,7 +56,7 @@ A component-only task uses this skill, not pagemaker.
 ### Icons
 
 - Reuse the project's icon components, icon library, and approved icon assets first.
-- Do not use emoji as UI icons or as a substitute for a missing icon library.
+- Do not use emoji anywhere in the interface, including as UI icons or as a substitute for a missing icon library.
 - Do not hand-write inline SVG paths or draw a new SVG icon inside a component.
 - SVG rendered by an established icon library is allowed. Existing SVG assets supplied by the project or user are also allowed.
 - Do not use raster images as interface icons.
@@ -106,6 +106,12 @@ A component-only task uses this skill, not pagemaker.
 - Preserve accessible names, labels, validation, consent, cost, security guidance, and destructive warnings.
 - Use [`references/ui-copy.md`](./references/ui-copy.md) for the canonical `KEEP`, `REWRITE`, and `REMOVE` process.
 
+### Text and Titles
+
+- Do not use emoji anywhere in the interface, including copy, labels, and decoration.
+- Do not use em dash (U+2014) or en dash (U+2013) in interface text, including headings, labels, and copy. Use a colon, comma, period, or parentheses instead. Only use them when the user explicitly asks.
+- Separate parts of a page title with a middle dot surrounded by spaces, " · ", for example "Home · Blog · About". Do not use an en dash, em dash, hyphen, or vertical bar as the title separator.
+
 ## Core Anti-Patterns
 
 ### 1. Decoration Before Hierarchy
@@ -148,6 +154,14 @@ A component-only task uses this skill, not pagemaker.
 * **Clean Fix:** State the user-visible meaning, status, or next action. Keep implementation detail in developer documentation.
 * **The Waitsec Way:** Show what the user needs to know, not how the code works.
 
+### 6. Emoji and Fancy Dashes in Generated Text
+
+* **The Bad Habit:** Adding emoji to labels, headings, or copy, and joining title parts with an en dash or em dash.
+* **The Problem:** The interface looks machine-generated, and long dashes render inconsistently across fonts and platforms.
+* **Why It Fails:** Emoji changes shape and meaning across devices, while en and em dashes read as out of place in short interface text.
+* **Clean Fix:** Remove emoji from all generated text. Replace en dash and em dash with a colon, comma, period, or parentheses. Separate title parts with " · ".
+* **The Waitsec Way:** Restrained text reads as deliberate and human.
+
 ## Pre-Flight Checklist
 
 Before finishing UI work:
@@ -159,4 +173,6 @@ Before finishing UI work:
 - [ ] Are labels, accessible names, focus, contrast, keyboard use, and touch behavior handled?
 - [ ] Are all reachable loading, empty, error, success, disabled, and destructive states clear?
 - [ ] Does the copy help users act without exposing implementation detail or deleting needed warnings?
+- [ ] Is generated text free of emoji, and free of em dash or en dash unless the user asked for them?
+- [ ] Does the page title use " · " as the separator instead of an en dash, em dash, hyphen, or vertical bar?
 - [ ] Did I verify the changed interface at relevant viewport sizes and interaction states?

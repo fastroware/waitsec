@@ -43,6 +43,8 @@ Check the target and nearby pages for:
 
 Native CSS is an existing styling system. Keep it by default. Do not ask whether to replace it unless the user requested a wider styling change.
 
+If the project is blank or has no styling system at all, ask the user before generating the page. Offer plain choices: native CSS, a utility framework such as Tailwind CSS, or a library the user names. Do not choose for the user. When Tailwind CSS is chosen, an established icon library delivered by CDN comes with it by default, for example Lucide or Iconify. Keep one icon set for the whole page.
+
 ### 4. Find Reusable UI
 
 Look for existing:

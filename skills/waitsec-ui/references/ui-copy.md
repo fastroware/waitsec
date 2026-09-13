@@ -64,6 +64,14 @@ Do not remove these just because the interface looks cleaner without them:
 
 A visually hidden accessible name is still useful text. Do not remove it because it is not visible.
 
+## Text Formatting
+
+These rules apply to every piece of generated interface text, not only to copy that is kept, rewritten, or removed:
+
+- Do not use emoji in copy, labels, headings, or decoration.
+- Do not use em dash (U+2014) or en dash (U+2013). Use a colon, comma, period, or parentheses instead. Only use them when the user explicitly asks.
+- Separate parts of a page title with a middle dot surrounded by spaces, " · ". Do not use an en dash, em dash, hyphen, or vertical bar as the title separator.
+
 ## Decision Process
 
 For each piece of copy:
