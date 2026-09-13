@@ -4,11 +4,11 @@
   </a>
 </p>
 
-<h1 align="center">
+<!-- <h1 align="center">
   <img src="https://raw.githubusercontent.com/fastroware/waitsec/main/assets/logo-waitsec.png" alt="waitsec logo" width="88" height="88">
   <br>
   waitsec
-</h1>
+</h1> -->
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2ea44f" alt="License: MIT"></a>
