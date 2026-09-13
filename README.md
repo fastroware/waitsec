@@ -70,20 +70,20 @@ npx skills add fastroware/waitsec -y
 
 ### Partial install
 
-Extensions depend on the core skill, so installing one extension always means installing `waitsec` plus that extension. Example for the page builder:
+Partial install works for any extension, not just the page builder. Extensions depend on the core skill, so always include `waitsec`.
 
 ```bash
-npx skills add fastroware/waitsec --skill waitsec waitsec-pagemaker
+npx skills add fastroware/waitsec --skill waitsec                        # core only
+npx skills add fastroware/waitsec --skill waitsec waitsec-pagemaker      # core plus page builder
+npx skills add fastroware/waitsec --skill waitsec waitsec-ui             # core plus UI
+npx skills add fastroware/waitsec --skill waitsec waitsec-code           # core plus code
+npx skills add fastroware/waitsec --skill waitsec waitsec-quality        # core plus quality
+
+# several extensions at once
+npx skills add fastroware/waitsec --skill waitsec waitsec-pagemaker waitsec-ui
 ```
 
-Other combinations:
-
-```bash
-npx skills add fastroware/waitsec --skill waitsec                # core only
-npx skills add fastroware/waitsec --skill waitsec waitsec-ui     # core plus UI
-npx skills add fastroware/waitsec --skill waitsec waitsec-code   # core plus code
-npx skills add fastroware/waitsec --skill waitsec waitsec-quality # core plus quality
-```
+In the interactive installer `npx waitsec`, you do this in the first prompt: all skills are checked, so just unselect the ones you do not want and keep the rest.
 
 ## How to use it
 

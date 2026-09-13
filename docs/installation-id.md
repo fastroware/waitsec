@@ -96,14 +96,16 @@ Setelah ini, Anda bisa meminta tugas apa pun ke agent, dan skill yang relevan ak
 
 ## 6. Instalasi sebagian
 
-Kadang Anda hanya ingin satu area, misalnya hanya pembuatan halaman. Itu boleh, tapi ingat aturan dependensinya:
+Instalasi sebagian berlaku untuk semua ekstensi, bukan hanya untuk halaman. Anda bisa memasang hanya inti, satu ekstensi, atau beberapa ekstensi sekaligus.
 
-> Setiap skill tambahan menganggap skill inti `waitsec` sudah ada. Jadi instalasi sebagian untuk satu tambahan selalu berarti memasang dua skill: `waitsec` plus tambahan yang diinginkan.
+Aturan dependensinya:
 
-Contoh dengan skills CLI. Salin yang Anda butuhkan:
+> Setiap ekstensi menganggap skill inti `waitsec` sudah ada. Jadi kapan pun Anda memasang ekstensi, pasang `waitsec` bersamanya.
+
+### Pasang satu ekstensi
 
 ```bash
-# Hanya inti
+# Hanya guardrail inti
 npx skills add fastroware/waitsec --skill waitsec
 
 # Inti plus page builder
@@ -119,9 +121,23 @@ npx skills add fastroware/waitsec --skill waitsec waitsec-code
 npx skills add fastroware/waitsec --skill waitsec waitsec-quality
 ```
 
-Catatan: halaman per-skill di skills.sh menampilkan perintah seperti `npx skills add fastroware/waitsec --skill waitsec`, yang hanya memasang satu skill itu. Untuk tambahan, selalu sertakan `waitsec` di daftar `--skill` seperti contoh di atas.
+### Pasang beberapa ekstensi
 
-Dengan installer interaktif `npx waitsec`, instalasi sebagian caranya sama: biarkan `waitsec` dan tambahan tetap terpilih, dan batalkan pilihan sisanya.
+Tulis semua skill yang diinginkan setelah `--skill`:
+
+```bash
+# Inti plus page builder dan UI
+npx skills add fastroware/waitsec --skill waitsec waitsec-pagemaker waitsec-ui
+
+# Inti plus semuanya kecuali kualitas
+npx skills add fastroware/waitsec --skill waitsec waitsec-pagemaker waitsec-ui waitsec-code
+```
+
+### Dengan installer interaktif
+
+Saat menjalankan `npx waitsec`, prompt pertama adalah pemilihan skill. Kelima skill tercentang secara default. Batalkan centang yang tidak diinginkan, sisakan `waitsec` plus ekstensi yang Anda mau, lalu tekan `Enter`. Ini cara paling mudah untuk memasang sebagian, dan Anda bebas memilih kombinasi apa pun.
+
+Catatan: halaman per-skill di skills.sh menampilkan perintah seperti `npx skills add fastroware/waitsec --skill waitsec`, yang hanya memasang satu skill itu. Untuk ekstensi apa pun, selalu sertakan `waitsec` di daftar `--skill` seperti contoh di atas.
 
 ## 7. Instalasi per editor
 

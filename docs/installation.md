@@ -96,14 +96,16 @@ After this, you can ask your agent for any task, and the relevant skill activate
 
 ## 6. Partial install
 
-Sometimes you only want one area, for example only page building. That is fine, but remember the dependency rule:
+Partial install works for any extension, not only for pages. You can install just the core, one extension, or several extensions together.
 
-> Every extension expects the core `waitsec` skill to be present. So a partial install of one extension always means installing two skills: `waitsec` plus the extension you want.
+The dependency rule:
 
-Examples with the skills CLI. Copy the one you need:
+> Every extension expects the core `waitsec` skill to be present. So whenever you install an extension, install `waitsec` together with it.
+
+### Install one extension
 
 ```bash
-# Core only
+# Only the core guardrails
 npx skills add fastroware/waitsec --skill waitsec
 
 # Core plus page builder
@@ -119,9 +121,23 @@ npx skills add fastroware/waitsec --skill waitsec waitsec-code
 npx skills add fastroware/waitsec --skill waitsec waitsec-quality
 ```
 
-Note: the per-skill page on skills.sh shows a command like `npx skills add fastroware/waitsec --skill waitsec`, which installs only that one skill. For an extension, always add `waitsec` to the `--skill` list as shown above.
+### Install several extensions
 
-With the interactive installer `npx waitsec`, partial install works the same way: keep `waitsec` and the extension selected, and unselect the rest.
+List every skill you want after `--skill`:
+
+```bash
+# Core plus page builder and UI
+npx skills add fastroware/waitsec --skill waitsec waitsec-pagemaker waitsec-ui
+
+# Core plus everything except quality
+npx skills add fastroware/waitsec --skill waitsec waitsec-pagemaker waitsec-ui waitsec-code
+```
+
+### With the interactive installer
+
+When you run `npx waitsec`, the first prompt is the skill selection. All five skills are checked by default. Unselect the ones you do not want, keep `waitsec` plus the extensions you do want, then press `Enter`. That is the simplest way to install a partial set, and you can pick any combination.
+
+Note: the per-skill page on skills.sh shows a command like `npx skills add fastroware/waitsec --skill waitsec`, which installs only that one skill. For any extension, always add `waitsec` to the `--skill` list as shown above.
 
 ## 7. Install per editor
 
