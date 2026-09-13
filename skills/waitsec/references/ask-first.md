@@ -77,3 +77,4 @@ If the user says "just do it," choose the safest reversible option and continue.
 - [ ] Is the missing answer absent from both the prompt and the project?
 - [ ] Would the answer change a high-impact decision?
 - [ ] If I asked, did I keep it short and offer concrete choices?
+

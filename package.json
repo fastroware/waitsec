@@ -1,6 +1,6 @@
 {
   "name": "waitsec",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Practical guardrails for AI coding agents. Hold on, think first, code less.",
   "main": "rules/waitsec.md",
   "bin": {
