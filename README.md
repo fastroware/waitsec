@@ -29,29 +29,6 @@ Think of it as a checklist taped to your agent's desk. When you ask for a featur
 
 If you have ever asked for a small change and got twelve new files, or reported a one line bug and watched the agent edit five unrelated files, waitsec is for that problem.
 
-## What "global" means
-
-When you install waitsec, the installer asks for a scope. That is only about where the rule files are saved.
-
-| Scope | Where the files go | Best for |
-| :--- | :--- | :--- |
-| **This project only** | Inside the current folder, for example `.agents/skills/` or `.claude/skills/`, plus a rules file | Teams. The rules travel with the repository and can be committed. |
-| **Everywhere (Global)** | Your home directory, for example `~/.agents/skills` or `~/.claude/skills` | You. Every project on this computer gets the guardrails, even brand new ones. |
-
-You can install both. A project install wins inside that project.
-
-Full explanation: [docs/installation.md](https://github.com/fastroware/waitsec/blob/main/docs/installation.md) or [Bahasa Indonesia](https://github.com/fastroware/waitsec/blob/main/docs/installation-id.md).
-
-## Features
-
-| Skill | What it does | Use it when |
-| :--- | :--- | :--- |
-| `waitsec` | Core 5 guardrails: ask-first, anti-overengineering, small-diff, debug-first, verify-first | Always. This is the base every extension builds on. |
-| `waitsec-pagemaker` | Builds clean web pages: project recon, design preferences, responsive layout, UX, SEO and GEO, Schema.org, auth pages, motion, 3D, and image sourcing | You build or redesign web pages. |
-| `waitsec-code` | Clean code: no comment noise, small focused functions, no unnecessary dependencies | You write or refactor source code. |
-| `waitsec-ui` | Frontend restraint: anti-slop visuals, mobile-first layout, clean UI copy | You work on UI or design systems. |
-| `waitsec-quality` | Security auditing, realistic tests, safe database migrations | You touch auth, payments, tests, or migrations. |
-
 ## Install
 
 Use the interactive installer in your project folder. It handles every editor and puts the files in the right place:
@@ -84,6 +61,29 @@ npx skills add fastroware/waitsec --skill waitsec waitsec-pagemaker waitsec-ui
 ```
 
 In the interactive installer `npx waitsec`, you do this in the first prompt: all skills are checked, so just unselect the ones you do not want and keep the rest.
+
+## What "global" means
+
+When you install waitsec, the installer asks for a scope. That is only about where the rule files are saved.
+
+| Scope | Where the files go | Best for |
+| :--- | :--- | :--- |
+| **This project only** | Inside the current folder, for example `.agents/skills/` or `.claude/skills/`, plus a rules file | Teams. The rules travel with the repository and can be committed. |
+| **Everywhere (Global)** | Your home directory, for example `~/.agents/skills` or `~/.claude/skills` | You. Every project on this computer gets the guardrails, even brand new ones. |
+
+You can install both. A project install wins inside that project.
+
+Full explanation: [docs/installation.md](https://github.com/fastroware/waitsec/blob/main/docs/installation.md) or [Bahasa Indonesia](https://github.com/fastroware/waitsec/blob/main/docs/installation-id.md).
+
+## Features
+
+| Skill | What it does | Use it when |
+| :--- | :--- | :--- |
+| `waitsec` | Core 5 guardrails: ask-first, anti-overengineering, small-diff, debug-first, verify-first | Always. This is the base every extension builds on. |
+| `waitsec-pagemaker` | Builds clean web pages: project recon, design preferences, responsive layout, UX, SEO and GEO, Schema.org, auth pages, motion, 3D, and image sourcing | You build or redesign web pages. |
+| `waitsec-code` | Clean code: no comment noise, small focused functions, no unnecessary dependencies | You write or refactor source code. |
+| `waitsec-ui` | Frontend restraint: anti-slop visuals, mobile-first layout, clean UI copy | You work on UI or design systems. |
+| `waitsec-quality` | Security auditing, realistic tests, safe database migrations | You touch auth, payments, tests, or migrations. |
 
 ## How to use it
 
@@ -183,6 +183,18 @@ If an agent bypassed a guardrail, generated unexpected boilerplate, or an instal
 2. Create a branch: `git checkout -b feature/my-guardrail`.
 3. Keep instructions concise, actionable, and free of generic AI slop.
 4. Submit a **Pull Request** to `main`.
+
+## Contributors
+
+Thanks to everyone who has contributed to this project.
+
+<a href="https://github.com/fastroware/waitsec/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=fastroware/waitsec" alt="waitsec contributors">
+</a>
+
+- [fastroware](https://github.com/fastroware): creator and maintainer.
+
+Want your name here? See the contributing section above.
 
 ## License
 
