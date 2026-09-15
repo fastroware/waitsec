@@ -16,6 +16,8 @@ Use it when:
 
 Do not use it to silently replace a system the user is happy with.
 
+If the user names a familiar aesthetic directly, such as modern, minimalist, brutalist, corporate, playful, luxury, retro, dark mode, neumorphic, or maximalist, start from [`visual-styles.md`](./visual-styles.md) instead of deriving a system from nothing. Still run it through the steps below. A named style is a starting point, not a finished system.
+
 ## 1. Understand Before Choosing
 
 Never skip this step, especially when the brief is "just make it look good", because that sentence contains no decisions and someone still has to make them.

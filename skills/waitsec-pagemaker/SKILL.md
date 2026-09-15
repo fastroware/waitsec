@@ -36,7 +36,7 @@ Use this skill when:
 
 - Creating a complete page, route, or page template.
 - Reworking the section order and purpose of an existing page.
-- Turning a brief into a landing, blog index, article, about, contact, or auth page.
+- Turning a brief into a landing, blog index, article, about, contact, auth, or dashboard page.
 - Planning a multi-section public page.
 - Auditing a complete page for content flow, page-level responsive behavior, or metadata.
 - Adding page metadata or structured data as part of full-page work.
@@ -109,7 +109,7 @@ If the project is blank or has no styling system, ask the user before generating
 
 Do not choose for the user. Default to the simplest option only when the user has no preference. When Tailwind CSS is chosen, an established icon library delivered by CDN comes with it by default, for example Lucide or Iconify. Keep one icon set for the whole page.
 
-If the user asks for a new visual direction or a redesign, or the project has no consistent colors, type, and spacing, load [`references/design-direction.md`](./references/design-direction.md) before styling. State a one-sentence visual thesis, define the shared values once, and extend existing tokens instead of layering a second system beside them. Do not silently replace a working system the user is happy with.
+If the user asks for a new visual direction or a redesign, or the project has no consistent colors, type, and spacing, load [`references/design-direction.md`](./references/design-direction.md) before styling. If they name a familiar aesthetic instead, such as modern, minimalist, brutalist, corporate, playful, luxury, retro, dark mode, neumorphic, or maximalist, start from [`references/visual-styles.md`](./references/visual-styles.md) and still run it through the design-direction steps. State a one-sentence visual thesis, define the shared values once, and extend existing tokens instead of layering a second system beside them. Do not silently replace a working system the user is happy with.
 
 ### 6. Build With the Existing System
 
@@ -136,6 +136,7 @@ Check the route, content, interactions, relevant states, responsive behavior, an
 - SVG rendered by an icon library and existing SVG assets are allowed. Use a clear text label when an icon is optional, or choose a fitting established library when the page genuinely needs a consistent icon set.
 - Build hierarchy with type, spacing, alignment, and contrast before using effects.
 - Avoid repeated gradients, blur, large shadows, decorative grids, and all-pill interfaces unless the product already uses them with a clear purpose.
+- When the user asks for glassmorphism, frosted glass, liquid glass, or a backdrop blur surface, load [`references/glassmorphism.md`](./references/glassmorphism.md) instead of improvising the recipe. Keep it to a few named surfaces over a real background layer, never the whole page.
 - Keep one visually primary action per decision area. Separate destructive actions.
 - Give every interactive element default, hover, focus, active, and disabled states from the existing system.
 - When the page needs a new direction, run the visual thesis in [`references/design-direction.md`](./references/design-direction.md) before styling, and keep every value traceable to one system.
@@ -196,6 +197,7 @@ Check the route, content, interactions, relevant states, responsive behavior, an
 | :--- | :--- |
 | Stack unclear or dependency under consideration | [`project-recon.md`](./references/project-recon.md) |
 | New visual direction, redesign, or establishing colors and type | [`design-direction.md`](./references/design-direction.md) |
+| A named aesthetic such as modern, minimalist, brutalist, corporate, playful, luxury, retro, dark mode, neumorphic, or maximalist | [`visual-styles.md`](./references/visual-styles.md) |
 | Public metadata, indexability, or schema | [`seo-and-structured-data.md`](./references/seo-and-structured-data.md) |
 | Landing, product, or campaign page | [`landing-page.md`](./references/landing-page.md) |
 | Blog, news, or article listing | [`blog-index.md`](./references/blog-index.md) |
@@ -203,8 +205,10 @@ Check the route, content, interactions, relevant states, responsive behavior, an
 | About, profile, or portfolio page | [`about-me.md`](./references/about-me.md) |
 | Contact, support, or feedback page | [`contact-page.md`](./references/contact-page.md) |
 | Login, register, reset, or lockout page | [`auth-pages.md`](./references/auth-pages.md) |
+| Admin panel, analytics, internal tool, or app home screen | [`dashboard.md`](./references/dashboard.md) |
 | Selecting or adding page images | [`image-sourcing.md`](./references/image-sourcing.md) |
 | Requested animation, parallax, scroll effects, canvas, or 3D | [`motion-and-3d.md`](./references/motion-and-3d.md) |
+| Requested glassmorphism, frosted glass, or backdrop blur surface | [`glassmorphism.md`](./references/glassmorphism.md) |
 
 Load only the references needed for the current page. Do not read every blueprint by default.
 

@@ -122,6 +122,12 @@ Reach for the capability the job needs instead of the whole library:
 
 Register only the plugins the page uses, and keep that number small.
 
+When the project already uses one of these, follow its idiomatic pattern instead of writing around it:
+
+- **GSAP**: build sequences on a timeline instead of chaining delays, animate transform aliases such as `x`, `y`, `rotation`, and `scale` instead of a raw `transform` string, and use `autoAlpha` over `opacity` when an element must also stop receiving pointer events at zero. Re-run the scroll trigger's refresh method after a layout change so pinned and scrubbed sections stay aligned. In React, create and revert the animation inside a scoped hook tied to a container ref, not in a bare effect with manual selectors.
+- **Framer Motion**: use the `animate`, `whileHover`, and `whileTap` props instead of manual event handlers for hover and tap state. Use `AnimatePresence` for exit animations tied to conditional rendering, and give each animated child a stable `key`. Use `layout` and `layoutId` for shared element and reorder transitions instead of measuring the DOM by hand.
+- **Three.js and React Three Fiber**: dispose of geometries, materials, and textures when a component unmounts. Reuse materials across meshes instead of creating one per instance. Keep the render loop cheap and follow the same pixel-ratio cap and off-screen pause rules as the canvas guidance below.
+
 ## Framework Lifecycle and Cleanup
 
 - In React, create motion inside an effect hook scoped to a ref, and clean it up on unmount. Reuse one scope or context per component instead of global selectors.

@@ -2,7 +2,7 @@
 
 Use this guide for a personal profile, founder page, team member page, developer portfolio, or professional biography.
 
-Apply [`waitsec-ui`](../../waitsec-ui/SKILL.md) for layout, components, accessibility, and copy. Use [`seo-and-structured-data.md`](./seo-and-structured-data.md) only when the page is public and indexable.
+Apply [`waitsec-ui`](../../waitsec-ui/SKILL.md) for layout, components, accessibility, and copy. Use [`seo-and-structured-data.md`](./seo-and-structured-data.md) only when the page is public and indexable. When a portfolio or profile needs a real visual identity rather than the project's existing system, choose a direction from [`visual-styles.md`](./visual-styles.md) or run [`design-direction.md`](./design-direction.md) before styling.
 
 ## Choose the Page Type
 

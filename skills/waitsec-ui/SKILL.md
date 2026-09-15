@@ -70,6 +70,7 @@ A component-only task uses this skill, not pagemaker.
 - Keep radii and spacing consistent with existing tokens.
 - Give the main action the strongest visual weight. Keep secondary and destructive actions distinct.
 - Do not fill empty space with decorative cards, labels, badges, or background patterns.
+- If the user names a visual style such as modern, minimalist, brutalist, corporate, playful, luxury, retro, dark mode, neumorphic, or maximalist for a component or a small set of components, use [`waitsec-pagemaker/references/visual-styles.md`](../waitsec-pagemaker/references/visual-styles.md) for the concrete starting values instead of improvising from the name alone. A full-page or system-wide direction still belongs to pagemaker.
 
 ### Responsive Layout
 
