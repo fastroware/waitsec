@@ -1,8 +1,8 @@
 # Motion and 3D
 
-Use this guide when the user requests animation, parallax, canvas graphics, or 3D for a page, section, or interface element.
+Use this guide when the user requests animation, motion, parallax, canvas graphics, scroll effects, or 3D for a page, section, or interface element.
 
-Motion and 3D are optional enhancements. The page content, controls, and main action must work without them.
+Motion and 3D are optional enhancements. The page content, controls, and main action must work without them. Apply [`waitsec-ui`](../../waitsec-ui/SKILL.md) for states, focus, and copy detail.
 
 ## Decision Gate
 
@@ -16,18 +16,120 @@ Before implementing an effect, answer:
 
 If a still image, normal state change, or short CSS transition does the same job, use the simpler option.
 
+## Scope the Request
+
+Match the size of the motion work to the size of the request.
+
+| Scope | Example | What to build |
+| :--- | :--- | :--- |
+| Light | One hover, toggle, or dropdown | One or two effects, no choreography |
+| Medium | A hero, gallery, navigation, or section | A small sequence with one shared trigger |
+| Full | A page or an app-wide overhaul | A stated motion system with shared values and an audit |
+
+A hover effect never justifies a scroll-driven animation pipeline. State the scope before choosing tools.
+
+## State the Interaction Thesis
+
+For medium and full scope, write one sentence that names the feel and the technique, for example:
+
+> Cards rise 12px with a 200ms ease-out fade on scroll, for a calm, orderly feel.
+
+Then check it:
+
+- Does it name the timing range?
+- Does it cover hover and scroll behavior?
+- Does it say what is forbidden, such as bounce, elastic, or long travel?
+- Could someone derive the actual CSS or code from reading it?
+
+Do not start implementing until the thesis is clear. A wrong thesis caught in one sentence costs one sentence. The same wrong thesis caught after implementation costs the implementation.
+
+If the request is already specific, such as one hover scale on one button, skip the thesis and build the effect.
+
+## Duration Comes From Context
+
+Choose duration by what the motion is for, not by taste.
+
+| Context | Duration | Why |
+| :--- | :--- | :--- |
+| Micro-interaction: hover, focus, toggle | 100 to 150ms | Instant feedback with no perceived delay |
+| UI transition: modal, drawer, tab switch | 200 to 300ms | Smooth without dragging |
+| Page or route transition | 300 to 500ms | Long enough to show where the user went |
+| Scroll-driven or pointer-driven | No duration | Tied to input, so it is progress-based |
+
+The rule under the table: the more often an animation plays, the shorter and subtler it must be. A hover fires many times a day and gets 100ms. A one-time reveal can afford 600ms of choreography. Giving the hover the reveal budget is what makes an interface feel exhausting.
+
+## Easing Comes From Direction
+
+| Action | Easing | Why |
+| :--- | :--- | :--- |
+| Entering | ease-out or a spring | Decelerates into place, like arriving |
+| Exiting | ease-in | Accelerates away, getting out of the way |
+| Moving between states | ease-in-out | Smooth at both ends |
+| Scroll-synced | linear | Anything else reads as lag against the input |
+| Playful | Underdamped spring | Overshoot is what reads as alive |
+
+Exit is always more subtle than enter. An enter can combine translate, opacity, and scale. An exit is usually a short opacity fade. Keep that asymmetry, because the reverse feels like the interface is reluctant to let go.
+
+## Five Prohibitions
+
+1. Do not animate layout properties such as `width`, `height`, `top`, `left`, `margin`, or `padding`. Use transform and opacity.
+2. Do not scale content to zero. Fade and shrink to a small visible value instead.
+3. Do not ease in on an entrance. Entrances decelerate.
+4. Do not exceed 500ms on a UI interaction.
+5. Do not skip reduced motion.
+
+## Keep Motion Consistent
+
+A coherent interface uses a small named set of motion values, usually three to five durations and three to five easings, stored as tokens or variables where the project allows. Many one-off cubic-bezier values are not a design decision. When the project already names its durations and easings, use those values instead of adding new ones.
+
 ## Tool Choice
 
 Use this order:
 
 1. Existing project motion or graphics tools.
-2. Native CSS transitions and animations for small interface changes.
+2. Modern CSS for small interface changes, scroll reveals, and page transitions.
 3. Browser APIs for focused behavior when they keep the code small.
 4. A new dependency only when the requested effect needs its features and the project can support its cost.
 
-Do not default to a named animation or 3D library. If the user requests one, confirm that it fits the current framework, version policy, and bundle setup.
+Do not default to a named animation or 3D library. If the user requests one, confirm that it fits the current framework, version policy, and bundle setup. Respect a library the project already uses instead of replacing it.
 
 Use local project dependencies in build projects. Follow the project's approved external-script policy for static pages. Pin external versions when the project allows a CDN and a CDN is justified.
+
+### What CSS Handles First
+
+Check these before reaching for a library:
+
+- Scroll and view progress: `animation-timeline` with `scroll()` or `view()`, plus `animation-range`. Ship it behind `@supports (animation-timeline: scroll())` and use `animation-fill-mode: both`.
+- Page transitions: the View Transitions API, same-document for single-page apps and cross-document for multi-page sites, with `view-transition-name` for shared elements.
+- Entrances from `display: none`: `@starting-style` paired with `transition-behavior: allow-discrete`.
+- Tooltips, popovers, and menus: anchor positioning with `position-try-fallbacks`.
+- Component-size behavior: container queries.
+- Visual techniques: `clip-path` reveals, `backdrop-filter`, `mix-blend-mode`, layered radial gradients, and `conic-gradient` masking.
+
+Stay in CSS for a few small animations, a scroll reveal, an enter or exit from `display: none`, a tooltip, or a page transition. Reach for a library when the job has several sequenced steps, a stagger across a list of unknown length, an interruptible physics spring, or an SVG shape morph.
+
+### When a Motion Library Already Exists or Is Justified
+
+Reach for the capability the job needs instead of the whole library:
+
+| Need | Look for |
+| :--- | :--- |
+| A single tween, easing, or stagger | Core tween API, transforms, opacity |
+| Several sequenced steps, labels, or playback | Timeline API |
+| Scroll-linked movement, pinning, or scrubbing | Scroll trigger API |
+| Page transition helpers, drag, flip, or text split | The plugin set |
+| Value mapping, clamping, snapping, or ranges | Utility helpers |
+
+Register only the plugins the page uses, and keep that number small.
+
+## Framework Lifecycle and Cleanup
+
+- In React, create motion inside an effect hook scoped to a ref, and clean it up on unmount. Reuse one scope or context per component instead of global selectors.
+- In Vue and Svelte, create motion in the mount lifecycle and kill tweens, triggers, and observers on unmount.
+- Scope selectors to the component root so one instance does not animate another.
+- In server-rendered apps, do not touch `window` or schedule animation during render. Run it after mount.
+- Do not set component state from a scroll or animation callback on every frame. Update the animated property or a ref directly.
+- In a sequence, control when an entrance tween first renders instead of letting it fire before the timeline reaches it.
 
 ## Motion Rules
 
@@ -38,18 +140,23 @@ Use local project dependencies in build projects. Follow the project's approved 
 - Keep durations and easing consistent with the existing product.
 - Avoid long entrance sequences that delay reading or interaction.
 - Trigger scroll effects with a small shared mechanism rather than repeated listeners.
+- Prefer `animation-timeline` first, then `IntersectionObserver`, then a scroll listener as a last resort.
 - Stop observers and animation work when they are no longer needed.
 - Pause continuous work when content is off-screen or the page is hidden.
+- Use `requestAnimationFrame` for animation loops, never `setTimeout` or `setInterval`.
+- Use `will-change` sparingly, and remove it when the animation ends.
 
 ## Reduced Motion
 
-- Respect `prefers-reduced-motion`.
+- Respect `prefers-reduced-motion`. On the web use the `@media (prefers-reduced-motion: reduce)` query, and in JavaScript use `matchMedia('(prefers-reduced-motion: reduce)')`.
 - Remove non-essential movement.
 - Replace large travel, parallax, and repeated rotation with a still state or small change.
 - Keep status and progress understandable without animation.
+- Keep the finished state, not a broken one. A reduced-motion visitor should see the composition, just not the motion into it.
+- Never hide focus indicators with animation, and keep animated text above its contrast ratio at every frame.
 - Test keyboard and screen-reader use with motion disabled.
 
-Reduced motion is a complete usable mode, not an empty canvas.
+Reduced motion is a complete usable mode, not an empty canvas. An animated project with no reduced-motion handling anywhere is a critical failure.
 
 ## Parallax and Scroll Effects
 
@@ -127,6 +234,33 @@ Use 3D when interaction with a spatial object is part of the product or clearly 
 - Give controls accessible names and keyboard behavior.
 - Do not place needed text only inside a canvas.
 
+For a generative canvas, follow these rules:
+
+- Do not use `clearRect` when the effect needs trails. Fill with a translucent color instead.
+- Do not call `getImageData` inside the render loop. It stalls on a GPU readback.
+- Do not skip device-pixel-ratio scaling, or the canvas will look soft on a high-density display.
+- Do not allocate objects inside update or render. Pre-allocate a pool and recycle entries.
+- Handle resize by recalculating and redrawing, not by stretching the bitmap.
+
+## Motion Audit
+
+Run these checks on the affected files before reporting the work complete. Prefer searching the code over reading it from memory, because a search catches what a read-through misses.
+
+- Conditional renders with no matching exit animation.
+- Hover rules with no transition on the base selector.
+- Mapped lists with no stagger where a stagger was intended.
+- Animated inline styles with no transition.
+- Transitions on layout properties.
+- Permanent `will-change` left on many elements.
+- Animation loops built on `setTimeout` or `setInterval`.
+- Negative `outline` removal with no `:focus-visible` replacement.
+- Clickable `div` or `span` with no role and no keyboard handling.
+- Decorative animation with no `aria-hidden`.
+- Missing reduced-motion handling. Treat total absence in an animated project as critical.
+- Contrast at 4.5:1, including while text is fading, where it often drops below the line.
+
+Group findings by severity: critical, important, and nice-to-have.
+
 ## Verification
 
 Check:
@@ -138,6 +272,7 @@ Check:
 - Main-thread and rendering cost on a representative device.
 - Cleanup when components unmount or leave the viewport.
 - Fallback behavior without graphics support.
+- Narrow, middle, and wide widths, for example 375, 768, 1024, and 1440 when the project supports them.
 
 Use project performance tools when available. Do not claim a performance result without measurement.
 
@@ -183,9 +318,36 @@ Use project performance tools when available. Do not claim a performance result 
 * **Clean Fix:** Render readable content first and layer the effect on top. Keep a still, usable fallback.
 * **The Waitsec Way:** Enhancement may fail. The page may not.
 
+### 6. Animating Layout Properties
+
+* **The Bad Habit:** Animating `width`, `height`, `top`, or `left` because it is the first way to move an element.
+* **The Problem:** Each frame forces layout and paint work instead of a compositor-only change.
+* **Why It Fails:** The page stutters on ordinary devices, and nearby content shifts while the element moves.
+* **Clean Fix:** Animate transform and opacity. Reserve or measure the final space so layout does not jump. Use a width or height animation only when the visual need truly requires it and the measured cost is acceptable.
+* **The Waitsec Way:** Smooth motion comes from cheap properties, not from a faster machine.
+
+### 7. Scattering Durations and Easings
+
+* **The Bad Habit:** Typing a new millisecond value and a new cubic-bezier curve for every effect.
+* **The Problem:** Similar interactions move at different speeds and the interface feels assembled from parts.
+* **Why It Fails:** People read the mismatch as sloppiness even when they cannot name it.
+* **Clean Fix:** Keep a small named set of durations and easings, three to five of each, and reuse them. When the project already defines them, use those.
+* **The Waitsec Way:** A few shared values are easier to use and easier to change.
+
+### 8. Forgetting Cleanup
+
+* **The Bad Habit:** Creating tweens, scroll triggers, and observers without stopping them when the component unmounts.
+* **The Problem:** Old effects keep running, stack on top of new ones, and keep the page busy in the background.
+* **Why It Fails:** Revisiting the page shows doubled movement, drifting scroll behavior, and growing memory use.
+* **Clean Fix:** Kill tweens and triggers and disconnect observers in the unmount or cleanup path. Pause work that leaves the viewport.
+* **The Waitsec Way:** An effect owns its own resources and releases them.
+
 ## Motion and 3D Checklist
 
 - [ ] Does each effect have a clear user-visible job?
+- [ ] For medium or full scope, is there a stated interaction thesis?
+- [ ] Do durations and easings follow context and direction, from a small shared set?
+- [ ] Does the work avoid animating layout properties, scaling to zero, and easing in on entrances?
 - [ ] For parallax, did I choose the best contextual target instead of assuming it must be an image?
 - [ ] Are movement distance, speed, direction, and depth suitable for that target?
 - [ ] Does the effect adapt deliberately across mobile, touch, desktop, and precise-pointer use?
@@ -194,6 +356,8 @@ Use project performance tools when available. Do not claim a performance result 
 - [ ] Is content visible and usable before the effect loads?
 - [ ] Does reduced-motion mode preserve all information and actions?
 - [ ] Are scroll, focus, keyboard, and touch behavior stable?
-- [ ] Is continuous work paused when it is not visible?
-- [ ] If 3D is used, are rendering budgets and fallbacks defined?
+- [ ] Is animation work cleaned up on unmount and paused when not visible?
+- [ ] Is `will-change` removed once the animation ends?
+- [ ] If 3D or canvas is used, are rendering budgets, fallbacks, and canvas rules handled?
+- [ ] Did the motion audit pass for focus, reduced motion, and contrast during motion?
 - [ ] Did I measure meaningful performance claims on a representative setup?

@@ -81,7 +81,7 @@ Full explanation: [docs/installation.md](https://github.com/fastroware/waitsec/b
 | Skill | What it does | Use it when |
 | :--- | :--- | :--- |
 | `waitsec` | Core 5 guardrails: ask-first, anti-overengineering, small-diff, debug-first, verify-first | Always. This is the base every extension builds on. |
-| `waitsec-pagemaker` | Orchestrates complete web pages: project recon, page structure, responsive UI, content flow, and conditional guidance for SEO, structured data, auth, motion, 3D, and images | You build, restructure, or audit a complete web page. |
+| `waitsec-pagemaker` | Orchestrates complete web pages: project recon, page structure, visual direction, responsive UI, content flow, and conditional guidance for SEO, structured data, auth, motion, 3D, and images | You build, restructure, or audit a complete web page. |
 | `waitsec-code` | Clean code: no comment noise, small focused functions, no unnecessary dependencies | You write or refactor source code. |
 | `waitsec-ui` | Frontend restraint: anti-slop visuals, mobile-first layout, clean UI copy | You work on UI or design systems. |
 | `waitsec-quality` | Security auditing, realistic tests, safe database migrations | You touch auth, payments, tests, or migrations. |
@@ -141,6 +141,7 @@ waitsec/
 │   │   ├── SKILL.md               # Recon, workflow, UI contract, and reference routing
 │   │   └── references/
 │   │       ├── project-recon.md
+│   │       ├── design-direction.md
 │   │       ├── seo-and-structured-data.md
 │   │       ├── landing-page.md
 │   │       ├── blog-index.md

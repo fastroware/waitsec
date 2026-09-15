@@ -1,6 +1,6 @@
 ---
 name: waitsec-pagemaker
-description: "Page-level orchestrator for building and revising complete web pages. It reads the existing project, chooses only the needed page guidance, coordinates UI quality, and verifies the result without forcing frameworks, sections, assets, or metadata."
+description: "Page-level orchestrator for building and revising complete web pages. It reads the existing project, chooses only the needed page guidance, coordinates visual direction, UI quality, and motion craft, and verifies the result without forcing frameworks, sections, assets, or metadata."
 ---
 
 # waitsec-pagemaker: Page Orchestrator
@@ -109,6 +109,8 @@ If the project is blank or has no styling system, ask the user before generating
 
 Do not choose for the user. Default to the simplest option only when the user has no preference. When Tailwind CSS is chosen, an established icon library delivered by CDN comes with it by default, for example Lucide or Iconify. Keep one icon set for the whole page.
 
+If the user asks for a new visual direction or a redesign, or the project has no consistent colors, type, and spacing, load [`references/design-direction.md`](./references/design-direction.md) before styling. State a one-sentence visual thesis, define the shared values once, and extend existing tokens instead of layering a second system beside them. Do not silently replace a working system the user is happy with.
+
 ### 6. Build With the Existing System
 
 Reuse the project shell, components, styles, icons, and media. Keep changes limited to the task. Add a dependency only when the project and requested behavior cannot reasonably handle the need.
@@ -135,6 +137,8 @@ Check the route, content, interactions, relevant states, responsive behavior, an
 - Build hierarchy with type, spacing, alignment, and contrast before using effects.
 - Avoid repeated gradients, blur, large shadows, decorative grids, and all-pill interfaces unless the product already uses them with a clear purpose.
 - Keep one visually primary action per decision area. Separate destructive actions.
+- Give every interactive element default, hover, focus, active, and disabled states from the existing system.
+- When the page needs a new direction, run the visual thesis in [`references/design-direction.md`](./references/design-direction.md) before styling, and keep every value traceable to one system.
 
 ### Responsive Layout
 
@@ -180,15 +184,18 @@ Check the route, content, interactions, relevant states, responsive behavior, an
 - Do not apply that automatic sourcing default to existing project media or a subject the user explicitly requests.
 - Choose media that supports the content and follows the user's licensing and subject requirements.
 - Use native CSS for small transitions. Reuse an existing motion or 3D tool before considering another dependency.
+- Choose duration by context and easing by direction, from a small shared set. Keep content visible before scripts load, and respect `prefers-reduced-motion`.
+- Animate transforms and opacity, not layout properties. Keep motion out of the way of reading and controls.
 - Treat parallax as a relationship between page layers, not an image-only effect. Choose cards, product previews, media, headings, decorative layers, or backgrounds according to the page context.
 - Load [`references/image-sourcing.md`](./references/image-sourcing.md) only when media must be selected or added.
-- Load [`references/motion-and-3d.md`](./references/motion-and-3d.md) only when the requested page needs motion, parallax, or 3D.
+- Load [`references/motion-and-3d.md`](./references/motion-and-3d.md) only when the requested page needs motion, parallax, scroll effects, canvas, or 3D.
 
 ## Reference Routing
 
 | Need | Load |
 | :--- | :--- |
 | Stack unclear or dependency under consideration | [`project-recon.md`](./references/project-recon.md) |
+| New visual direction, redesign, or establishing colors and type | [`design-direction.md`](./references/design-direction.md) |
 | Public metadata, indexability, or schema | [`seo-and-structured-data.md`](./references/seo-and-structured-data.md) |
 | Landing, product, or campaign page | [`landing-page.md`](./references/landing-page.md) |
 | Blog, news, or article listing | [`blog-index.md`](./references/blog-index.md) |
@@ -197,7 +204,7 @@ Check the route, content, interactions, relevant states, responsive behavior, an
 | Contact, support, or feedback page | [`contact-page.md`](./references/contact-page.md) |
 | Login, register, reset, or lockout page | [`auth-pages.md`](./references/auth-pages.md) |
 | Selecting or adding page images | [`image-sourcing.md`](./references/image-sourcing.md) |
-| Requested animation, parallax, or 3D | [`motion-and-3d.md`](./references/motion-and-3d.md) |
+| Requested animation, parallax, scroll effects, canvas, or 3D | [`motion-and-3d.md`](./references/motion-and-3d.md) |
 
 Load only the references needed for the current page. Do not read every blueprint by default.
 
@@ -235,6 +242,22 @@ Load only the references needed for the current page. Do not read every blueprin
 * **Clean Fix:** Reuse the project tool first, use a simple native solution second, and add a dependency only with a clear reason.
 * **The Waitsec Way:** Dependencies solve real gaps, not routine styling.
 
+### 5. Styling Without a Stated Direction
+
+* **The Bad Habit:** Picking colors, type, and effects as the page is written, with no direction stated first.
+* **The Problem:** Values drift, similar elements look different, and the page reads as assembled rather than designed.
+* **Why It Fails:** People sense the mismatch even when they cannot name it, and later edits get harder because there is no system to follow.
+* **Clean Fix:** When the page needs direction, state a one-sentence visual thesis, define the shared values once, and make every value trace back to that system.
+* **The Waitsec Way:** Decide the direction once, then apply it consistently.
+
+### 6. Motion Added as Decoration
+
+* **The Bad Habit:** Adding entrance animations, parallax, or a 3D object because the page looks plain.
+* **The Problem:** The page gains moving parts and rendering cost without explaining anything or helping a task.
+* **Why It Fails:** Repeated movement competes with reading, and heavy effects can slow the page on ordinary devices.
+* **Clean Fix:** Give each effect a user-visible job and a stated thesis. Keep content visible before it loads, choose duration by context, and respect reduced motion.
+* **The Waitsec Way:** Motion is a signal, not a page theme.
+
 ## Pre-Flight Checklist
 
 Before reporting a page complete:
@@ -246,11 +269,14 @@ Before reporting a page complete:
 - [ ] Did I reuse project tools and avoid an unnecessary framework or dependency?
 - [ ] Does the page follow the compact UI contract and link to deeper UI guidance where needed?
 - [ ] If the project was blank, did I ask the user which styling system to use before building?
+- [ ] If the page needed a new direction, did I state a visual thesis and keep every value traceable to one system?
+- [ ] Does every interactive element have default, hover, focus, active, and disabled states?
 - [ ] Is generated text free of emoji, hand-written SVG, and em dash or en dash unless the user asked for them?
 - [ ] Does the page title use " · " as the separator instead of an en dash, em dash, hyphen, or vertical bar?
 - [ ] Does it work across the useful width range without page-level horizontal scrolling?
 - [ ] Are accessibility, interaction states, copy, and destructive outcomes handled where relevant?
 - [ ] Are images, motion, icons, and navigation present only when the page needs them?
+- [ ] If motion is present, do durations and easings follow context and direction, content is visible before it loads, reduced motion is handled, and work is cleaned up?
 - [ ] For public indexable pages, is metadata factual, non-duplicated, and validated where possible?
 - [ ] For auth work, are client UX and server security handled by the right skills?
 - [ ] Did I run relevant project checks and report the real results?
