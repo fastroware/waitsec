@@ -4,6 +4,8 @@ Use this guide when the user requests animation, motion, parallax, canvas graphi
 
 Motion and 3D are optional enhancements. The page content, controls, and main action must work without them. Apply [`waitsec-ui`](../../waitsec-ui/SKILL.md) for states, focus, and copy detail.
 
+When the request is for a whole motion language rather than one effect, or the user names a site they want the page to feel comparable to, choose the archetype in [`motion-archetypes.md`](./motion-archetypes.md) first, then return here for the values that implement it.
+
 ## Decision Gate
 
 Before implementing an effect, answer:
@@ -186,6 +188,24 @@ Useful patterns include:
 - **Heading moment:** Move a short heading group as one unit when it helps a section transition. Keep long paragraphs stable.
 - **Pointer depth:** On devices with precise pointers, a card may use a small tilt or inner-layer shift. Provide a calm touch and keyboard experience without requiring hover.
 
+### Choosing Travel and Depth
+
+Depth reads from the difference in speed between layers, not from how far any one layer travels. Two layers moving at clearly different rates create more depth than one layer moving a long way.
+
+Keep the page to three depth tiers at most, and assign each layer to one:
+
+| Tier | Moves relative to scroll | Suits |
+| :--- | :--- | :--- |
+| Background | Noticeably slower, roughly 10 to 30 percent of scroll distance | Large decorative scene layers, a section backdrop, an atmospheric shape |
+| Midground | Slightly slower or slightly faster, under about 10 percent | A featured card, a product or device frame, a media crop, a heading group |
+| Foreground | Moves with the page, no offset | Body text, forms, navigation, controls, anything the reader acts on |
+
+Total travel for a midground element should stay small, roughly 8 to 40 pixels across the section, since interface elements read as broken rather than deep when they drift far from where they belong. A large background layer can afford more, but keep it inside the space it occupies so it never reveals an edge or leaves a gap.
+
+Scale the effect down as the viewport narrows. A vertical offset that reads as depth on a wide screen is a large proportion of a phone's height, so reduce travel at narrow widths and drop to the foreground tier entirely when the layers would overlap.
+
+Pointer-driven tilt belongs to a precise pointer only. Keep the rotation small, a few degrees at most, return to rest when the pointer leaves, and never make a control's target area move while someone is aiming at it.
+
 Guardrails:
 
 - Use parallax only when the user asks or the product already uses it with purpose.
@@ -193,6 +213,7 @@ Guardrails:
 - Do not tie important reading or actions to an exact scroll position.
 - Avoid effects that fight native scrolling, create layout shift, or cause nausea.
 - Prefer transforms driven by one shared scroll or pointer mechanism instead of separate listeners for each element.
+- Follow [`scroll-experience.md`](./scroll-experience.md) for the scroll mechanics underneath: passive listeners, `IntersectionObserver` over scroll handlers, no per-frame layout reads, and no hijacking of the reader's own scroll.
 - Limit travel and depth levels so the page still feels controlled.
 - Provide the same information when the effect is off.
 - Test narrow screens, touch input, reduced motion, and a representative lower-powered device when the effect is substantial.

@@ -16,7 +16,7 @@ Use it when:
 
 Do not use it to silently replace a system the user is happy with.
 
-If the user names a familiar aesthetic directly, such as modern, minimalist, brutalist, corporate, playful, luxury, retro, dark mode, neumorphic, or maximalist, start from [`visual-styles.md`](./visual-styles.md) instead of deriving a system from nothing. Still run it through the steps below. A named style is a starting point, not a finished system.
+If the user names a familiar aesthetic directly, such as modern, minimalist, brutalist, corporate, playful, luxury, retro, dark mode, neumorphic, or maximalist, start from [`visual-styles.md`](./visual-styles.md) instead of deriving a system from nothing. If no style is named and nothing in the project or brief points to one, run [`style-inference.md`](./style-inference.md) first, using a provided source or the page's stated purpose to choose a reasonable starting direction. Still run either path through the steps below. A named or inferred style is a starting point, not a finished system.
 
 ## 1. Understand Before Choosing
 
@@ -53,11 +53,12 @@ For an open-ended page this sentence is a gate. Do not start styling until it is
 
 When the page establishes a direction, define the values once, then use them everywhere.
 
-- Color: background, surface, text, muted text, border, one primary accent, and semantic states for success, warning, and danger.
+- Color: background, surface, text, muted text, border, one primary accent, and semantic states for success, warning, and danger, each with a real light and dark value. See [`color-scheme-and-theming.md`](./color-scheme-and-theming.md) for the token structure and the toggle itself.
 - Type: one or two families, a small size scale, line heights, and heading weights.
 - Space: one spacing scale, usually steps of 4 or 8.
 - Radius and border: one or two radii and one border color.
 - Elevation: a small number of shadow levels, or none if the direction is flat.
+- Background: the page and section treatment, chosen deliberately rather than defaulted. See [`background-treatment.md`](./background-treatment.md).
 - Motion: the shared durations and easings from [`motion-and-3d.md`](./motion-and-3d.md).
 
 Prefer a plain set of variables or tokens the project already supports. Every value in the page should trace back to one of these. A stray hex value or spacing number is a sign the system is not being followed.
@@ -95,6 +96,7 @@ Run this before reporting the work complete. Search the code instead of reading 
 - Headings that jump levels or skip sizes in a way that breaks hierarchy.
 - Repeated decorative effects that are not part of the stated thesis.
 - A second design system layered beside the existing one.
+- A dark theme produced by mechanically inverting the light theme instead of a real, separately tuned token.
 
 Group findings by severity: critical, important, and nice-to-have. Fix critical issues before calling the page done.
 
@@ -107,5 +109,6 @@ Group findings by severity: critical, important, and nice-to-have. Fix critical 
 - [ ] Does every interactive element have default, hover, focus, active, and disabled states?
 - [ ] Is the direction restrained, with one primary accent and quiet surfaces?
 - [ ] Did I extend existing tokens instead of creating a second system?
+- [ ] If the system is new, does every color token carry a real, separately tuned light and dark value?
 - [ ] Did the audit pass for stray values, missing states, and contrast?
 - [ ] Were findings reported by severity instead of claimed as a clean pass?

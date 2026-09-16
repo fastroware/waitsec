@@ -69,17 +69,22 @@ A component-only task uses this skill, not pagemaker.
 - Use borders, shadows, gradients, blur, and motion only when they communicate structure or state.
 - Keep radii and spacing consistent with existing tokens.
 - Give the main action the strongest visual weight. Keep secondary and destructive actions distinct.
-- Do not fill empty space with decorative cards, labels, badges, or background patterns.
+- Do not fill empty space with decorative cards, labels, badges, or background patterns. A component's background is a deliberate choice too: see [`waitsec-pagemaker/references/background-treatment.md`](../waitsec-pagemaker/references/background-treatment.md) when a surface needs a gradient, texture, or imagery behind it.
+- Keep decoration carrying information: a status dot marks a real state, a left stripe marks a real condition, a badge carries real status. Use [`waitsec-pagemaker/references/generated-output-tells.md`](../waitsec-pagemaker/references/generated-output-tells.md) to audit a component for defaults that arrived without a decision.
+- Leave ordinary scrolling to the browser, and keep a scrollbar visible on any scrollable region. See [`waitsec-pagemaker/references/scroll-experience.md`](../waitsec-pagemaker/references/scroll-experience.md) when a component styles its scrollbar or reveals content on scroll.
 - If the user names a visual style such as modern, minimalist, brutalist, corporate, playful, luxury, retro, dark mode, neumorphic, or maximalist for a component or a small set of components, use [`waitsec-pagemaker/references/visual-styles.md`](../waitsec-pagemaker/references/visual-styles.md) for the concrete starting values instead of improvising from the name alone. A full-page or system-wide direction still belongs to pagemaker.
 
 ### Responsive Layout
 
 - Start with the smallest useful layout, then expand when the content needs more room.
 - Let content determine layout changes. Reuse project breakpoints when they work.
+- Design the narrow state deliberately instead of patching it as a trailing override, and give it its own scale for type, padding, and gaps while keeping touch targets full size.
+- Cover the middle of the width range, not just a phone and a wide desktop. Two states leave tablet and small-laptop widths inheriting a stretched stack or a crammed grid.
 - Prevent page-level horizontal scrolling.
 - Put wide tables, code, and data views in their own overflow container when needed.
-- Avoid fixed page widths and fixed viewport heights that trap content on phones.
+- Avoid fixed page widths and fixed viewport heights that trap content on phones. Prefer content height or `dvh` over `100vh`.
 - Keep controls reachable and readable when a mobile keyboard is open.
+- Use [`references/responsive-reflow.md`](./references/responsive-reflow.md) for breakpoint placement, grid collapse, overflow causes, touch targets, and navigation reflow in detail.
 
 ### Accessibility
 
@@ -110,6 +115,7 @@ A component-only task uses this skill, not pagemaker.
 ### Text and Titles
 
 - Do not use emoji anywhere in the interface, including copy, labels, and decoration.
+- Do not apply a gradient to heading or label text. Emphasize with weight, size, or a system color applied to a whole phrase, so emphasis follows meaning and contrast stays checkable.
 - Do not use em dash (U+2014) or en dash (U+2013) in interface text, including headings, labels, and copy. Use a colon, comma, period, or parentheses instead. Only use them when the user explicitly asks.
 - Separate parts of a page title with a middle dot surrounded by spaces, " · ", for example "Home · Blog · About". Do not use an en dash, em dash, hyphen, or vertical bar as the title separator.
 
@@ -171,6 +177,8 @@ Before finishing UI work:
 - [ ] Do icons come from an existing or justified library or approved asset, with no emoji, raster substitute, or hand-written inline SVG?
 - [ ] Is the visual hierarchy clear without decorative noise?
 - [ ] Does the layout work across the useful width range without page-level horizontal scrolling?
+- [ ] Are there real layout states across the whole range, so tablet and small-laptop widths are neither a stretched stack nor a crammed grid?
+- [ ] Does every decorative mark carry real information, with no status dot, stripe, badge, or arrow added for looks alone?
 - [ ] Are labels, accessible names, focus, contrast, keyboard use, and touch behavior handled?
 - [ ] Are all reachable loading, empty, error, success, disabled, and destructive states clear?
 - [ ] Does the copy help users act without exposing implementation detail or deleting needed warnings?

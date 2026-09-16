@@ -37,6 +37,7 @@ Use this skill when:
 - Creating a complete page, route, or page template.
 - Reworking the section order and purpose of an existing page.
 - Turning a brief into a landing, blog index, article, about, contact, auth, or dashboard page.
+- Building or redesigning a page from a provided URL, PDF, or Word document used as the content or brand source.
 - Planning a multi-section public page.
 - Auditing a complete page for content flow, page-level responsive behavior, or metadata.
 - Adding page metadata or structured data as part of full-page work.
@@ -109,7 +110,9 @@ If the project is blank or has no styling system, ask the user before generating
 
 Do not choose for the user. Default to the simplest option only when the user has no preference. When Tailwind CSS is chosen, an established icon library delivered by CDN comes with it by default, for example Lucide or Iconify. Keep one icon set for the whole page.
 
-If the user asks for a new visual direction or a redesign, or the project has no consistent colors, type, and spacing, load [`references/design-direction.md`](./references/design-direction.md) before styling. If they name a familiar aesthetic instead, such as modern, minimalist, brutalist, corporate, playful, luxury, retro, dark mode, neumorphic, or maximalist, start from [`references/visual-styles.md`](./references/visual-styles.md) and still run it through the design-direction steps. State a one-sentence visual thesis, define the shared values once, and extend existing tokens instead of layering a second system beside them. Do not silently replace a working system the user is happy with.
+If the user asks for a new visual direction or a redesign, or the project has no consistent colors, type, and spacing, load [`references/design-direction.md`](./references/design-direction.md) before styling. If they name a familiar aesthetic instead, such as modern, minimalist, brutalist, corporate, playful, luxury, retro, dark mode, neumorphic, or maximalist, start from [`references/visual-styles.md`](./references/visual-styles.md) and still run it through the design-direction steps. If no style is named and no existing system applies, load [`references/style-inference.md`](./references/style-inference.md) first: a source URL or uploaded document gives real brand signals to extract, and a stated purpose with no style at all maps to a starting direction from its domain table. State the inferred direction in one sentence before building. State a one-sentence visual thesis, define the shared values once, and extend existing tokens instead of layering a second system beside them. Do not silently replace a working system the user is happy with.
+
+Any new visual system built here includes a working light and dark theme by default. Use [`references/color-scheme-and-theming.md`](./references/color-scheme-and-theming.md) for the token structure, the flash-free toggle, and the transition between themes. Skip this only when the project already ships one committed theme and the current task does not otherwise touch its visual system.
 
 ### 6. Build With the Existing System
 
@@ -127,6 +130,8 @@ Use [`references/seo-and-structured-data.md`](./references/seo-and-structured-da
 
 Check the route, content, interactions, relevant states, responsive behavior, and available project validation commands. Report only checks that actually ran.
 
+Run the audit in [`references/generated-output-tells.md`](./references/generated-output-tells.md) over the finished page. It catches the defaults that arrive without a decision behind them, and the fabricated facts that are more damaging than any styling choice. Removing tells is only half of it: if the page is left with no identity at all, that is a direction problem, so return to the visual thesis rather than removing more.
+
 ## Compact UI Contract
 
 ### Project Fit and Visual Restraint
@@ -137,8 +142,11 @@ Check the route, content, interactions, relevant states, responsive behavior, an
 - Build hierarchy with type, spacing, alignment, and contrast before using effects.
 - Avoid repeated gradients, blur, large shadows, decorative grids, and all-pill interfaces unless the product already uses them with a clear purpose.
 - When the user asks for glassmorphism, frosted glass, liquid glass, or a backdrop blur surface, load [`references/glassmorphism.md`](./references/glassmorphism.md) instead of improvising the recipe. Keep it to a few named surfaces over a real background layer, never the whole page.
+- Do not apply a gradient to headline text. Emphasize with weight, size, or a system color on a whole phrase, so emphasis follows meaning instead of line position and contrast stays checkable.
+- Do not open a hero with a capsule eyebrow badge restating the product name, and never with a decorative dot, glow, or pulse on it. Load [`references/hero-composition.md`](./references/hero-composition.md) when building or refining a first screen.
 - Keep one visually primary action per decision area. Separate destructive actions.
 - Give every interactive element default, hover, focus, active, and disabled states from the existing system.
+- Build a working light and dark theme by default for any new visual system, following [`references/color-scheme-and-theming.md`](./references/color-scheme-and-theming.md), unless the project already commits to one theme.
 - When the page needs a new direction, run the visual thesis in [`references/design-direction.md`](./references/design-direction.md) before styling, and keep every value traceable to one system.
 
 ### Responsive Layout
@@ -187,9 +195,13 @@ Check the route, content, interactions, relevant states, responsive behavior, an
 - Use native CSS for small transitions. Reuse an existing motion or 3D tool before considering another dependency.
 - Choose duration by context and easing by direction, from a small shared set. Keep content visible before scripts load, and respect `prefers-reduced-motion`.
 - Animate transforms and opacity, not layout properties. Keep motion out of the way of reading and controls.
-- Treat parallax as a relationship between page layers, not an image-only effect. Choose cards, product previews, media, headings, decorative layers, or backgrounds according to the page context.
+- Treat parallax as a relationship between page layers, not an image-only effect. Choose cards, product previews, media, headings, decorative layers, or backgrounds according to the page context. Keep the page to at most three depth tiers, and never move body text, forms, navigation, or controls.
+- Leave ordinary scrolling to the browser. Do not hijack wheel or touch input, do not hide a scrollbar on a scrollable region, and let scroll reveals fire once rather than on every pass.
+- Choose the page background deliberately. Flat is the correct default, and a blurred colored orb, mesh glow, dot grid, or blueprint texture added because a section looked bare is not. Load [`references/background-treatment.md`](./references/background-treatment.md) when a background is being chosen or a decorative one is requested.
 - Load [`references/image-sourcing.md`](./references/image-sourcing.md) only when media must be selected or added.
 - Load [`references/motion-and-3d.md`](./references/motion-and-3d.md) only when the requested page needs motion, parallax, scroll effects, canvas, or 3D.
+- Load [`references/motion-archetypes.md`](./references/motion-archetypes.md) when the page needs a whole motion language rather than one effect, or when the user points at a site they want this page to feel comparable to. Take that site's reasoning, not its choreography, and build the content-only version before adding the archetype.
+- Load [`references/scroll-experience.md`](./references/scroll-experience.md) when the page styles its scrollbar, enables smooth scrolling, snaps or pins a section, or reveals content on scroll.
 
 ## Reference Routing
 
@@ -198,8 +210,11 @@ Check the route, content, interactions, relevant states, responsive behavior, an
 | Stack unclear or dependency under consideration | [`project-recon.md`](./references/project-recon.md) |
 | New visual direction, redesign, or establishing colors and type | [`design-direction.md`](./references/design-direction.md) |
 | A named aesthetic such as modern, minimalist, brutalist, corporate, playful, luxury, retro, dark mode, neumorphic, or maximalist | [`visual-styles.md`](./references/visual-styles.md) |
+| No named style, built from a URL, a document, or a stated purpose with no aesthetic language | [`style-inference.md`](./references/style-inference.md) |
+| Light and dark theme support or a theme toggle | [`color-scheme-and-theming.md`](./references/color-scheme-and-theming.md) |
 | Public metadata, indexability, or schema | [`seo-and-structured-data.md`](./references/seo-and-structured-data.md) |
 | Landing, product, or campaign page | [`landing-page.md`](./references/landing-page.md) |
+| A page hero, or refining the first screen of a landing or product page | [`hero-composition.md`](./references/hero-composition.md) |
 | Blog, news, or article listing | [`blog-index.md`](./references/blog-index.md) |
 | Article, post, or long-form reading page | [`article-single.md`](./references/article-single.md) |
 | About, profile, or portfolio page | [`about-me.md`](./references/about-me.md) |
@@ -208,7 +223,12 @@ Check the route, content, interactions, relevant states, responsive behavior, an
 | Admin panel, analytics, internal tool, or app home screen | [`dashboard.md`](./references/dashboard.md) |
 | Selecting or adding page images | [`image-sourcing.md`](./references/image-sourcing.md) |
 | Requested animation, parallax, scroll effects, canvas, or 3D | [`motion-and-3d.md`](./references/motion-and-3d.md) |
+| A whole motion language for a flagship page, or a reference site the user wants to feel comparable to | [`motion-archetypes.md`](./references/motion-archetypes.md) |
+| Choosing a page or section background, or a requested decorative background | [`background-treatment.md`](./references/background-treatment.md) |
+| Scrollbar styling, smooth scrolling, scroll snap, sticky sections, or scroll-triggered reveals | [`scroll-experience.md`](./references/scroll-experience.md) |
+| Auditing a page for generic, template-looking, or fabricated output | [`generated-output-tells.md`](./references/generated-output-tells.md) |
 | Requested glassmorphism, frosted glass, or backdrop blur surface | [`glassmorphism.md`](./references/glassmorphism.md) |
+| Pricing section, plan tiers, or a feature comparison table | [`pricing-and-comparison.md`](./references/pricing-and-comparison.md) |
 
 Load only the references needed for the current page. Do not read every blueprint by default.
 
@@ -273,14 +293,23 @@ Before reporting a page complete:
 - [ ] Did I reuse project tools and avoid an unnecessary framework or dependency?
 - [ ] Does the page follow the compact UI contract and link to deeper UI guidance where needed?
 - [ ] If the project was blank, did I ask the user which styling system to use before building?
+- [ ] If no style was named and no existing system applied, did I state the inferred direction in one sentence instead of guessing silently?
 - [ ] If the page needed a new direction, did I state a visual thesis and keep every value traceable to one system?
+- [ ] Does the page's visual system include a working light and dark theme with a flash-free, correctly transitioned toggle, unless the project already commits to one theme?
 - [ ] Does every interactive element have default, hover, focus, active, and disabled states?
 - [ ] Is generated text free of emoji, hand-written SVG, and em dash or en dash unless the user asked for them?
 - [ ] Does the page title use " · " as the separator instead of an en dash, em dash, hyphen, or vertical bar?
 - [ ] Does it work across the useful width range without page-level horizontal scrolling?
+- [ ] Are there real layout states across the whole width range, so tablet and small-laptop widths are neither a stretched stack nor a crammed grid?
+- [ ] If the page styles its scrollbar or changes scroll behavior, does the scrollbar stay visible and grabbable, and does ordinary scrolling stay the browser's?
 - [ ] Are accessibility, interaction states, copy, and destructive outcomes handled where relevant?
 - [ ] Are images, motion, icons, and navigation present only when the page needs them?
+- [ ] Is the page background a deliberate choice, free of an orb, mesh glow, or grid texture that arrived only because a section looked bare?
+- [ ] If the page has a hero, is it free of a dotted eyebrow capsule, gradient headline text, and a mockup holding placeholder values?
 - [ ] If motion is present, do durations and easings follow context and direction, content is visible before it loads, reduced motion is handled, and work is cleaned up?
+- [ ] If the page uses a motion archetype, does it scale down through narrow screen, touch, reduced motion, low power, and failed script, and does the page still explain itself with every effect removed?
 - [ ] For public indexable pages, is metadata factual, non-duplicated, and validated where possible?
+- [ ] If the page includes pricing or a comparison table, are every price, limit, and feature real, with no invented numbers?
 - [ ] For auth work, are client UX and server security handled by the right skills?
+- [ ] Did I run the generated-output tells audit, and does the page still have a stated identity after it?
 - [ ] Did I run relevant project checks and report the real results?

@@ -4,6 +4,8 @@ Use this guide for a product home page, campaign page, launch page, or focused m
 
 A landing page has one main job. Define that job before choosing sections or visual treatments. Apply [`waitsec-ui`](../../waitsec-ui/SKILL.md) for interface detail and load [`seo-and-structured-data.md`](./seo-and-structured-data.md) only when the page is public and indexable.
 
+For a flagship or launch page that needs a motion language rather than a few transitions, choose an archetype from [`motion-archetypes.md`](./motion-archetypes.md). Choose the page and section backgrounds from [`background-treatment.md`](./background-treatment.md) rather than defaulting to a decorative glow.
+
 ## Start With Known Facts
 
 Identify:
@@ -32,7 +34,11 @@ Choose only the sections supported by the goal and real content.
 | FAQ | Repeated questions block the main action. | Questions would be invented for page length or schema. |
 | Final action | A later reminder helps after the explanation. | It would repeat the same message after every section. |
 
+Use [`hero-composition.md`](./hero-composition.md) for the hero itself: what it owes the reader, when an eyebrow earns its line, headline craft, and whether the hero visual is evidence or decoration.
+
 Navigation and footer belong only when the existing shell or page journey needs them. Do not create a new navbar for an isolated campaign page without checking the project.
+
+Use [`pricing-and-comparison.md`](./pricing-and-comparison.md) for the Pricing section's tier cards or a full feature comparison table, including real-data rules, tier highlighting, and responsive behavior.
 
 ## Content Order
 
